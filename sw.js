@@ -1,7 +1,7 @@
 // TaxRight 2024 — Service Worker
 // Strategy: Cache-first for app shell, network-first for CDN assets
 
-const CACHE = 'taxright-v9';
+const CACHE = 'taxright-v10';
 const APP_SHELL = [
   '/taxright/',
   '/taxright/index.html',
