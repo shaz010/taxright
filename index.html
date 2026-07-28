@@ -99,12 +99,12 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .cur-wrap::before{content:'$';position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--tx3);font-size:.95rem;font-weight:600;pointer-events:none}
 /* RADIO/TOGGLE GROUP */
 .radio-group{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
-.radio-option{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--rs);cursor:pointer;transition:.15s;font-size:.875rem;font-weight:500;color:var(--tx2);background:var(--surface2);white-space:nowrap}
+.radio-option{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--rs);cursor:pointer;transition:.15s;font-size:.875rem;font-weight:500;color:var(--tx2);background:var(--surface2);word-break:break-word}
 .radio-option:hover{border-color:var(--border2);background:var(--surface)}
 .radio-option.selected{border-color:var(--primary);background:var(--primary-lt);color:var(--primary)}
 .radio-option input{display:none}
 /* Let long labels wrap on very small screens only */
-@media(max-width:480px){.radio-option{white-space:normal;font-size:.82rem;padding:9px 12px}}
+@media(max-width:480px){.radio-option{font-size:.82rem;padding:9px 12px}}
 /* CHECKBOX GROUP */
 .check-group{display:flex;flex-direction:column;gap:8px}
 .check-item{display:flex;align-items:flex-start;gap:10px;cursor:pointer}
@@ -610,7 +610,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       </div>
     </div>
     <button id="theme-btn" onclick="toggleDark()" title="Cycle theme">🌙</button>
-    <span class="build-badge" title="Build number">b18</span>
+    <span class="build-badge" title="Build number">b19</span>
   </div>
 </header>
 
