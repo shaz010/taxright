@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaxRight — Shortlist + Crimson</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #060606;
+  color: #ccc;
+  padding: 32px 24px 60px;
+}
+h1 {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #444;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 36px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.v-card { border-radius: 20px; overflow: hidden; border: 1px solid #1a1a1a; }
+.v-label {
+  padding: 11px 18px 10px; border-bottom: 1px solid;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.v-name { font-size: .85rem; font-weight: 800; letter-spacing: -.01em; }
+.v-desc { font-size: .68rem; margin-top: 2px; }
+.v-tag {
+  font-size: .58rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .08em;
+  padding: 3px 9px; border-radius: 99px; border: 1px solid currentColor; opacity: .7;
+}
+.v-body { padding: 20px; }
+
+/* Mini UI */
+.mini-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-radius: 11px; margin-bottom: 13px; border: 1px solid;
+}
+.mini-logo { font-size: .88rem; font-weight: 800; letter-spacing: -.02em; }
+.mini-pill { display: flex; align-items: center; border-radius: 8px; overflow: hidden; border: 1px solid; }
+.mini-pip { padding: 5px 11px; }
+.mini-pip-label { font-size: .52rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; margin-bottom: 2px; }
+.mini-pip-val { font-size: .8rem; font-weight: 700; }
+.mini-sep { width: 1px; align-self: stretch; }
+.mini-theme-btn { font-size: .85rem; padding: 5px 8px; border-radius: 7px; border: 1px solid; background: none; cursor: pointer; }
+
+.mini-refund {
+  border-radius: 14px; padding: 20px 16px; text-align: center;
+  margin-bottom: 13px; position: relative; overflow: hidden; border: 1px solid;
+}
+.mini-refund-label { font-size: .6rem; text-transform: uppercase; letter-spacing: .12em; font-weight: 700; margin-bottom: 6px; }
+.mini-refund-amt { font-size: 2.3rem; font-weight: 800; letter-spacing: -.04em; }
+.mini-refund-sub { font-size: .65rem; margin-top: 4px; }
+
+.mini-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 13px; }
+.mini-stat { border-radius: 10px; padding: 11px 12px; border: 1px solid; }
+.mini-stat-label { font-size: .58rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; margin-bottom: 5px; }
+.mini-stat-val { font-size: 1.05rem; font-weight: 800; letter-spacing: -.02em; }
+
+.mini-card { border-radius: 11px; padding: 14px 15px; margin-bottom: 13px; border: 1px solid; }
+.mini-card-title { font-size: .6rem; text-transform: uppercase; letter-spacing: .09em; font-weight: 700; margin-bottom: 10px; }
+.mini-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.mini-label { font-size: .65rem; font-weight: 600; margin-bottom: 4px; display: block; }
+.mini-input {
+  width: 100%; border-radius: 7px; padding: 8px 10px;
+  font-size: .8rem; font-family: inherit; border: 1px solid; outline: none;
+}
+
+.mini-btns { display: flex; gap: 9px; }
+.mini-btn { border-radius: 9px; padding: 9px 14px; font-size: .78rem; font-weight: 600; cursor: pointer; border: 1px solid; font-family: inherit; flex: 1; }
+
+.swatches { display: flex; gap: 6px; margin-top: 14px; }
+.sw-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.sw { width: 24px; height: 24px; border-radius: 50%; border: 1px solid rgba(255,255,255,.08); }
+.sw-label { font-size: .55rem; color: #444; }
+
+
+/* ═══════════════════════════════════════
+   ICE BLUE
+═══════════════════════════════════════ */
+.ice {
+  --bg:#08090F; --sur:#0E1018; --sur2:#14161F; --sur3:#1A1C28;
+  --bd:#1E2235; --bd2:#262B42;
+  --tx:#E4EEFF; --tx2:#9AAED0; --tx3:#5C6E96; --tx4:#384160;
+  --acc:#7BA3D4; --acc2:#A8C4E8; --acc3:#4D7AB5;
+  --hi:#67E8F9; --hi-glow:rgba(103,232,249,.35);
+}
+.ice .v-label { background:#0E1018; border-color:#1E2235; }
+.ice .v-body { background:#08090F; }
+.ice .mini-header { background:#0E1018; border-color:#1E2235; }
+.ice .mini-logo { color:#E4EEFF; }
+.ice .mini-pill { background:#14161F; border-color:#262B42; }
+.ice .mini-pip { background:#14161F; }
+.ice .mini-pip-label { color:#5C6E96; }
+.ice .mini-pip-val { color:#67E8F9; }
+.ice .mini-pip-val.n { color:#9AAED0; }
+.ice .mini-sep { background:#1E2235; }
+.ice .mini-theme-btn { border-color:#262B42; color:#5C6E96; }
+.ice .mini-refund { background:#0E1018; border-color:#262B42; }
+.ice .mini-refund-label { color:#5C6E96; }
+.ice .mini-refund-amt { color:#67E8F9; text-shadow:0 0 24px var(--hi-glow),0 0 48px rgba(103,232,249,.15); }
+.ice .mini-refund-sub { color:#5C6E96; }
+.ice .mini-stat { background:#0E1018; border-color:#1E2235; }
+.ice .mini-stat-label { color:#5C6E96; }
+.ice .mini-stat-val { color:#7BA3D4; }
+.ice .mini-stat-val.hi { color:#67E8F9; text-shadow:0 0 12px var(--hi-glow); }
+.ice .mini-card { background:#0E1018; border-color:#1E2235; }
+.ice .mini-card-title { color:#4D7AB5; }
+.ice .mini-label { color:#5C6E96; }
+.ice .mini-input { background:#14161F; border-color:#262B42; color:#E4EEFF; }
+.ice .mini-btn { background:#14161F; border-color:#262B42; color:#9AAED0; }
+.ice .mini-btn.pri { background:#1A1C28; border-color:#4D7AB5; color:#A8C4E8; }
+.ice .mini-refund::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse at 50% -10%, rgba(103,232,249,.08) 0%, transparent 65%);
+}
+
+
+/* ═══════════════════════════════════════
+   WARM SILVER
+═══════════════════════════════════════ */
+.warm {
+  --bg:#0C0B0A; --sur:#141210; --sur2:#1A1815; --sur3:#201E1A;
+  --bd:#2A2620; --bd2:#352F28;
+  --tx:#EDE8E0; --tx2:#C4B8A8; --tx3:#8A7D6E; --tx4:#524840;
+  --acc:#C4B08A; --acc2:#D4C4A0; --acc3:#8A7855;
+  --hi:#6EE7B7; --hi-glow:rgba(110,231,183,.28);
+}
+.warm .v-label { background:#141210; border-color:#2A2620; }
+.warm .v-body { background:#0C0B0A; }
+.warm .mini-header { background:#141210; border-color:#2A2620; }
+.warm .mini-logo { color:#EDE8E0; }
+.warm .mini-pill { background:#1A1815; border-color:#352F28; }
+.warm .mini-pip { background:#1A1815; }
+.warm .mini-pip-label { color:#8A7D6E; }
+.warm .mini-pip-val { color:#6EE7B7; }
+.warm .mini-pip-val.n { color:#C4B8A8; }
+.warm .mini-sep { background:#2A2620; }
+.warm .mini-theme-btn { border-color:#352F28; color:#8A7D6E; }
+.warm .mini-refund { background:#141210; border-color:#352F28; }
+.warm .mini-refund-label { color:#8A7D6E; }
+.warm .mini-refund-amt { color:#6EE7B7; text-shadow:0 0 24px var(--hi-glow),0 0 48px rgba(110,231,183,.12); }
+.warm .mini-refund-sub { color:#8A7D6E; }
+.warm .mini-stat { background:#141210; border-color:#2A2620; }
+.warm .mini-stat-label { color:#8A7D6E; }
+.warm .mini-stat-val { color:#C4B08A; }
+.warm .mini-stat-val.hi { color:#6EE7B7; text-shadow:0 0 12px var(--hi-glow); }
+.warm .mini-card { background:#141210; border-color:#2A2620; }
+.warm .mini-card-title { color:#8A7855; }
+.warm .mini-label { color:#8A7D6E; }
+.warm .mini-input { background:#1A1815; border-color:#352F28; color:#EDE8E0; }
+.warm .mini-btn { background:#1A1815; border-color:#352F28; color:#C4B8A8; }
+.warm .mini-btn.pri { background:#201E1A; border-color:#8A7855; color:#D4C4A0; }
+.warm .mini-refund::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(ellipse at 50% -10%, rgba(196,176,138,.06) 0%, transparent 65%);
+}
+
+
+/* ═══════════════════════════════════════
+   CRIMSON IRIDESCENT
+═══════════════════════════════════════ */
+.crimson {
+  --bg:#0A0608; --sur:#120B0E; --sur2:#180E12; --sur3:#1F1118;
+  --bd:#2E1520; --bd2:#3D1C2A;
+  --tx:#F5E8EE; --tx2:#D4A8BC; --tx3:#9A6070; --tx4:#5E3545;
+  --hi:#6EE7B7; --hi-glow:rgba(110,231,183,.28);
+}
+
+.crimson .v-label { background:#120B0E; border-color:#2E1520; }
+.crimson .v-body { background:#0A0608; }
+.crimson .mini-header { background:#120B0E; border-color:#2E1520; }
+.crimson .mini-logo { color:#F5E8EE; }
+.crimson .mini-pill { background:#180E12; border-color:#3D1C2A; }
+.crimson .mini-pip { background:#180E12; }
+.crimson .mini-pip-label { color:#9A6070; }
+.crimson .mini-pip-val { color:#6EE7B7; }
+.crimson .mini-pip-val.n { color:#D4A8BC; }
+.crimson .mini-sep { background:#2E1520; }
+.crimson .mini-theme-btn { border-color:#3D1C2A; color:#9A6070; }
+
+/* Refund hero — iridescent crimson radiance */
+.crimson .mini-refund {
+  background: #120B0E;
+  border-color:#3D1C2A;
+  position: relative; overflow: hidden;
+}
+.crimson .mini-refund::before {
+  content:''; position:absolute; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse at 30% 0%, rgba(220,20,60,.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 70% 0%, rgba(180,0,120,.14) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(100,0,80,.08) 0%, transparent 60%);
+}
+.crimson .mini-refund > * { position: relative; z-index: 1; }
+.crimson .mini-refund-label { color:#9A6070; }
+.crimson .mini-refund-amt {
+  background: linear-gradient(135deg, #FF3366 0%, #FF6B6B 25%, #FF0044 50%, #CC0066 75%, #FF3366 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 14px rgba(220,20,60,.6)) drop-shadow(0 0 30px rgba(200,0,80,.3));
+  animation: shimmer 4s linear infinite;
+  background-size: 200% 100%;
+}
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.crimson .mini-refund-sub { color:#9A6070; }
+
+.crimson .mini-stat { background:#120B0E; border-color:#2E1520; }
+.crimson .mini-stat-label { color:#9A6070; }
+.crimson .mini-stat-val {
+  background: linear-gradient(135deg, #E8607A, #CC2244);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.crimson .mini-stat-val.hi { color:#6EE7B7; background:none; -webkit-text-fill-color:#6EE7B7; text-shadow:0 0 12px rgba(110,231,183,.3); }
+
+.crimson .mini-card { background:#120B0E; border-color:#2E1520; }
+.crimson .mini-card-title { color:#6B2840; }
+.crimson .mini-label { color:#9A6070; }
+.crimson .mini-input { background:#180E12; border-color:#3D1C2A; color:#F5E8EE; }
+.crimson .mini-btn { background:#180E12; border-color:#3D1C2A; color:#D4A8BC; }
+.crimson .mini-btn.pri {
+  background: linear-gradient(135deg, #1F1118, #2A1220);
+  border-color:#6B1830;
+  color:#F08090;
+  box-shadow: 0 0 12px rgba(180,20,60,.2), inset 0 1px 0 rgba(255,100,120,.08);
+}
+
+/* Sidebar active glow for crimson */
+.crimson-sidebar-active {
+  border-left: 3px solid #CC0033;
+  box-shadow: inset 3px 0 12px rgba(200,0,60,.15);
+}
+</style>
+</head>
+<body>
+
+<h1>✦ Your Shortlist · Noir Variations</h1>
+
+<div class="grid">
+
+  <!-- ICE BLUE -->
+  <div class="v-card ice">
+    <div class="v-label">
+      <div>
+        <div class="v-name" style="color:#7BA3D4">Ice Blue</div>
+        <div class="v-desc" style="color:#384160">Arctic precision · zero margin · crisp</div>
+      </div>
+      <span class="v-tag" style="color:#7BA3D4">❄️ Arctic</span>
+    </div>
+    <div class="v-body">
+      <div class="mini-header">
+        <div class="mini-logo">TaxRight<span style="color:#5C6E96;font-weight:500"> 2024</span></div>
+        <div class="mini-pill">
+          <div class="mini-pip"><div class="mini-pip-label">Refund</div><div class="mini-pip-val">$3,240</div></div>
+          <div class="mini-sep"></div>
+          <div class="mini-pip"><div class="mini-pip-label">Rate</div><div class="mini-pip-val n">14.2%</div></div>
+        </div>
+        <button class="mini-theme-btn">🧊</button>
+      </div>
+      <div class="mini-refund">
+        <div class="mini-refund-label">Federal Refund</div>
+        <div class="mini-refund-amt">$3,240</div>
+        <div class="mini-refund-sub">Updates live as you type</div>
+      </div>
+      <div class="mini-stats">
+        <div class="mini-stat"><div class="mini-stat-label">AGI</div><div class="mini-stat-val">$88,500</div></div>
+        <div class="mini-stat"><div class="mini-stat-label">Tax</div><div class="mini-stat-val">$9,180</div></div>
+        <div class="mini-stat"><div class="mini-stat-label">Refund</div><div class="mini-stat-val hi">$3,240</div></div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-card-title">Deductions</div>
+        <div class="mini-row">
+          <div><span class="mini-label">Mortgage Int.</span><input class="mini-input" value="$12,400"></div>
+          <div><span class="mini-label">Property Tax</span><input class="mini-input" value="$4,200"></div>
+        </div>
+      </div>
+      <div class="mini-btns">
+        <button class="mini-btn">← Back</button>
+        <button class="mini-btn pri">Continue →</button>
+      </div>
+      <div class="swatches">
+        <div class="sw-wrap"><div class="sw" style="background:#08090F"></div><div class="sw-label">bg</div></div>
+        <div class="sw-wrap"><div class="sw" style="background:#0E1018"></div><div class="sw-label">sur</div></div>
+        <div class="sw-wrap"><div class="sw" style="background:#7BA3D4"></div><div class="sw-label">acc</div></div>
+        <div class="sw-wrap"><div class="sw" style="background:#67E8F9"></div><div class="sw-label">$</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WARM SILVER -->
+  <div class="v-card warm">
+    <div class="v-label">
+      <div>
+        <div class="v-name" style="color:#C4B08A">Warm Silver</div>
+        <div class="v-desc" style="color:#524840">Brushed gold-steel · vintage · refined</div>
+      </div>
+      <span class="v-tag" style="color:#C4B08A">🥂 Gold</span>
+    </div>
+    <div class="v-body">
+      <div class="mini-header">
+        <div class="mini-logo">TaxRight<span style="color:#8A7D6E;font-weight:500"> 2024</span></div>
+        <div class="mini-pill">
+          <div class="mini-pip"><div class="mini-pip-label">Refund</div><div class="mini-pip-val">$3,240</div></div>
+          <div class="mini-sep"></div>
+          <div class="mini-pip"><div class="mini-pip-label">Rate</div><div class="mini-pip-val n">14.2%</div></div>
+        </div>
+        <button class="mini-theme-btn">🪙</button>
+      </div>
+      <div class="mini-refund">
+        <div class="mini-refund-label">Federal Refund</div>
+        <div class="mini-refund-amt">$3,240</div>
+        <div class="mini-refund-sub">Updates live as you type</div>
+      </div>
+      <div class="mini-stats">
+        <div class="mini-stat"><div class="mini-stat-label">AGI</div><div class="mini-stat-val">$88,500</div></div>
+        <div class="mini-stat"><div class="mini-stat-label">Tax</div><div class="mini-stat-val">$9,180</div></div>
+        <div class="mini-stat"><div class="mini-stat-label">Refund</div><div class="mini-stat-val hi">$3,240</div></div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-card-title">Deductions</div>
+        <div class="mini-row">
+          <div><span class="mini-label">Mortgage Int.</span><input class="mini-input" value="$12,400"></div>
+          <div><span class="mini-label">Property Tax</span><input class="mini-input" value="$4,200"></div>
+        </div>
+      </div>
+      <div class="mini-btns">
+        <button class="mini-btn">← Back</button>
+        <button class="mini-btn pri">Continue →</button>
+      </div>
+      <div class="swatches">
+        <div class="sw-wrap"><div class="sw" style="background:#0C0B0A"></div><div class="sw-label">bg</div></div>
+        <div class="sw-wrap"><div class="sw" style="background:#141210"></div><div class="sw-label">sur</div></div>
+        <div class="sw-wrap"><div class="sw" style="background:#C4B08A"></div><div class="sw-label">acc</div></div>
+        <div class="sw-wrap"><div class="sw" style="background:#6EE7B7"></div><div class="sw-label">$</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CRIMSON IRIDESCENT -->
+  <div class="v-card crimson">
+    <div class="v-label">
+      <div>
+        <div class="v-name" style="background:linear-gradient(135deg,#FF3366,#FF6B6B,#CC0066);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Crimson Iridescent</div>
+        <div class="v-desc" style="color:#5E3545">Shifting crimson → magenta · cinematic · bold</div>
+      </div>
+      <span class="v-tag" style="color:#CC2244">🔴 Noir</span>
+    </div>
+    <div class="v-body">
+      <div class="mini-header">
+        <div class="mini-logo">TaxRight<span style="color:#9A6070;font-weight:500"> 2024</span></div>
+        <div class="mini-pill">
+          <div class="mini-pip"><div class="mini-pip-label">Refund</div><div class="mini-pip-val">$3,240</div></div>
+          <div class="mini-sep"></div>
+          <div class="mini-pip"><div class="mini-pip-label">Rate</div><div class="mini-pip-val n">14.2%</div></div>
+        </div>
+        <button class="mini-theme-btn">🎬</button>
+      </div>
+      <div class="mini-refund">
+        <div class="mini-refund-label">Federal Refund</div>
+        <div class="mini-refund-amt">$3,240</div>
+        <div class="mini-refund-sub">Updates live as you type</div>
+      </div>
+      <div class="mini-stats">
+        <div class="mini-stat"><div class="mini-stat-label">AGI</div><div class="mini-stat-val">$88,500</div></div>
+        <div class="mini-stat"><div class="mini-stat-label">Tax</div><div class="mini-stat-val">$9,180</div></div>
+        <div class="mini-stat"><div class="mini-stat-label">Refund</div><div class="mini-stat-val hi">$3,240</div></div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-card-title">Deductions</div>
+        <div class="mini-row">
+          <div><span class="mini-label">Mortgage Int.</span><input class="mini-input" value="$12,400"></div>
+          <div><span class="mini-label">Property Tax</span><input class="mini-input" value="$4,200"></div>
+        </div>
+      </div>
+      <div class="mini-btns">
+        <button class="mini-btn">← Back</button>
+        <button class="mini-btn pri">Continue →</button>
+      </div>
+      <div class="swatches">
+        <div class="sw-wrap"><div class="sw" style="background:#0A0608"></div><div class="sw-label">bg</div></div>
+        <div class="sw-wrap"><div class="sw" style="background:#120B0E"></div><div class="sw-label">sur</div></div>
+        <div class="sw-wrap"><div class="sw" style="background:#CC0033"></div><div class="sw-label">acc</div></div>
+        <div class="sw-wrap"><div class="sw" style="background:linear-gradient(135deg,#FF3366,#CC0066)"></div><div class="sw-label">ird</div></div>
+        <div class="sw-wrap"><div class="sw" style="background:#6EE7B7"></div><div class="sw-label">$</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p style="text-align:center;color:#2a2a2a;font-size:.72rem;margin-top:40px;letter-spacing:.06em">
+  PREVIEW ONLY · NOTHING COMMITTED · TELL ME WHICH ONE OR MIX
+</p>
+
+</body>
+</html>

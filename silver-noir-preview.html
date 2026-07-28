@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaxRight — Silver Noir Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #0A0A0F;
+  color: #D4D8E2;
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* ── SILVER NOIR PALETTE ── */
+:root {
+  --bg:       #0A0A0F;
+  --surface:  #111118;
+  --surface2: #18181F;
+  --surface3: #1E1E27;
+  --border:   #252530;
+  --border2:  #2E2E3C;
+  --tx:       #E8ECF4;
+  --tx2:      #B8BFC9;
+  --tx3:      #7C8494;
+  --tx4:      #454B57;
+  --silver:   #A8B2C4;
+  --silver-lt:#C8D0DF;
+  --silver-dk:#6B7585;
+  --accent:   #9BAABF;
+  --accent-lt:rgba(155,170,191,.12);
+  --green:    #6EE7B7;
+  --green-lt: rgba(110,231,183,.10);
+  --red:      #F87171;
+  --sh:       0 1px 8px rgba(0,0,0,.7);
+  --sh2:      0 4px 28px rgba(0,0,0,.85);
+}
+
+/* ── HEADER ── */
+.header {
+  background: #0A0A0F;
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-icon {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, #1E1E27, #252530);
+  border: 1px solid var(--border2);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.logo-text {
+  font-size: 1.1rem; font-weight: 800; color: var(--tx);
+  letter-spacing: -.02em;
+}
+.logo-year { color: var(--silver-dk); font-weight: 500; margin-left: 3px; }
+
+.refund-pill {
+  display: flex; align-items: center; gap: 0;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.rp-item { padding: 6px 14px; text-align: center; }
+.rp-label { font-size: .62rem; color: var(--tx3); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; display: block; }
+.rp-value { font-size: .88rem; font-weight: 700; color: var(--green); display: block; }
+.rp-value.neutral { color: var(--tx2); }
+.rp-sep { width: 1px; background: var(--border); align-self: stretch; }
+
+.hdr-right { display: flex; align-items: center; gap: 10px; }
+.theme-btn {
+  background: none; border: 1px solid var(--border2);
+  border-radius: 8px; padding: 6px 10px; cursor: pointer;
+  color: var(--tx3); font-size: 1rem;
+}
+.build-badge { font-size: .6rem; font-weight: 700; color: var(--tx4); letter-spacing: .04em; opacity: .5; }
+
+/* ── LAYOUT ── */
+.layout { display: flex; min-height: calc(100vh - 58px); }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 220px; flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
+}
+.sb-label {
+  font-size: .65rem; font-weight: 700; color: var(--tx4);
+  text-transform: uppercase; letter-spacing: .1em;
+  padding: 0 18px 8px;
+}
+.step-btn {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  padding: 10px 18px; background: none; border: none; cursor: pointer;
+  color: var(--tx3); font-size: .85rem; text-align: left;
+  border-left: 3px solid transparent; transition: .15s;
+}
+.step-btn:hover { background: var(--surface2); color: var(--tx2); }
+.step-btn.active {
+  background: var(--surface2);
+  border-left-color: var(--silver);
+  color: var(--tx);
+}
+.step-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--surface3); border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .7rem; font-weight: 700; color: var(--tx3);
+  flex-shrink: 0;
+}
+.step-btn.active .step-num {
+  background: var(--silver-dk);
+  border-color: var(--silver);
+  color: var(--tx);
+}
+.step-btn.done .step-num {
+  background: rgba(110,231,183,.15);
+  border-color: rgba(110,231,183,.4);
+  color: var(--green);
+}
+.sb-pct { font-size: .65rem; color: var(--tx4); margin-left: auto; font-weight: 700; }
+.step-btn.active .sb-pct { color: var(--silver-dk); }
+
+/* ── MAIN ── */
+.main { flex: 1; padding: 28px 32px; max-width: 760px; }
+
+.step-title {
+  font-size: 1.5rem; font-weight: 800; color: var(--tx);
+  letter-spacing: -.02em; margin-bottom: 4px;
+}
+.step-sub { font-size: .9rem; color: var(--tx3); margin-bottom: 24px; }
+
+/* ── CARD ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  box-shadow: var(--sh);
+}
+.card-title {
+  font-size: .75rem; font-weight: 700; color: var(--silver-dk);
+  text-transform: uppercase; letter-spacing: .1em; margin-bottom: 14px;
+}
+
+/* ── FORM ── */
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.field-row.three { grid-template-columns: 1fr 1fr 1fr; }
+.field-group { display: flex; flex-direction: column; gap: 5px; }
+label { font-size: .75rem; font-weight: 600; color: var(--tx3); }
+input, select {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: var(--tx);
+  font-size: .9rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .15s;
+}
+input:focus, select:focus {
+  border-color: var(--silver);
+  background: var(--surface3);
+  box-shadow: 0 0 0 3px rgba(155,170,191,.08);
+}
+select option { background: var(--surface2); }
+
+/* ── STAT CARDS ── */
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.stat-label { font-size: .7rem; color: var(--tx3); font-weight: 600; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
+.stat-val { font-size: 1.3rem; font-weight: 800; color: var(--tx); letter-spacing: -.02em; }
+.stat-val.green { color: var(--green); text-shadow: 0 0 16px rgba(110,231,183,.3); }
+.stat-val.silver { color: var(--silver-lt); }
+.stat-val.red { color: var(--red); }
+
+/* ── REFUND DISPLAY ── */
+.refund-hero {
+  background: linear-gradient(135deg, #0F0F16 0%, #141420 100%);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  padding: 28px;
+  text-align: center;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.refund-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(168,178,196,.06) 0%, transparent 70%);
+}
+.refund-label { font-size: .75rem; color: var(--tx3); text-transform: uppercase; letter-spacing: .12em; font-weight: 700; margin-bottom: 8px; }
+.refund-amount {
+  font-size: 3.2rem; font-weight: 800; color: var(--green);
+  letter-spacing: -.04em;
+  text-shadow: 0 0 30px rgba(110,231,183,.35), 0 0 60px rgba(110,231,183,.15);
+}
+.refund-sub { font-size: .8rem; color: var(--tx3); margin-top: 6px; }
+
+/* ── BUTTON ── */
+.btn {
+  background: linear-gradient(135deg, #1E1E27, #252530);
+  border: 1px solid var(--border2);
+  color: var(--silver-lt);
+  border-radius: 10px;
+  padding: 11px 22px;
+  font-size: .9rem; font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+}
+.btn:hover { border-color: var(--silver-dk); color: var(--tx); }
+.btn-primary {
+  background: linear-gradient(135deg, #2A2E3A, #353A48);
+  border-color: var(--silver-dk);
+  color: var(--tx);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #353A48, #404657);
+  box-shadow: 0 0 0 1px var(--silver-dk), 0 0 16px rgba(168,178,196,.12);
+}
+
+/* ── AUDIT RISK ── */
+.risk-bar-wrap { margin-top: 8px; }
+.risk-bar-bg { background: var(--surface3); border-radius: 99px; height: 6px; overflow: hidden; }
+.risk-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--green), var(--silver)); width: 30%; }
+
+/* ── PROGRESS STRIP ── */
+.progress-strip {
+  height: 3px;
+  background: var(--surface2);
+  position: relative;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--silver-dk), var(--silver));
+  width: 43%;
+  transition: width .4s ease;
+}
+
+/* ── PALETTE SWATCHES (preview only) ── */
+.swatch-row { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.swatch {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  font-size: .6rem; color: var(--tx4); font-weight: 600; text-transform: uppercase; letter-spacing: .05em;
+}
+.swatch-circle { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border2); }
+
+.preview-label {
+  font-size: .65rem; font-weight: 700; color: var(--silver-dk);
+  text-transform: uppercase; letter-spacing: .12em;
+  padding: 6px 12px; background: var(--surface3);
+  border: 1px solid var(--border); border-radius: 6px;
+  display: inline-block; margin-bottom: 16px;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <a class="logo" href="#">
+    <div class="logo-icon">⚖️</div>
+    <span class="logo-text">TaxRight<span class="logo-year">2024</span></span>
+  </a>
+  <div class="refund-pill">
+    <div class="rp-item">
+      <span class="rp-label">Fed. Refund</span>
+      <span class="rp-value">$3,240</span>
+    </div>
+    <div class="rp-sep"></div>
+    <div class="rp-item">
+      <span class="rp-label">Eff. Rate</span>
+      <span class="rp-value neutral">14.2%</span>
+    </div>
+    <div class="rp-sep"></div>
+    <div class="rp-item">
+      <span class="rp-label">Tax Owed</span>
+      <span class="rp-value neutral">$9,180</span>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <button class="theme-btn">🪙</button>
+    <span class="build-badge">b5</span>
+  </div>
+</header>
+
+<!-- PROGRESS STRIP -->
+<div class="progress-strip"><div class="progress-fill"></div></div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-label">Your Return</div>
+    <button class="step-btn done">
+      <span class="step-num">✓</span> About You
+      <span class="sb-pct">100%</span>
+    </button>
+    <button class="step-btn done">
+      <span class="step-num">✓</span> Income
+      <span class="sb-pct">100%</span>
+    </button>
+    <button class="step-btn active">
+      <span class="step-num">3</span> Deductions
+      <span class="sb-pct">60%</span>
+    </button>
+    <button class="step-btn">
+      <span class="step-num">4</span> Adjustments
+      <span class="sb-pct">0%</span>
+    </button>
+    <button class="step-btn">
+      <span class="step-num">5</span> Credits
+      <span class="sb-pct">0%</span>
+    </button>
+    <button class="step-btn">
+      <span class="step-num">6</span> Payments
+      <span class="sb-pct">30%</span>
+    </button>
+    <button class="step-btn">
+      <span class="step-num">7</span> Results
+      <span class="sb-pct">—</span>
+    </button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="preview-label">🪙 Silver Noir — Preview Only</div>
+
+    <!-- PALETTE -->
+    <div class="swatch-row">
+      <div class="swatch"><div class="swatch-circle" style="background:#0A0A0F"></div>bg</div>
+      <div class="swatch"><div class="swatch-circle" style="background:#111118"></div>surface</div>
+      <div class="swatch"><div class="swatch-circle" style="background:#18181F"></div>surface2</div>
+      <div class="swatch"><div class="swatch-circle" style="background:#A8B2C4"></div>silver</div>
+      <div class="swatch"><div class="swatch-circle" style="background:#C8D0DF"></div>silver-lt</div>
+      <div class="swatch"><div class="swatch-circle" style="background:#6B7585"></div>silver-dk</div>
+      <div class="swatch"><div class="swatch-circle" style="background:#6EE7B7"></div>refund</div>
+    </div>
+
+    <div class="step-title">Deductions</div>
+    <div class="step-sub">We'll find the best deduction strategy for your situation.</div>
+
+    <!-- REFUND HERO -->
+    <div class="refund-hero">
+      <div class="refund-label">Federal Refund</div>
+      <div class="refund-amount">$3,240</div>
+      <div class="refund-sub">Based on income entered so far · updates live</div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">Gross Income</div>
+        <div class="stat-val silver">$88,500</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Tax</div>
+        <div class="stat-val silver">$9,180</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Effective Rate</div>
+        <div class="stat-val silver">14.2%</div>
+      </div>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="card">
+      <div class="card-title">Itemized Deductions</div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>Mortgage Interest</label>
+          <input type="text" placeholder="$0" value="$12,400">
+        </div>
+        <div class="field-group">
+          <label>Property Tax</label>
+          <input type="text" placeholder="$0" value="$4,200">
+        </div>
+      </div>
+      <div class="field-row three">
+        <div class="field-group">
+          <label>Charitable Cash</label>
+          <input type="text" placeholder="$0">
+        </div>
+        <div class="field-group">
+          <label>Medical Expenses</label>
+          <input type="text" placeholder="$0">
+        </div>
+        <div class="field-group">
+          <label>State Taxes (SALT)</label>
+          <input type="text" placeholder="$0" value="$10,000">
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPARISON CARD -->
+    <div class="card">
+      <div class="card-title">Standard vs. Itemized</div>
+      <div class="stat-grid" style="margin-bottom:0">
+        <div class="stat-card">
+          <div class="stat-label">Standard</div>
+          <div class="stat-val silver">$14,600</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Your Itemized</div>
+          <div class="stat-val green">$26,600</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">You gain</div>
+          <div class="stat-val green">+$12,000</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AUDIT RISK -->
+    <div class="card">
+      <div class="card-title">Audit Risk Score</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:.9rem;color:var(--green);font-weight:700">Low Risk</span>
+        <span style="font-size:.8rem;color:var(--tx3)">2 / 10</span>
+      </div>
+      <div class="risk-bar-wrap">
+        <div class="risk-bar-bg"><div class="risk-bar-fill"></div></div>
+      </div>
+      <p style="font-size:.78rem;color:var(--tx3);margin-top:10px">No significant IRS triggers detected in your return.</p>
+    </div>
+
+    <!-- BUTTONS -->
+    <div style="display:flex;gap:12px;margin-top:8px">
+      <button class="btn">← Back</button>
+      <button class="btn btn-primary">Continue to Adjustments →</button>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
