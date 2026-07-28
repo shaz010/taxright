@@ -203,10 +203,96 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .detail-row.total .detail-label{font-size:1rem;font-weight:800;color:var(--tx)}
 .detail-row.total .detail-value{font-size:1.1rem;font-weight:800}
 /* HELP TOOLTIP */
-.help-icon{display:inline-flex;width:16px;height:16px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:var(--tx3);cursor:pointer;margin-left:4px;vertical-align:middle;transition:.15s}
+.help-icon{display:inline-flex;width:18px;height:18px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:var(--tx3);cursor:pointer;margin-left:5px;vertical-align:middle;transition:.15s;flex-shrink:0}
 .help-icon:hover{background:var(--primary-lt);border-color:var(--primary);color:var(--primary)}
-.help-panel{display:none;margin-top:8px;padding:12px 14px;background:var(--primary-lt);border:1px solid rgba(27,79,216,.2);border-radius:var(--rs);font-size:.82rem;color:var(--primary-dk);line-height:1.5}
-.help-panel.open{display:block}
+.help-panel{display:none;margin-top:8px;padding:13px 15px;background:var(--primary-lt);border:1px solid rgba(27,79,216,.15);border-radius:var(--rs);font-size:.84rem;color:var(--tx2);line-height:1.6}
+.help-panel.open{display:block;animation:fadeIn .2s ease}
+.help-panel .hp-emoji{font-size:1.3rem;margin-bottom:6px;display:block}
+.help-panel .hp-title{font-weight:700;color:var(--tx);font-size:.88rem;margin-bottom:4px}
+.help-panel .hp-simple{font-size:.9rem;color:var(--tx);font-weight:500;margin-bottom:6px;line-height:1.5}
+.help-panel .hp-find{font-size:.78rem;color:var(--tx3);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
+.help-panel .hp-find strong{color:var(--tx2)}
+.help-panel .hp-more{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:.75rem;font-weight:700;color:var(--primary);cursor:pointer;background:none;border:none;padding:0;text-decoration:none}
+.help-panel .hp-more:hover{text-decoration:underline}
+
+/* ── HELP DRAWER ─────────────────────────────────────────────────────────── */
+#help-fab{
+  position:fixed;bottom:88px;right:18px;z-index:300;
+  display:flex;align-items:center;gap:7px;
+  background:var(--primary);color:#fff;
+  border:none;border-radius:99px;padding:10px 16px 10px 13px;
+  font-size:.82rem;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 16px rgba(27,79,216,.35);
+  transition:.2s;font-family:inherit;
+}
+#help-fab:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(27,79,216,.45)}
+#help-fab .fab-icon{font-size:1rem}
+@media(max-width:900px){#help-fab{bottom:76px;right:12px;padding:9px 14px 9px 11px}}
+
+#help-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;backdrop-filter:blur(2px)}
+#help-overlay.open{display:block}
+
+#help-drawer{
+  position:fixed;top:0;right:0;bottom:0;width:380px;max-width:100vw;
+  background:var(--surface);border-left:1px solid var(--border);
+  z-index:500;display:flex;flex-direction:column;
+  transform:translateX(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);
+  overflow:hidden;
+}
+#help-drawer.open{transform:translateX(0)}
+@media(max-width:600px){
+  #help-drawer{top:auto;left:0;right:0;bottom:0;width:100%;max-height:88vh;border-left:none;border-top:1px solid var(--border);border-radius:20px 20px 0 0;transform:translateY(100%)}
+  #help-drawer.open{transform:translateY(0)}
+}
+
+.hd-header{padding:18px 18px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.hd-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.hd-title{font-size:1rem;font-weight:800;color:var(--tx);letter-spacing:-.01em}
+.hd-close{background:none;border:1px solid var(--border2);border-radius:8px;padding:5px 9px;cursor:pointer;color:var(--tx3);font-size:.85rem}
+.hd-close:hover{background:var(--surface2);color:var(--tx)}
+.hd-search-wrap{position:relative}
+.hd-search{
+  width:100%;padding:9px 12px 9px 34px;
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:10px;color:var(--tx);font-size:.88rem;font-family:inherit;outline:none;
+}
+.hd-search:focus{border-color:var(--primary)}
+.hd-search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--tx4);font-size:.9rem;pointer-events:none}
+
+.hd-cats{display:flex;gap:6px;padding:12px 18px;flex-shrink:0;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.hd-cat{padding:5px 11px;border-radius:99px;font-size:.72rem;font-weight:700;border:1px solid var(--border2);background:none;color:var(--tx3);cursor:pointer;transition:.15s;font-family:inherit}
+.hd-cat:hover{border-color:var(--primary);color:var(--primary)}
+.hd-cat.active{background:var(--primary-lt);border-color:var(--primary);color:var(--primary)}
+
+.hd-body{flex:1;overflow-y:auto;padding:12px 18px 24px}
+.hd-term{
+  padding:12px 14px;border-radius:12px;margin-bottom:8px;
+  border:1px solid var(--border);background:var(--surface2);
+  cursor:pointer;transition:.15s;
+}
+.hd-term:hover{border-color:var(--primary);background:var(--primary-lt)}
+.hd-term-head{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.hd-term-emoji{font-size:1.1rem}
+.hd-term-title{font-size:.88rem;font-weight:700;color:var(--tx)}
+.hd-term-short{font-size:.78rem;color:var(--tx3);line-height:1.4}
+.hd-no-results{text-align:center;color:var(--tx4);padding:32px 0;font-size:.88rem}
+
+/* Term detail view */
+.hd-detail{display:none;flex-direction:column;height:100%}
+.hd-detail.open{display:flex}
+.hd-detail-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.hd-back{background:none;border:none;color:var(--primary);cursor:pointer;font-size:.82rem;font-weight:700;padding:0;display:flex;align-items:center;gap:4px}
+.hd-detail-body{flex:1;overflow-y:auto;padding:20px 18px 32px}
+.hd-detail-emoji{font-size:2.5rem;margin-bottom:10px;display:block}
+.hd-detail-title{font-size:1.3rem;font-weight:800;color:var(--tx);margin-bottom:8px;letter-spacing:-.02em}
+.hd-detail-simple{font-size:1rem;color:var(--tx);font-weight:500;line-height:1.6;margin-bottom:16px;padding:12px 14px;background:var(--primary-lt);border-radius:10px;border-left:3px solid var(--primary)}
+.hd-detail-explain{font-size:.9rem;color:var(--tx2);line-height:1.7;margin-bottom:16px}
+.hd-detail-find{background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:16px}
+.hd-detail-find-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--tx4);margin-bottom:6px}
+.hd-detail-find-text{font-size:.85rem;color:var(--tx2);line-height:1.6}
+.hd-detail-related{display:flex;flex-wrap:wrap;gap:6px}
+.hd-related-chip{padding:5px 10px;border-radius:99px;background:var(--surface2);border:1px solid var(--border2);font-size:.72rem;font-weight:600;color:var(--tx3);cursor:pointer;transition:.15s}
+.hd-related-chip:hover{border-color:var(--primary);color:var(--primary)}
 /* DOC CHECKLIST */
 .doc-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
 .doc-item:last-child{border-bottom:none}
@@ -562,7 +648,14 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       </div>
 
       <div class="card">
-        <div class="card-title">Filing Status</div>
+        <div class="card-title">Filing Status <span class="help-icon" onclick="toggleHelp('h-fs','filing-status')">?</span></div>
+        <div class="help-panel" id="h-fs" style="margin-bottom:12px">
+          <span class="hp-emoji">👤</span>
+          <div class="hp-title">What is Filing Status?</div>
+          <div class="hp-simple">This tells the IRS about your family situation. It's the single most important thing you pick — it determines how much of your income is tax-free! <em>Single</em> means you're unmarried. <em>Married Filing Jointly</em> usually saves the most money for couples.</div>
+          <div class="hp-find"><strong>📍 How to choose:</strong> Use the status that describes you on December 31, 2024. If you're unsure between Head of Household and Single, click "Tell me more" below.</div>
+          <button class="hp-more" onclick="openHelpDrawer('filing-status')">Tell me more →</button>
+        </div>
         <div class="card-sub">Select the status that applied on December 31, <span class="ty">2024</span>.</div>
         <div class="radio-group" id="filing-status-group">
           <label class="radio-option selected" onclick="setFilingStatus('single')"><input type="radio" name="fs" value="single" checked> Single</label>
@@ -633,7 +726,14 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
       <!-- W-2 -->
       <div class="card" id="w2-section">
-        <div class="card-title">W-2 Employment Income</div>
+        <div class="card-title">W-2 Employment Income <span class="help-icon" onclick="toggleHelp('h-w2','w2')">?</span></div>
+        <div class="help-panel" id="h-w2" style="margin-bottom:12px">
+          <span class="hp-emoji">📄</span>
+          <div class="hp-title">What is a W-2?</div>
+          <div class="hp-simple">It's a form your employer sends you every January. It shows how much you earned and how much tax was already taken out of your paychecks. Think of it as your job's report card for the IRS!</div>
+          <div class="hp-find"><strong>📍 Where to find it:</strong> Check your work email in January, your company's HR portal, or your mailbox. Had two jobs? You'll have two W-2s — enter both!</div>
+          <button class="hp-more" onclick="openHelpDrawer('w2')">Tell me more →</button>
+        </div>
         <div class="card-sub">Add one entry per employer. Find these figures on your W-2 form.</div>
         <div class="item-list" id="w2-list"></div>
         <button class="add-btn" onclick="addW2()">+ Add W-2 Employer</button>
@@ -659,12 +759,24 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
           <div class="field">
             <label>Ordinary Dividends (1099-DIV Box 1a) <span class="help-icon" onclick="toggleHelp('h-ord-div')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="ord-div" oninput="st('ordinaryDividends',+this.value);recalc()"></div>
-            <div class="help-panel" id="h-ord-div">Total dividends received. May be reduced by qualified dividends taxed at lower rates.</div>
+            <div class="help-panel" id="h-ord-div">
+              <span class="hp-emoji">💰</span>
+              <div class="hp-title">Ordinary Dividends</div>
+              <div class="hp-simple">When you own stock or mutual funds, companies sometimes share their profits with you — that's a dividend! This is the <em>total</em> amount they paid you this year.</div>
+              <div class="hp-find"><strong>📍 Where to find it:</strong> Box 1a on your 1099-DIV (emailed or mailed in January by your brokerage).</div>
+              <button class="hp-more" onclick="openHelpDrawer('ordinary-dividends')">Tell me more →</button>
+            </div>
           </div>
           <div class="field">
             <label>Qualified Dividends (1099-DIV Box 1b) <span class="help-icon" onclick="toggleHelp('h-qual-div')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="qual-div" oninput="st('qualifiedDividends',+this.value);recalc()"></div>
-            <div class="help-panel" id="h-qual-div">Subset of ordinary dividends taxed at 0%, 15%, or 20% — always ≤ ordinary dividends.</div>
+            <div class="help-panel" id="h-qual-div">
+              <span class="hp-emoji">⭐</span>
+              <div class="hp-title">Qualified Dividends</div>
+              <div class="hp-simple">Some dividends get a special tax break and are taxed at a <em>lower rate</em> than regular income. This number is always smaller than or equal to your ordinary dividends above — don't add them together!</div>
+              <div class="hp-find"><strong>📍 Where to find it:</strong> Box 1b on the same 1099-DIV form. It's already included in Box 1a.</div>
+              <button class="hp-more" onclick="openHelpDrawer('qualified-dividends')">Tell me more →</button>
+            </div>
           </div>
         </div>
         <div class="field-row two">
@@ -675,19 +787,36 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
           <div class="field">
             <label>Short-Term Capital Gains <span class="help-icon" onclick="toggleHelp('h-stcg')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" placeholder="0" id="stcg" oninput="st('shortTermGains',+this.value);recalc()"></div>
-            <div class="help-panel" id="h-stcg">Assets held ≤ 1 year. Taxed as ordinary income. Can be negative (loss).</div>
+            <div class="help-panel" id="h-stcg">
+              <span class="hp-emoji">⚡</span>
+              <div class="hp-title">Short-Term Capital Gains</div>
+              <div class="hp-simple">If you sold a stock, crypto, or other investment that you owned for less than one year, your profit (or loss) goes here. The IRS treats this just like a paycheck — taxed at your regular rate.</div>
+              <div class="hp-find"><strong>📍 Where to find it:</strong> Your brokerage's 1099-B form or year-end statement. Look for "short-term." Can be negative if you lost money!</div>
+              <button class="hp-more" onclick="openHelpDrawer('stcg')">Tell me more →</button>
+            </div>
           </div>
         </div>
         <div class="field-row two">
           <div class="field">
             <label>Long-Term Capital Gains <span class="help-icon" onclick="toggleHelp('h-ltcg')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" placeholder="0" id="ltcg" oninput="st('longTermGains',+this.value);recalc()"></div>
-            <div class="help-panel" id="h-ltcg">Assets held &gt;1 year. Taxed at 0%, 15%, or 20% depending on your income.</div>
+            <div class="help-panel" id="h-ltcg">
+              <span class="hp-emoji">📊</span>
+              <div class="hp-title">Long-Term Capital Gains</div>
+              <div class="hp-simple">If you owned an investment for <em>more than one year</em> before selling, you get a tax break! The IRS rewards patient investors — you'll pay 0%, 15%, or 20% instead of your regular tax rate, which is usually lower.</div>
+              <div class="hp-find"><strong>📍 Where to find it:</strong> Your brokerage's 1099-B form. Look for "long-term." This is one of the best tax breaks available!</div>
+              <button class="hp-more" onclick="openHelpDrawer('ltcg')">Tell me more →</button>
+            </div>
           </div>
           <div class="field">
             <label>Capital Loss Carryforward <span class="help-icon" onclick="toggleHelp('h-clf')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="cap-loss-cf" oninput="st('capLossCarryforward',+this.value);recalc()"></div>
-            <div class="help-panel" id="h-clf">Unused capital losses from prior years (from prior Schedule D). Up to $3,000 offsets ordinary income annually.</div>
+            <div class="help-panel" id="h-clf">
+              <span class="hp-emoji">🔄</span>
+              <div class="hp-title">Capital Loss Carryforward</div>
+              <div class="hp-simple">If you lost more than you gained from investments in a <em>previous</em> year, the IRS lets you carry those unused losses into this year. It's like a coupon that reduces your taxable gains!</div>
+              <div class="hp-find"><strong>📍 Where to find it:</strong> Last year's Schedule D (capital gains worksheet) from your prior tax return. Leave blank if this is your first year investing or you had no prior losses.</div>
+            </div>
           </div>
         </div>
       </div>
@@ -715,7 +844,13 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
           <div class="field">
             <label>Social Security Benefits <span class="help-icon" onclick="toggleHelp('h-ss')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="ss-benefits" oninput="st('socialSecurityBenefits',+this.value);recalc()"></div>
-            <div class="help-panel" id="h-ss">Enter Box 5 of SSA-1099. Up to 85% may be taxable depending on your total income.</div>
+            <div class="help-panel" id="h-ss">
+              <span class="hp-emoji">👴</span>
+              <div class="hp-title">Social Security Benefits</div>
+              <div class="hp-simple">If you receive Social Security payments, you might owe a little tax on part of them — but usually not all of it! If Social Security is your <em>only</em> income, you probably owe nothing. If you have other income too, up to 85% may be taxable.</div>
+              <div class="hp-find"><strong>📍 Where to find it:</strong> Box 5 on your SSA-1099 (the pink Social Security statement mailed each January). Only enter the amount in Box 5, not Box 3 or 4.</div>
+              <button class="hp-more" onclick="openHelpDrawer('social-security')">Tell me more →</button>
+            </div>
           </div>
           <div class="field">
             <label>Other Taxable Income</label>
@@ -727,7 +862,13 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
           <div class="field">
             <label>IRA / 401k Distributions <span class="help-icon" onclick="toggleHelp('h-dist')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="ira-distributions" oninput="st('iraDistributions',+this.value);recalc()"></div>
-            <div class="help-panel" id="h-dist">Taxable amount from 1099-R (Box 2a). Early distributions (under 59½) add a 10% penalty.</div>
+            <div class="help-panel" id="h-dist">
+              <span class="hp-emoji">🏦</span>
+              <div class="hp-title">IRA / 401k Withdrawals</div>
+              <div class="hp-simple">If you took money out of a retirement account (IRA, 401k, 403b, etc.) this year, that counts as income and you'll owe tax on it. This is the <em>taxable</em> portion — usually the full amount unless you made non-deductible contributions before.</div>
+              <div class="hp-find"><strong>📍 Where to find it:</strong> Box 2a on your 1099-R (mailed by your retirement plan in January). If Box 2a says "Unknown," use Box 1 (the total distribution).</div>
+              <button class="hp-more" onclick="openHelpDrawer('ira')">Tell me more →</button>
+            </div>
           </div>
           <div class="field">
             <label>Early Distribution? <span class="help-icon" onclick="toggleHelp('h-early')">?</span></label>
@@ -735,7 +876,12 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
               <option value="no">No (59½ or older / qualified exception)</option>
               <option value="yes">Yes (under 59½, no exception) — 10% penalty</option>
             </select>
-            <div class="help-panel" id="h-early">10% early withdrawal penalty applies unless you qualify for an exception (disability, SEPP, first home, etc.)</div>
+            <div class="help-panel" id="h-early">
+              <span class="hp-emoji">⏰</span>
+              <div class="hp-title">Early Withdrawal Penalty</div>
+              <div class="hp-simple">The IRS really wants you to keep retirement money for retirement! If you took money out before age 59½, there's usually an extra 10% penalty on top of the normal tax. However, there are exceptions — like if you were disabled, bought your first home, or set up equal regular payments.</div>
+              <div class="hp-find"><strong>📍 How to check:</strong> Look at Box 7 on your 1099-R. Code "1" usually means the penalty applies. Code "2" means you qualify for an exception. Not sure? Check the instructions on the back of your 1099-R.</div>
+            </div>
           </div>
         </div>
       </div>
@@ -744,7 +890,11 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <div class="card">
         <div class="card-title">Did you receive a 1099-K? <span class="help-icon" onclick="toggleHelp('h-1099k')">?</span></div>
         <div class="help-panel open" id="h-1099k" style="margin-bottom:16px">
-          <strong>New 2024 rule:</strong> Payment platforms (PayPal, Venmo, Etsy, eBay, etc.) must send a 1099-K if they paid you $5,000+ in 2024. This includes personal sales and reimbursements — not all of it is taxable! Use this guide to sort it out.
+          <span class="hp-emoji">📱</span>
+          <div class="hp-title">What is a 1099-K?</div>
+          <div class="hp-simple">Apps like PayPal, Venmo, Etsy, and eBay now send a 1099-K if they processed $5,000+ for you in 2024. But don't panic — <em>not all of it is taxable!</em> Friends paying you back for dinner is not income. Selling your old couch for less than you paid is not income. Only money you earned for goods or services counts.</div>
+          <div class="hp-find"><strong>📍 Where to find it:</strong> Check your email or the app's account dashboard. Use the wizard below to separate taxable from non-taxable amounts.</div>
+          <button class="hp-more" onclick="openHelpDrawer('1099-k')">Tell me more →</button>
         </div>
         <div class="field-row single">
           <div class="field">
@@ -804,7 +954,13 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
       <div class="card">
         <div class="card-title">Business Expenses <span class="help-icon" onclick="toggleHelp('h-sched-c')">?</span></div>
-        <div class="help-panel" id="h-sched-c" style="margin-bottom:16px">All expenses must be "ordinary and necessary" for your business. Keep receipts for everything over $75 — the IRS can disallow deductions without documentation.</div>
+        <div class="help-panel" id="h-sched-c" style="margin-bottom:16px">
+          <span class="hp-emoji">🗂️</span>
+          <div class="hp-title">Business Expenses (Schedule C)</div>
+          <div class="hp-simple">Every dollar you spend on your business can reduce your taxes! The rule is simple: the expense has to be "ordinary" (normal for your type of work) and "necessary" (helpful for earning income). Always keep receipts — the IRS can say "no" if you can't prove it.</div>
+          <div class="hp-find"><strong>📍 Good rule of thumb:</strong> Save every receipt for anything over $25. Take photos with your phone right away so you don't lose them. Your bank and credit card statements are great backup proof.</div>
+          <button class="hp-more" onclick="openHelpDrawer('schedule-c')">Tell me more →</button>
+        </div>
         <div class="card-sub">Enter annual totals for each category. Leave blank if not applicable.</div>
         <div class="field-row two">
           <div class="field">
@@ -840,12 +996,23 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
           <div class="field">
             <label>Business Meals (50% limit applied automatically) <span class="help-icon" onclick="toggleHelp('h-meals')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-meals" oninput="updateExpense('meals',+this.value)"></div>
-            <div class="help-panel" id="h-meals">Enter the full amount you spent. Only 50% is deductible — the calculation is done for you.</div>
+            <div class="help-panel" id="h-meals">
+              <span class="hp-emoji">🍽️</span>
+              <div class="hp-title">Business Meals (50% Rule)</div>
+              <div class="hp-simple">Taking a client out to lunch? Eating while traveling for business? You can deduct half! The IRS lets you write off 50% of business meal costs. Just enter the <em>full</em> amount you spent — we'll automatically calculate the 50% for you.</div>
+              <div class="hp-find"><strong>📍 What counts:</strong> Meals with clients, customers, or business partners where business was discussed. Keep the receipt and note who was there and what you talked about on the back!</div>
+            </div>
           </div>
           <div class="field">
             <label>Contract Labor / Subcontractors <span class="help-icon" onclick="toggleHelp('h-contract')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-contract" oninput="updateExpense('contractLabor',+this.value)"></div>
-            <div class="help-panel" id="h-contract">Payments to independent contractors. Issue a 1099-NEC if you paid any single contractor $600+.</div>
+            <div class="help-panel" id="h-contract">
+              <span class="hp-emoji">🤝</span>
+              <div class="hp-title">Payments to Contractors</div>
+              <div class="hp-simple">If you hired freelancers or independent contractors to help with your business, you can deduct what you paid them! Important: if you paid any single person $600 or more, you're required to send them a 1099-NEC form by January 31st.</div>
+              <div class="hp-find"><strong>📍 What to enter:</strong> Total paid to all contractors combined. If you use a payment platform like PayPal or Venmo for business, check if they already sent a 1099-K — don't count it twice!</div>
+              <button class="hp-more" onclick="openHelpDrawer('1099-nec')">Tell me more →</button>
+            </div>
           </div>
         </div>
         <div class="field-row two">
@@ -862,7 +1029,12 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
           <div class="field">
             <label>Equipment &amp; Depreciation <span class="help-icon" onclick="toggleHelp('h-sec179')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-depreciation" oninput="updateExpense('depreciation',+this.value)"></div>
-            <div class="help-panel" id="h-sec179">Section 179 lets you deduct the full cost of equipment in year of purchase (up to $1,220,000 in 2024). Bonus depreciation is 60% for 2024.</div>
+            <div class="help-panel" id="h-sec179">
+              <span class="hp-emoji">💻</span>
+              <div class="hp-title">Equipment &amp; Depreciation</div>
+              <div class="hp-simple">Bought a computer, camera, tools, or other equipment for your business? Great news — you can often deduct the <em>full cost</em> in the same year you bought it (no waiting!). This is called Section 179. For 2024, you can deduct up to $1,220,000 in equipment right away.</div>
+              <div class="hp-find"><strong>📍 What counts:</strong> Computers, phones (business %), cameras, machinery, office furniture — anything with a useful life over one year used for your business. Keep your receipt or invoice showing the date and price.</div>
+            </div>
           </div>
           <div class="field">
             <label>Education &amp; Training (business-related)</label>
@@ -886,7 +1058,13 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
       <div class="card">
         <div class="card-title">Home Office Deduction <span class="help-icon" onclick="toggleHelp('h-home-office')">?</span></div>
-        <div class="help-panel" id="h-home-office" style="margin-bottom:16px"><strong>Eligibility:</strong> Your home office must be used <em>regularly and exclusively</em> for business — no personal use allowed in that space. Must be your principal place of business.</div>
+        <div class="help-panel" id="h-home-office" style="margin-bottom:16px">
+          <span class="hp-emoji">🏡</span>
+          <div class="hp-title">Home Office Deduction</div>
+          <div class="hp-simple">If you work from home and have a space used <em>only</em> for business, you can deduct a portion of your home costs (rent, mortgage, utilities, internet)! The key rule: the room or area must be used <strong>exclusively</strong> for work — no bed in the corner, no watching TV there.</div>
+          <div class="hp-find"><strong>📍 Two methods:</strong> <em>Simple</em> = $5 per sq ft (max 300 sq ft = $1,500 deduction, no math needed). <em>Actual</em> = track all home costs and multiply by office percentage. Most people use Simple — it's easy and usually close to the same!</div>
+          <button class="hp-more" onclick="openHelpDrawer('home-office')">Tell me more →</button>
+        </div>
         <div class="toggle-row">
           <div class="toggle-info">
             <div class="t-title">I have a qualifying home office</div>
@@ -941,7 +1119,13 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
       <div class="card">
         <div class="card-title">Vehicle / Mileage Deduction <span class="help-icon" onclick="toggleHelp('h-vehicle')">?</span></div>
-        <div class="help-panel" id="h-vehicle" style="margin-bottom:16px"><strong>2024 Standard Mileage Rate: 67¢/mile.</strong> You must elect the standard mileage method in the first year you use a vehicle for business. A contemporaneous mileage log (date, destination, business purpose, miles) is required — reconstructed logs are frequently disallowed in audits.</div>
+        <div class="help-panel" id="h-vehicle" style="margin-bottom:16px">
+          <span class="hp-emoji">🚗</span>
+          <div class="hp-title">Vehicle &amp; Mileage Deduction</div>
+          <div class="hp-simple">Drive your car for work? Every business mile saves you money! In 2024, the IRS lets you deduct <strong>67¢ for every business mile</strong> driven. Commuting to your regular office doesn't count, but driving to a client, the post office, or a job site does!</div>
+          <div class="hp-find"><strong>📍 What you'll need:</strong> Your total business miles for 2024 and your odometer reading on Jan 1 and Dec 31. Keep a simple mileage log — even a note in your phone with date, destination, and miles. The IRS loves a good log!</div>
+          <button class="hp-more" onclick="openHelpDrawer('vehicle')">Tell me more →</button>
+        </div>
         <div class="toggle-row">
           <div class="toggle-info">
             <div class="t-title">I used a vehicle for business</div>
@@ -1010,17 +1194,34 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
       <div class="card">
         <div class="card-title">Above-the-Line Adjustments <span class="help-icon" onclick="toggleHelp('h-atl')">?</span></div>
-        <div class="help-panel" id="h-atl" style="margin-bottom:16px">These deductions reduce your AGI directly — they benefit you even if you take the standard deduction.</div>
+        <div class="help-panel" id="h-atl" style="margin-bottom:16px">
+          <span class="hp-emoji">📐</span>
+          <div class="hp-title">Above-the-Line Adjustments</div>
+          <div class="hp-simple">These are <em>extra special</em> deductions because they reduce your income before anything else is calculated — even if you're not itemizing! Think of them as VIP discounts that everyone gets to use, no matter how you file.</div>
+          <div class="hp-find"><strong>📍 What qualifies:</strong> Student loan interest, IRA contributions, health savings accounts (HSA), self-employed health insurance, and retirement plans for self-employed people are all listed below.</div>
+          <button class="hp-more" onclick="openHelpDrawer('agi')">Tell me more →</button>
+        </div>
         <div class="field-row two">
           <div class="field">
             <label>Student Loan Interest <span class="help-icon" onclick="toggleHelp('h-sli')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="student-loan-int" oninput="st('studentLoanInterest',+this.value);recalc()"></div>
-            <div class="help-panel" id="h-sli">Max $2,500. Phases out: $75K–$90K (single), $155K–$185K (MFJ). Box 1 of Form 1098-E.</div>
+            <div class="help-panel" id="h-sli">
+              <span class="hp-emoji">🎓</span>
+              <div class="hp-title">Student Loan Interest</div>
+              <div class="hp-simple">Paying off student loans? You can deduct up to $2,500 of the interest you paid this year — even if you don't itemize! This is free money that many people miss. (Note: this benefit phases out for higher earners.)</div>
+              <div class="hp-find"><strong>📍 Where to find it:</strong> Box 1 on Form 1098-E, sent by your loan servicer (Sallie Mae, Navient, etc.) in January. You can also find it in your loan servicer's online portal.</div>
+            </div>
           </div>
           <div class="field">
             <label>Traditional IRA Contribution <span class="help-icon" onclick="toggleHelp('h-ira')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="ira-contrib" oninput="st('iraContribution',+this.value);recalc()"></div>
-            <div class="help-panel" id="h-ira">Max $7,000 (under 50) or $8,000 (50+). Deductibility phases out if covered by a workplace plan. Can contribute until April 15, 2025.</div>
+            <div class="help-panel" id="h-ira">
+              <span class="hp-emoji">🏦</span>
+              <div class="hp-title">Traditional IRA Contribution</div>
+              <div class="hp-simple">A Traditional IRA is a retirement savings account where your contributions may be tax-deductible right now — meaning every dollar you put in could lower your tax bill today! You can contribute up to $7,000 (or $8,000 if you're 50 or older) and have until April 15, 2025 to contribute for 2024.</div>
+              <div class="hp-find"><strong>📍 Where to find it:</strong> Your brokerage or bank statement showing your 2024 IRA deposit. Double-check you labeled it as a "2024 contribution" when you made it.</div>
+              <button class="hp-more" onclick="openHelpDrawer('ira')">Tell me more →</button>
+            </div>
           </div>
         </div>
         <div class="field-row two">
@@ -1043,7 +1244,12 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
           <div class="field">
             <label>HSA Contribution <span class="help-icon" onclick="toggleHelp('h-hsa')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="hsa-contrib" oninput="st('hsaContribution',+this.value);recalc()"></div>
-            <div class="help-panel" id="h-hsa">Must be enrolled in an HDHP. 2024 limits: $4,150 (self-only) or $8,300 (family). Age 55+: add $1,000. Check Box 12 Code W on your W-2 for employer contributions.</div>
+            <div class="help-panel" id="h-hsa">
+              <span class="hp-emoji">🏥</span>
+              <div class="hp-title">Health Savings Account (HSA)</div>
+              <div class="hp-simple">An HSA is like a special piggy bank for medical bills — money goes in tax-free, grows tax-free, and comes out tax-free for healthcare! To contribute, you must have a High Deductible Health Plan (HDHP). It's one of the only accounts with a triple tax benefit!</div>
+              <div class="hp-find"><strong>📍 Where to find it:</strong> Your HSA provider mails Form 5498-SA showing your contributions. Or look at Box 12 Code W on your W-2 for employer contributions (don't enter employer amounts here — they're already not taxed).</div>
+            </div>
           </div>
           <div class="field">
             <label>HSA Coverage Type</label>
@@ -1057,12 +1263,22 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
           <div class="field">
             <label>Self-Employed Health Insurance Premiums <span class="help-icon" onclick="toggleHelp('h-sehi')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="se-health" oninput="st('seHealthInsurance',+this.value);recalc()"></div>
-            <div class="help-panel" id="h-sehi">100% deductible for medical, dental, vision, and LTC premiums. Cannot exceed your net SE income. Cannot claim for months you were eligible for employer-sponsored coverage.</div>
+            <div class="help-panel" id="h-sehi">
+              <span class="hp-emoji">🩺</span>
+              <div class="hp-title">Self-Employed Health Insurance</div>
+              <div class="hp-simple">If you're self-employed and pay for your own health insurance (not through an employer), you can deduct 100% of those premiums! This includes medical, dental, and vision insurance for yourself and your family. This is a huge benefit that employed workers don't get.</div>
+              <div class="hp-find"><strong>📍 What to enter:</strong> The total premiums you paid in 2024 for health, dental, and vision coverage. Check your insurance statements or bank records for the amounts. Don't include months where you were also covered by a spouse's employer plan.</div>
+            </div>
           </div>
           <div class="field">
             <label>SEP-IRA / Solo 401k Contribution <span class="help-icon" onclick="toggleHelp('h-sep')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="sep-ira" oninput="st('sepIraContribution',+this.value);recalc()"></div>
-            <div class="help-panel" id="h-sep">SEP-IRA: up to 25% of net SE earnings, max $69,000. Solo 401k: up to $23,000 employee + 20% employer, max $69,000 combined.</div>
+            <div class="help-panel" id="h-sep">
+              <span class="hp-emoji">💼</span>
+              <div class="hp-title">SEP-IRA / Solo 401k</div>
+              <div class="hp-simple">Self-employed people can save a lot more for retirement than regular employees! A SEP-IRA lets you set aside up to 25% of your profit (max $69,000) and deduct every dollar. A Solo 401k works similarly. Both are great ways to legally lower your tax bill while building your future.</div>
+              <div class="hp-find"><strong>📍 Where to find it:</strong> Your SEP-IRA or Solo 401k account statement showing 2024 contributions. You have until your tax filing deadline (with extensions) to make SEP-IRA contributions for 2024!</div>
+            </div>
           </div>
         </div>
         <div id="half-se-tax-display" style="display:none" class="alert success">
@@ -1096,19 +1312,37 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
             <div class="field">
               <label>Mortgage Interest Paid (1098) <span class="help-icon" onclick="toggleHelp('h-mort')">?</span></label>
               <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="mortgage-interest" oninput="st('mortgageInterest',+this.value);recalc()"></div>
-              <div class="help-panel" id="h-mort">Interest on loans up to $750,000 (acquired after 12/15/2017) or $1M (older loans). Box 1 of Form 1098.</div>
+              <div class="help-panel" id="h-mort">
+                <span class="hp-emoji">🏠</span>
+                <div class="hp-title">Mortgage Interest</div>
+                <div class="hp-simple">The interest you pay on your home loan is often tax-deductible! This is one of the biggest deductions homeowners have. The government helps make homeownership affordable by letting you deduct this from your income.</div>
+                <div class="hp-find"><strong>📍 Where to find it:</strong> Box 1 on Form 1098 (Mortgage Interest Statement) — your lender mails this in January. Only the interest portion counts, not the principal (the part that pays down the loan).</div>
+                <button class="hp-more" onclick="openHelpDrawer('mortgage-interest')">Tell me more →</button>
+              </div>
             </div>
             <div class="field">
               <label>Property Tax Paid <span class="help-icon" onclick="toggleHelp('h-salt')">?</span></label>
               <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="property-tax" oninput="st('propertyTax',+this.value);recalc()"></div>
-              <div class="help-panel" id="h-salt">Combined with state income/sales tax, capped at $10,000 total ($5,000 if MFS). No deduction for federal income taxes.</div>
+              <div class="help-panel" id="h-salt">
+                <span class="hp-emoji">🏛️</span>
+                <div class="hp-title">Property Tax</div>
+                <div class="hp-simple">The property tax you pay on your home can be deducted! However, there's a combined limit of $10,000 total for all state and local taxes (property tax + state income tax combined). This is called the SALT cap.</div>
+                <div class="hp-find"><strong>📍 Where to find it:</strong> Your county tax bill or mortgage escrow statement. Your lender may also include it on Form 1098. Enter the amount you actually <em>paid</em> in 2024, not the amount billed.</div>
+                <button class="hp-more" onclick="openHelpDrawer('salt')">Tell me more →</button>
+              </div>
             </div>
           </div>
           <div class="field-row two">
             <div class="field">
               <label>State &amp; Local Income Tax Paid <span class="help-icon" onclick="toggleHelp('h-slit')">?</span></label>
               <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="state-income-tax" oninput="st('stateTax',+this.value);recalc()"></div>
-              <div class="help-panel" id="h-slit">Combined with property tax, the SALT cap is $10,000. Can alternatively deduct sales tax (use IRS tables) if higher.</div>
+              <div class="help-panel" id="h-slit">
+                <span class="hp-emoji">🗺️</span>
+                <div class="hp-title">State &amp; Local Income Tax</div>
+                <div class="hp-simple">You can deduct state income taxes you paid in 2024 — but remember, the total with property taxes is capped at $10,000! If you live in a state with no income tax (like Florida or Texas), you can deduct sales tax instead using IRS tables.</div>
+                <div class="hp-find"><strong>📍 Where to find it:</strong> Your state tax return shows how much you paid. Or check your pay stubs — it shows state tax withheld each pay period. Add up all state tax withheld for the year.</div>
+                <button class="hp-more" onclick="openHelpDrawer('salt')">Tell me more →</button>
+              </div>
             </div>
             <div class="field">
               <label>SALT Total (auto-capped at $10,000)</label>
@@ -1119,19 +1353,36 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
             <div class="field">
               <label>Charitable Cash Donations <span class="help-icon" onclick="toggleHelp('h-charity')">?</span></label>
               <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="charity-cash" oninput="st('charitableCash',+this.value);recalc()"></div>
-              <div class="help-panel" id="h-charity">Keep bank records or written acknowledgment for all donations. For $250+, you need a contemporaneous written acknowledgment from the charity.</div>
+              <div class="help-panel" id="h-charity">
+                <span class="hp-emoji">❤️</span>
+                <div class="hp-title">Cash Donations to Charity</div>
+                <div class="hp-simple">Money donated to qualified charities (churches, non-profits, food banks, etc.) can be deducted! The IRS rewards generosity. Just make sure you have proof — a bank statement, cancel check, or receipt from the charity.</div>
+                <div class="hp-find"><strong>📍 Important:</strong> For any donation of $250 or more, you need a written "thank you" letter from the charity confirming the amount and that you received nothing in return. Most charities send these automatically at year-end.</div>
+                <button class="hp-more" onclick="openHelpDrawer('charitable')">Tell me more →</button>
+              </div>
             </div>
             <div class="field">
               <label>Non-Cash Charitable Donations <span class="help-icon" onclick="toggleHelp('h-noncash')">?</span></label>
               <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="charity-noncash" oninput="st('charitableNonCash',+this.value);recalc()"></div>
-              <div class="help-panel" id="h-noncash">Clothing, household items to Goodwill/Salvation Army, etc. Deduct fair market value. Form 8283 required for $500+. Appraisal required for $5,000+.</div>
+              <div class="help-panel" id="h-noncash">
+                <span class="hp-emoji">👕</span>
+                <div class="hp-title">Non-Cash Donations (Clothes, Goods)</div>
+                <div class="hp-simple">Donated bags of clothes to Goodwill? Dropped off furniture at Salvation Army? You can deduct the fair market value of what you gave — what it would sell for at a thrift store, not what you originally paid. Take photos of everything before you donate!</div>
+                <div class="hp-find"><strong>📍 What you need:</strong> A receipt from the charity listing items donated. For donations over $500 total, fill out Form 8283. For items worth over $5,000, you'll need a professional appraisal. Apps like ItsDeductible can help estimate values.</div>
+                <button class="hp-more" onclick="openHelpDrawer('charitable')">Tell me more →</button>
+              </div>
             </div>
           </div>
           <div class="field-row two">
             <div class="field">
               <label>Medical &amp; Dental Expenses <span class="help-icon" onclick="toggleHelp('h-medical')">?</span></label>
               <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="medical-expenses" oninput="st('medicalExpenses',+this.value);recalc()"></div>
-              <div class="help-panel" id="h-medical">Only expenses exceeding 7.5% of your AGI are deductible. The threshold is calculated automatically.</div>
+              <div class="help-panel" id="h-medical">
+                <span class="hp-emoji">💊</span>
+                <div class="hp-title">Medical &amp; Dental Expenses</div>
+                <div class="hp-simple">If your out-of-pocket medical bills were really large this year, you might be able to deduct them — but only the amount that exceeds 7.5% of your income. For example, if you earned $50,000, the first $3,750 of medical costs don't count, but anything above that does!</div>
+                <div class="hp-find"><strong>📍 What counts:</strong> Doctor bills, prescriptions, dental, vision, hearing aids, hospital stays — expenses you paid out of pocket (not reimbursed by insurance). Enter your total and we'll calculate the deductible portion automatically.</div>
+              </div>
             </div>
             <div class="field">
               <label>Deductible Medical (after 7.5% AGI floor)</label>
@@ -1157,7 +1408,13 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
       <div class="card">
         <div class="card-title">Child Tax Credit <span class="help-icon" onclick="toggleHelp('h-ctc')">?</span></div>
-        <div class="help-panel" id="h-ctc" style="margin-bottom:12px"><strong>$2,000 per qualifying child</strong> under 17 on Dec 31, 2024. Up to $1,700 is refundable (ACTC). Phases out at $200K (single) / $400K (MFJ) — $50 per $1,000 over threshold.</div>
+        <div class="help-panel" id="h-ctc" style="margin-bottom:12px">
+          <span class="hp-emoji">👶</span>
+          <div class="hp-title">Child Tax Credit</div>
+          <div class="hp-simple">Having kids saves you money on taxes! For each child under 17 at the end of 2024, you get a <strong>$2,000 tax credit</strong> — and up to $1,700 of that can come back to you as a refund even if you owe no tax! We'll calculate this automatically from the dependents you entered in Step 1.</div>
+          <div class="hp-find"><strong>📍 What qualifies:</strong> Your child must be under age 17 on December 31, 2024, live with you for at least half the year, and have a Social Security number. You don't need to do anything extra — just make sure you added them in Step 1!</div>
+          <button class="hp-more" onclick="openHelpDrawer('ctc')">Tell me more →</button>
+        </div>
         <div id="ctc-auto-display" class="alert info">
           <span class="alert-icon">👨‍👩‍👧</span>
           <div class="alert-body" id="ctc-auto-text">Based on your dependents, we'll calculate this automatically.</div>
@@ -1166,12 +1423,22 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
       <div class="card">
         <div class="card-title">Child &amp; Dependent Care Credit <span class="help-icon" onclick="toggleHelp('h-cdcc')">?</span></div>
-        <div class="help-panel" id="h-cdcc" style="margin-bottom:12px">For childcare costs while you (and spouse) worked or looked for work. Max qualifying expenses: $3,000 (1 child) / $6,000 (2+ children). Credit: 20–35% depending on income.</div>
+        <div class="help-panel" id="h-cdcc" style="margin-bottom:12px">
+          <span class="hp-emoji">🧒</span>
+          <div class="hp-title">Child &amp; Dependent Care Credit</div>
+          <div class="hp-simple">Pay for daycare or after-school care so you could work? The government helps! You can get back 20–35% of what you spent on childcare (up to $3,000 for one child, $6,000 for two or more). This applies to kids under 13, or any dependent who can't care for themselves.</div>
+          <div class="hp-find"><strong>📍 What counts:</strong> Daycare centers, family daycare, after-school programs, and summer day camps. Does NOT include overnight camps or school tuition (kindergarten and above). Both you and your spouse must have earned income or been full-time students.</div>
+        </div>
         <div class="field-row two">
           <div class="field">
             <label>Childcare Expenses Paid <span class="help-icon" onclick="toggleHelp('h-cc2')">?</span></label>
             <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="childcare-exp" oninput="st('childCareExpenses',+this.value);recalc()"></div>
-            <div class="help-panel" id="h-cc2">Daycare, after-school care, summer camps (but not overnight camps). Both spouses must have earned income.</div>
+            <div class="help-panel" id="h-cc2">
+              <span class="hp-emoji">🏫</span>
+              <div class="hp-title">What Childcare Costs Qualify?</div>
+              <div class="hp-simple">Enter the total you paid in 2024 for care while you worked. Daycare, after-school programs, babysitters (even a teenager you hire), and summer <em>day</em> camps all count. Overnight summer camps and school tuition (K-12) do NOT count.</div>
+              <div class="hp-find"><strong>📍 Where to find it:</strong> Check your bank statements or childcare provider receipts. Your daycare may have sent you Form 2441 or a year-end statement showing total amounts paid. Ask your provider for their Tax ID number — you'll need it!</div>
+            </div>
           </div>
           <div class="field">
             <label>Employer-Provided Dependent Care FSA</label>
@@ -1201,7 +1468,12 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
       <div class="card">
         <div class="card-title">Retirement Savings Contribution Credit <span class="help-icon" onclick="toggleHelp('h-saver')">?</span></div>
-        <div class="help-panel" id="h-saver" style="margin-bottom:12px">Also called the "Saver's Credit." 10–50% of retirement contributions (IRA, 401k, etc.), up to $2,000 contribution ($4,000 MFJ). Non-refundable. Income limits: $38,250 (single) / $76,500 (MFJ) for 2024.</div>
+        <div class="help-panel" id="h-saver" style="margin-bottom:12px">
+          <span class="hp-emoji">🐷</span>
+          <div class="hp-title">Saver's Credit</div>
+          <div class="hp-simple">This is a special bonus for low-to-middle income earners who save for retirement! If you contributed to an IRA, 401k, or similar account, you might get an extra credit worth 10–50% of what you saved (up to $1,000, or $2,000 for couples). It's free money for doing the right thing!</div>
+          <div class="hp-find"><strong>📍 Income limits for 2024:</strong> Single filers earning under $38,250 qualify. Married couples earning under $76,500 qualify. If you're near these limits, it's still worth entering your contributions — you might qualify for a partial credit!</div>
+        </div>
         <div class="field-row single">
           <div class="field">
             <label>Total 2024 Retirement Contributions (IRA + 401k + SIMPLE + SEP)</label>
@@ -1239,7 +1511,13 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
       <div class="card">
         <div class="card-title">Estimated Tax Payments Made <span class="help-icon" onclick="toggleHelp('h-est')">?</span></div>
-        <div class="help-panel" id="h-est" style="margin-bottom:16px">If you're self-employed or had income without withholding, you may have made quarterly payments to the IRS using Form 1040-ES. Enter the amounts you actually paid.</div>
+        <div class="help-panel" id="h-est" style="margin-bottom:16px">
+          <span class="hp-emoji">📅</span>
+          <div class="hp-title">Estimated Tax Payments</div>
+          <div class="hp-simple">If you're self-employed (or had side income with no withholding), you're supposed to pay taxes four times a year — kind of like a paycheck, but you send the check to the IRS yourself. These are called "estimated payments." If you made them, enter them here so you get credit!</div>
+          <div class="hp-find"><strong>📍 Where to find them:</strong> Check your IRS.gov account, your bank statements for payments to "US Treasury," or your Form 1040-ES payment voucher stubs. The four due dates in 2024 were April 15, June 17, September 16, and January 15, 2025.</div>
+          <button class="hp-more" onclick="openHelpDrawer('estimated-tax')">Tell me more →</button>
+        </div>
         <div class="field-row two">
           <div class="field">
             <label>Q1 Payment (paid April 15, 2024)</label>
@@ -2301,10 +2579,7 @@ function toggleVehicle(on) {
   document.getElementById('vehicle-fields').style.display = on ? '' : 'none';
   recalc();
 }
-function toggleHelp(id) {
-  const el = document.getElementById(id);
-  if (el) el.classList.toggle('open');
-}
+// toggleHelp defined below (supports drawer linking via key param)
 function setFilingStatus(fs) {
   S.filingStatus = fs;
   document.querySelectorAll('#filing-status-group .radio-option').forEach(o => {
@@ -2917,6 +3192,339 @@ recalc();
 // Check for saved session after a brief delay (let page settle)
 setTimeout(checkSavedSession, 300);
 
+// ══════════════════════════════════════════════════════════════════════════
+// TAX HELP KNOWLEDGE BASE
+// Written in plain English — no jargon, explain like you're 10
+// ══════════════════════════════════════════════════════════════════════════
+const TAX_HELP = {
+  'w2': {
+    emoji: '📄', title: 'W-2 Form', tags: ['income'],
+    simple: 'The report card your employer sends every January showing what you earned and how much tax was already taken out of your paychecks.',
+    explain: 'If you work a regular job, your employer sends you a W-2 by January 31st. Box 1 shows your total wages for the year. Box 2 shows how much federal tax was withheld (taken out of your paychecks automatically). If you had two jobs, you get two W-2s — enter both. The goal is to report all your income so the IRS can check it matches what your employers reported.',
+    find: 'Check your work email or mailbox in January. Many employers post it online through HR portals like ADP, Workday, Gusto, or Paylocity — search "W-2" or "tax documents" after logging in.',
+    related: ['withholding', 'wages', 'filing-status']
+  },
+  'wages': {
+    emoji: '💵', title: 'Wages / Salary', tags: ['income'],
+    simple: 'The total money you earned from your job before any taxes were taken out.',
+    explain: 'This is your gross pay for the year — everything your employer paid you, including bonuses and tips, before taxes and deductions. You find this in Box 1 of your W-2. It\'s usually less than what you\'d calculate by multiplying your hourly rate × hours, because some pre-tax benefits (like 401k contributions) reduce this number.',
+    find: 'Box 1 on your W-2 form.',
+    related: ['w2', 'withholding']
+  },
+  'withholding': {
+    emoji: '🏦', title: 'Tax Withholding', tags: ['income', 'basics'],
+    simple: 'Money your employer automatically sends to the IRS out of every paycheck on your behalf — like pre-paying your taxes throughout the year.',
+    explain: 'Every time you get paid, your employer holds back some money and sends it to the IRS. At tax time, if they withheld more than you actually owe, you get a refund. If they withheld too little, you owe the difference. You control how much is withheld by filling out a Form W-4 with your employer.',
+    find: 'Box 2 (Federal income tax withheld) on your W-2 form.',
+    related: ['w2', 'refund', 'tax-bracket']
+  },
+  '1099-nec': {
+    emoji: '📋', title: '1099-NEC (Freelance Income)', tags: ['income'],
+    simple: 'The tax form you get instead of a W-2 when you did freelance, contract, or gig work for a company.',
+    explain: 'NEC stands for Non-Employee Compensation. If a company paid you $600 or more for work but you weren\'t their employee (no benefits, no W-2, you set your own hours), they send you a 1099-NEC. Unlike a W-2 job, no tax was withheld — you\'re responsible for paying it all. This is why freelancers often owe money at tax time.',
+    find: 'Check your email or mailbox by January 31st. Platforms like Upwork, Fiverr, and most clients send these digitally. If a client paid you under $600, you still owe tax on it even without a form.',
+    related: ['schedule-c', 'se-tax', '1099-k']
+  },
+  '1099-k': {
+    emoji: '📱', title: '1099-K (Payment Apps)', tags: ['income'],
+    simple: 'A form from PayPal, Venmo, Cash App, Etsy, eBay, etc. showing how much money flowed through your account.',
+    explain: 'Starting in 2024, payment platforms must send you a 1099-K if they processed $5,000+ in payments to you. Important: not all of it is taxable! Money from friends splitting dinner, reimbursements from roommates, or selling personal items you lost money on is NOT income. Only money from actual business activity counts. The 1099-K wizard in this app helps you sort it out.',
+    find: 'Look in your PayPal, Venmo, or platform account under "Tax Documents" or "Statements." Also check your email from those platforms in January/February.',
+    related: ['1099-nec', 'schedule-c', 'freelance']
+  },
+  '1099-div': {
+    emoji: '📈', title: '1099-DIV (Dividends)', tags: ['income'],
+    simple: 'A form from your brokerage showing money your investments paid you just for owning them — like a bonus for holding stocks.',
+    explain: 'When you own stocks or mutual funds, companies sometimes share their profits with you — these are called dividends. Your brokerage sends a 1099-DIV showing how much you received. Ordinary dividends (Box 1a) are taxed like regular income. Qualified dividends (Box 1b) get a special lower tax rate because you held the investment long enough.',
+    find: 'Your brokerage account (Fidelity, Schwab, Vanguard, Robinhood, etc.) — look for "Tax Documents" in early February.',
+    related: ['ordinary-dividends', 'qualified-dividends', 'ltcg']
+  },
+  'ordinary-dividends': {
+    emoji: '💰', title: 'Ordinary Dividends', tags: ['income'],
+    simple: 'All the dividend money your investments paid you this year — taxed at your normal tax rate.',
+    explain: 'This is the total amount companies paid you as a dividend for owning their stock. It\'s taxed just like your salary. Box 1a on your 1099-DIV shows this number. Inside this total there may be "qualified dividends" (Box 1b) which get a better tax rate — you\'ll enter both.',
+    find: 'Box 1a on your 1099-DIV from your brokerage.',
+    related: ['qualified-dividends', '1099-div', 'tax-bracket']
+  },
+  'qualified-dividends': {
+    emoji: '⭐', title: 'Qualified Dividends', tags: ['income'],
+    simple: 'A portion of your dividends that get taxed at a lower rate because you held the investment long enough.',
+    explain: 'The IRS rewards long-term investors with a lower tax rate on certain dividends. To qualify, you need to have held the stock for more than 60 days around when the dividend was paid. Your brokerage figures this out for you — you just enter the number from Box 1b of your 1099-DIV. This number is always equal to or less than your ordinary dividends.',
+    find: 'Box 1b on your 1099-DIV. It\'s a subset of Box 1a, never larger.',
+    related: ['ordinary-dividends', 'ltcg', '1099-div']
+  },
+  'ltcg': {
+    emoji: '📊', title: 'Long-Term Capital Gains', tags: ['income'],
+    simple: 'Profit from selling an investment you owned for MORE than one year — taxed at a lower rate as a reward for patience.',
+    explain: 'If you bought a stock for $1,000, held it for over a year, then sold it for $1,500 — you have a $500 long-term capital gain. The IRS taxes this at 0%, 15%, or 20% (depending on your income), which is much better than the regular tax rate. This is the government\'s way of encouraging long-term investing over quick trading.',
+    find: 'Box 2a on your 1099-B, or your brokerage\'s tax summary document. Brokerage apps like Robinhood and Coinbase show this in their tax center.',
+    related: ['stcg', 'qualified-dividends', '1099-div']
+  },
+  'stcg': {
+    emoji: '⚡', title: 'Short-Term Capital Gains', tags: ['income'],
+    simple: 'Profit from selling an investment you owned for ONE YEAR OR LESS — taxed like regular income.',
+    explain: 'Bought and sold a stock within a year? Any profit is taxed at your normal income tax rate — no special discount. This is why day traders often owe more tax than long-term investors. If you lost money on a short-term sale, you can use that loss to reduce other gains or deduct up to $3,000 against your regular income.',
+    find: 'Box 2 on your 1099-B, or your brokerage\'s tax summary. You\'ll see gains labeled as "short-term."',
+    related: ['ltcg', 'tax-bracket']
+  },
+  'filing-status': {
+    emoji: '👤', title: 'Filing Status', tags: ['basics'],
+    simple: 'A category that describes your family situation — it determines your tax rate and how big your standard deduction is.',
+    explain: 'The IRS uses filing status to figure out your tax brackets and deductions. Single means you\'re unmarried. Married Filing Jointly means you and your spouse combine everything on one return (usually saves money). Head of Household gives single parents a bigger deduction. Your status is based on your situation on December 31st of the tax year.',
+    find: 'You choose this — it\'s not on any form. Think about your situation on December 31st of the tax year: were you married? Did you support a child or dependent?',
+    related: ['standard-deduction', 'tax-bracket']
+  },
+  'standard-deduction': {
+    emoji: '✂️', title: 'Standard Deduction', tags: ['deductions', 'basics'],
+    simple: 'A flat dollar amount the IRS lets you subtract from your income so you pay less tax — no receipts needed.',
+    explain: 'The IRS says "we\'ll just automatically reduce your taxable income by this amount, no questions asked." For 2024: $14,600 if single, $29,200 if married filing jointly. Most people take the standard deduction because it\'s bigger than what they could claim if they added up all their actual expenses (itemized deductions). This app compares both and picks the best one for you.',
+    find: 'No form needed — you just choose it. This app shows you which gives you the bigger deduction.',
+    related: ['itemized', 'salt', 'mortgage-interest']
+  },
+  'itemized': {
+    emoji: '🧾', title: 'Itemized Deductions', tags: ['deductions'],
+    simple: 'Listing your actual deductible expenses (mortgage interest, property taxes, charity donations) to see if they add up to more than the standard deduction.',
+    explain: 'Instead of taking the flat standard deduction, you can add up specific expenses the IRS allows: mortgage interest, state and local taxes (up to $10,000), charitable donations, medical expenses over 7.5% of income, etc. If your total is bigger than the standard deduction, itemizing saves you more money. Most homeowners itemize; most renters take the standard deduction.',
+    find: 'You gather your own records: Form 1098 (mortgage interest), property tax bills, donation receipts.',
+    related: ['standard-deduction', 'salt', 'mortgage-interest', 'charitable']
+  },
+  'mortgage-interest': {
+    emoji: '🏠', title: 'Mortgage Interest Deduction', tags: ['deductions'],
+    simple: 'If you have a home loan, the interest you paid on it this year may be deductible — which reduces your taxable income.',
+    explain: 'Homeowners can deduct the interest paid on mortgages up to $750,000. This is often the biggest itemized deduction people have. Your mortgage lender sends you a Form 1098 every January showing exactly how much interest you paid. Note: only the interest is deductible, not the principal (the loan paydown).',
+    find: 'Form 1098 from your mortgage lender, mailed in January or available in your lender\'s online portal.',
+    related: ['itemized', 'salt', 'standard-deduction']
+  },
+  'salt': {
+    emoji: '🏛️', title: 'SALT Deduction', tags: ['deductions'],
+    simple: 'SALT stands for State And Local Taxes — you can deduct what you paid in state income tax and property tax, up to $10,000 total.',
+    explain: 'If you paid state income tax and/or property taxes, you can deduct up to $10,000 of those combined. This cap was introduced in 2018. For example, if your property taxes were $8,000 and your state income tax was $5,000, you can only deduct $10,000 (not $13,000). This deduction only helps if you\'re itemizing.',
+    find: 'Your state tax return or W-2 Box 17 for state income tax withheld. Your property tax bills from your county or mortgage statement showing escrow.',
+    related: ['itemized', 'mortgage-interest']
+  },
+  'charitable': {
+    emoji: '❤️', title: 'Charitable Donations', tags: ['deductions'],
+    simple: 'Money or goods you donated to qualifying nonprofit organizations — deductible if you itemize.',
+    explain: 'Cash donations to registered charities (churches, food banks, Red Cross, etc.) are deductible. You need written proof for any donation of $250 or more. Non-cash donations (clothes, furniture to Goodwill) are also deductible at fair market value. You can only claim this if your total itemized deductions exceed the standard deduction.',
+    find: 'Keep donation receipts, bank statements showing online donations, or acknowledgment letters from charities.',
+    related: ['itemized', 'standard-deduction']
+  },
+  'schedule-c': {
+    emoji: '🗂️', title: 'Schedule C (Business Income)', tags: ['income', 'deductions'],
+    simple: 'The form where self-employed people report what their business made and spent — profit is your taxable business income.',
+    explain: 'If you\'re a freelancer, contractor, or run a small business, you report your income and expenses on Schedule C. Revenue minus expenses = net profit, and that profit is taxable. Business expenses (supplies, software, marketing, home office, vehicle use) reduce your profit and therefore reduce your taxes. This is one of the best ways to legally lower what you owe.',
+    find: 'You fill this out yourself using your business records — invoices for income, receipts for expenses. Good recordkeeping all year makes this easy.',
+    related: ['1099-nec', 'se-tax', 'home-office', 'vehicle', 'qbi']
+  },
+  'se-tax': {
+    emoji: '💼', title: 'Self-Employment Tax', tags: ['income', 'basics'],
+    simple: 'The 15.3% tax that covers Social Security and Medicare for self-employed people — because you\'re paying both the employee AND employer share.',
+    explain: 'When you work a regular job, you pay 7.65% for Social Security/Medicare and your employer pays another 7.65%. When you\'re self-employed, there\'s no employer — so you pay both halves: 15.3%. The good news: you can deduct half of this SE tax from your income, which softens the blow. SE tax only applies to net self-employment income over $400.',
+    find: 'Calculated automatically from your Schedule C net profit.',
+    related: ['schedule-c', '1099-nec', 'qbi']
+  },
+  'qbi': {
+    emoji: '🏢', title: 'QBI Deduction (Section 199A)', tags: ['deductions'],
+    simple: 'A special bonus deduction for self-employed people and small business owners — you can deduct up to 20% of your business income, free.',
+    explain: 'Qualified Business Income (QBI) deduction lets most self-employed people deduct 20% of their net business profit from taxable income. It\'s a huge benefit. For example, if your freelance business made $50,000 profit, you could deduct $10,000 extra. The deduction phases out at higher incomes ($182,050 single / $364,200 married for 2024) and some professions have limits.',
+    find: 'Calculated automatically from your Schedule C income.',
+    related: ['schedule-c', 'se-tax', 'standard-deduction']
+  },
+  'home-office': {
+    emoji: '🏡', title: 'Home Office Deduction', tags: ['deductions'],
+    simple: 'If you work from home for your own business, you can deduct a portion of your rent/mortgage and utilities as a business expense.',
+    explain: 'Self-employed people (not W-2 employees) can deduct home office expenses if they use part of their home regularly and exclusively for business. The simplified method: $5 per square foot, up to 300 sq ft ($1,500 max). The actual method calculates the real percentage of home expenses — sometimes bigger. The space must be your principal place of business.',
+    find: 'Measure your office space and your total home square footage. Gather utility bills and rent/mortgage statements if using the actual method.',
+    related: ['schedule-c', 'vehicle']
+  },
+  'vehicle': {
+    emoji: '🚗', title: 'Vehicle / Mileage Deduction', tags: ['deductions'],
+    simple: 'If you use your car for business (not commuting), you can deduct either the business miles driven or a portion of actual car expenses.',
+    explain: 'For 2024, the IRS standard mileage rate is 67¢ per mile. Keep a mileage log: date, destination, business purpose, miles. Commuting to a regular office doesn\'t count — but driving to client meetings, job sites, or the post office for packages does. Alternative: deduct actual car expenses (gas, insurance, repairs) proportional to business use percentage.',
+    find: 'Your mileage log (use an app like MileIQ or a simple spreadsheet). Odometer readings from January 1st and December 31st help too.',
+    related: ['schedule-c', 'home-office']
+  },
+  'eitc': {
+    emoji: '🎁', title: 'Earned Income Tax Credit (EITC)', tags: ['credits'],
+    simple: 'One of the most valuable tax credits available — the government gives money back to low-to-moderate income workers, especially those with kids.',
+    explain: 'The EITC is a refundable credit, meaning even if you owe zero tax, you can still get this money back as a refund. For 2024, it\'s worth up to $7,830 if you have 3+ children, or $632 if you have no children. You must have earned income (wages or self-employment) and meet income limits. It\'s completely free money many people miss by not filing.',
+    find: 'Calculated automatically — you just need to enter your income and dependent information.',
+    related: ['ctc', 'refund', 'filing-status']
+  },
+  'ctc': {
+    emoji: '👶', title: 'Child Tax Credit (CTC)', tags: ['credits'],
+    simple: 'A $2,000 credit for each child under 17 that directly reduces your tax bill — up to $1,700 of it can be refunded even if you owe nothing.',
+    explain: 'For each qualifying child under 17 on December 31st, you get a $2,000 credit. Credits are better than deductions — they reduce your tax bill dollar for dollar. Up to $1,700 is refundable (called the Additional Child Tax Credit or ACTC), meaning you can get it back even if you owe less than $2,000. It phases out if your income is over $200,000 (single) or $400,000 (married).',
+    find: 'Calculated automatically — enter each dependent in Step 1.',
+    related: ['eitc', 'filing-status', 'refund']
+  },
+  'aotc': {
+    emoji: '🎓', title: 'American Opportunity Credit', tags: ['credits'],
+    simple: 'Up to $2,500 back per student in college for the first 4 years — and $1,000 of it is refundable even if you owe nothing.',
+    explain: 'The AOTC helps pay for college tuition, fees, and books. You get 100% of the first $2,000 in qualified education expenses, plus 25% of the next $2,000 — max $2,500 per student. Must be pursuing a degree at least half-time in their first 4 years of college. 40% ($1,000) is refundable. Your school sends a Form 1098-T showing what you paid.',
+    find: 'Form 1098-T from your college or university, usually available in your student portal by January 31st.',
+    related: ['llc', 'refund']
+  },
+  'social-security': {
+    emoji: '👴', title: 'Social Security Benefits', tags: ['income'],
+    simple: 'Monthly payments from the government if you\'re retired, disabled, or a surviving spouse — up to 85% may be taxable depending on your other income.',
+    explain: 'Not everyone pays tax on Social Security. If it\'s your only income, it\'s probably not taxable. But if you have other income too (wages, investments), up to 85% of your benefits may be taxable. The IRS uses a formula called "combined income" to figure out how much. Your SSA-1099 shows how much you received.',
+    find: 'Form SSA-1099, mailed by the Social Security Administration in January. Also available at ssa.gov.',
+    related: ['filing-status', 'agi']
+  },
+  'agi': {
+    emoji: '📐', title: 'Adjusted Gross Income (AGI)', tags: ['basics'],
+    simple: 'Your total income minus a few specific deductions — the starting point the IRS uses to calculate almost everything else.',
+    explain: 'AGI = gross income minus "above-the-line" adjustments like student loan interest, IRA contributions, alimony paid, and half of SE tax. Your AGI is important because many credits and deductions phase out or change based on it. A lower AGI generally means lower taxes and more eligibility for credits.',
+    find: 'Calculated automatically in this app. On a filed return, it appears on Line 11 of Form 1040.',
+    related: ['standard-deduction', 'tax-bracket', 'eitc']
+  },
+  'tax-bracket': {
+    emoji: '📊', title: 'Tax Brackets', tags: ['basics'],
+    simple: 'Tax brackets are like layers — you pay different rates on different portions of your income, NOT the top rate on everything.',
+    explain: 'This is the most misunderstood tax concept. If you\'re in the "22% bracket," you don\'t pay 22% on all your income. You pay 10% on the first chunk, 12% on the next chunk, and only 22% on income above a certain threshold. Think of it as filling a series of buckets. Your "marginal rate" is the rate on your last dollar earned. Your "effective rate" is what you actually paid overall — always lower.',
+    find: 'Shown automatically in the Results step. Check the bracket chart to see exactly where your income falls.',
+    related: ['effective-rate', 'withholding', 'agi']
+  },
+  'effective-rate': {
+    emoji: '📉', title: 'Effective Tax Rate', tags: ['basics'],
+    simple: 'The percentage of your TOTAL income you actually paid in tax — always lower than your bracket rate.',
+    explain: 'Because of how tax brackets work, most people pay much less than their top bracket rate. If your marginal rate is 22%, your effective rate might be 14% or 15%. This is the real, honest number for how much of your income went to taxes. It\'s calculated as: total tax ÷ total income × 100.',
+    find: 'Shown in the header and results of this app.',
+    related: ['tax-bracket', 'agi']
+  },
+  'refund': {
+    emoji: '💸', title: 'Tax Refund', tags: ['basics'],
+    simple: 'Money the IRS returns to you when you overpaid taxes throughout the year via withholding or estimated payments.',
+    explain: 'A refund isn\'t free money — it means the government was holding your money interest-free all year. Big refunds sound great, but they mean you were overpaying. Ideally you\'d owe a small amount or break even. That said, many people prefer refunds because it feels like a forced savings plan. You can adjust your W-4 at work to get more in each paycheck instead.',
+    find: 'Shown live in the header and results of this app as you enter your information.',
+    related: ['withholding', 'estimated-tax', 'ctc']
+  },
+  'estimated-tax': {
+    emoji: '📅', title: 'Estimated Tax Payments', tags: ['basics'],
+    simple: 'Quarterly payments self-employed people (or anyone without enough withholding) make to pre-pay their taxes throughout the year.',
+    explain: 'W-2 employees have taxes withheld automatically. But freelancers and self-employed people have no employer to do that — so the IRS expects them to pay taxes 4 times a year. Miss these and you may owe a penalty at tax time. The amounts shown in this app\'s quarterly planner are based on your projected tax liability.',
+    find: 'You make these payments yourself via IRS Direct Pay at irs.gov/payments or by mailing a check with Form 1040-ES.',
+    related: ['se-tax', 'withholding', 'safe-harbor']
+  },
+  'safe-harbor': {
+    emoji: '🛡️', title: 'Safe Harbor', tags: ['basics'],
+    simple: 'A guaranteed way to avoid IRS underpayment penalties — pay at least 100% of last year\'s tax (or 110% if you earned over $150K).',
+    explain: 'Even if you end up owing money at tax time, the IRS won\'t penalize you if your estimated payments covered the "safe harbor" amount. For most people: pay at least as much as you owed last year, spread across 4 quarterly payments. High earners (AGI over $150K): pay 110% of last year\'s tax. This gives you breathing room if your income is unpredictable.',
+    find: 'Your prior year tax return shows what you owed. This app calculates your safe harbor amounts automatically.',
+    related: ['estimated-tax', 'se-tax']
+  },
+  'ira': {
+    emoji: '🏦', title: 'IRA (Individual Retirement Account)', tags: ['deductions'],
+    simple: 'A special savings account for retirement — money you put in may be tax-deductible, and it grows tax-free until you retire.',
+    explain: 'A Traditional IRA lets you contribute up to $7,000 in 2024 ($8,000 if you\'re 50+). If you (or your spouse) don\'t have a workplace retirement plan, contributions are fully deductible — you pay no tax on that money now. You pay tax when you withdraw it in retirement. A Roth IRA works differently: no deduction now, but withdrawals in retirement are tax-free.',
+    find: 'Form 5498 from your IRA provider in May confirms contributions. For the deduction, just enter what you contributed.',
+    related: ['se-tax', 'agi', 'estimated-tax']
+  },
+  'rental-income': {
+    emoji: '🏘️', title: 'Rental Income', tags: ['income'],
+    simple: 'Money tenants pay you to live in property you own — it\'s taxable, but you can deduct many rental expenses against it.',
+    explain: 'If you rent out a house, apartment, or even a room, that income is taxable. But you can deduct mortgage interest, property taxes, insurance, repairs, depreciation, and property management fees against it. The result (profit or loss) flows to your tax return. Keep all rental income and expense records organized throughout the year.',
+    find: 'Your own records — bank deposits, rent receipts, expense receipts. If you use a property manager, they may send a year-end summary.',
+    related: ['schedule-c', 'mortgage-interest', 'salt']
+  }
+};
+
+// ── HELP DRAWER LOGIC ─────────────────────────────────────────────────────
+let helpActiveCat = 'all';
+
+function openHelpDrawer(key) {
+  document.getElementById('help-overlay').classList.add('open');
+  document.getElementById('help-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderHelpList();
+  if (key && TAX_HELP[key]) {
+    setTimeout(() => showHelpDetail(key), 50);
+  } else {
+    showHelpList();
+    setTimeout(() => document.getElementById('hd-search-input')?.focus(), 300);
+  }
+}
+
+function closeHelpDrawer() {
+  document.getElementById('help-overlay').classList.remove('open');
+  document.getElementById('help-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function showHelpList() {
+  document.getElementById('hd-list-view').style.display = 'flex';
+  document.getElementById('hd-list-view').style.flexDirection = 'column';
+  document.getElementById('hd-list-view').style.height = '100%';
+  document.getElementById('hd-detail-view').classList.remove('open');
+}
+
+function showHelpDetail(key) {
+  const term = TAX_HELP[key];
+  if (!term) return;
+  const body = document.getElementById('hd-detail-body');
+  const related = (term.related || []).map(r => {
+    const t = TAX_HELP[r];
+    return t ? `<button class="hd-related-chip" onclick="showHelpDetail('${r}')">${t.emoji} ${t.title}</button>` : '';
+  }).join('');
+  body.innerHTML = `
+    <span class="hd-detail-emoji">${term.emoji}</span>
+    <div class="hd-detail-title">${term.title}</div>
+    <div class="hd-detail-simple">${term.simple}</div>
+    <div class="hd-detail-explain">${term.explain}</div>
+    ${term.find ? `<div class="hd-detail-find"><div class="hd-detail-find-title">📍 Where to find this</div><div class="hd-detail-find-text">${term.find}</div></div>` : ''}
+    ${related ? `<div style="margin-top:4px;margin-bottom:6px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--tx4)">Related terms</div><div class="hd-detail-related">${related}</div>` : ''}
+  `;
+  document.getElementById('hd-list-view').style.display = 'none';
+  document.getElementById('hd-detail-view').classList.add('open');
+}
+
+function renderHelpList(filter) {
+  const list = document.getElementById('hd-term-list');
+  const q = (filter || '').toLowerCase().trim();
+  const items = Object.entries(TAX_HELP).filter(([key, t]) => {
+    const matchCat = helpActiveCat === 'all' || t.tags.includes(helpActiveCat);
+    const matchQ = !q || t.title.toLowerCase().includes(q) || t.simple.toLowerCase().includes(q) || t.explain.toLowerCase().includes(q) || key.includes(q);
+    return matchCat && matchQ;
+  });
+  if (!items.length) {
+    list.innerHTML = `<div class="hd-no-results">🔍 No results for "${q}"<br><span style="font-size:.75rem;color:var(--tx4)">Try a different word</span></div>`;
+    return;
+  }
+  list.innerHTML = items.map(([key, t]) => `
+    <div class="hd-term" onclick="showHelpDetail('${key}')">
+      <div class="hd-term-head">
+        <span class="hd-term-emoji">${t.emoji}</span>
+        <span class="hd-term-title">${t.title}</span>
+      </div>
+      <div class="hd-term-short">${t.simple}</div>
+    </div>
+  `).join('');
+}
+
+function filterHelp(q) { renderHelpList(q); }
+
+function filterCat(cat, btn) {
+  helpActiveCat = cat;
+  document.querySelectorAll('.hd-cat').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  const q = document.getElementById('hd-search-input')?.value || '';
+  renderHelpList(q);
+}
+
+// Upgrade inline help panels to link into drawer
+function toggleHelp(id, key) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.help-panel.open').forEach(p => p.classList.remove('open'));
+  if (!wasOpen) el.classList.add('open');
+  if (key && !wasOpen) {
+    const moreBtn = el.querySelector('.hp-more');
+    if (moreBtn) moreBtn.onclick = () => openHelpDrawer(key);
+  }
+}
+
 // ── PWA: register service worker ──────────────────────────────────────────
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -2925,5 +3533,44 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+
+<!-- ── HELP FAB ─────────────────────────────────────────────────────────── -->
+<button id="help-fab" onclick="openHelpDrawer()" aria-label="Open tax help">
+  <span class="fab-icon">💡</span> Tax Help
+</button>
+
+<!-- ── HELP DRAWER ───────────────────────────────────────────────────────── -->
+<div id="help-overlay" onclick="closeHelpDrawer()"></div>
+<div id="help-drawer" role="dialog" aria-label="Tax Help">
+  <!-- List view -->
+  <div id="hd-list-view">
+    <div class="hd-header">
+      <div class="hd-top">
+        <span class="hd-title">💡 Tax Help</span>
+        <button class="hd-close" onclick="closeHelpDrawer()">✕ Close</button>
+      </div>
+      <div class="hd-search-wrap">
+        <span class="hd-search-icon">🔍</span>
+        <input class="hd-search" id="hd-search-input" type="text" placeholder="Search any tax term…" oninput="filterHelp(this.value)" autocomplete="off">
+      </div>
+    </div>
+    <div class="hd-cats">
+      <button class="hd-cat active" onclick="filterCat('all',this)">All</button>
+      <button class="hd-cat" onclick="filterCat('income',this)">📥 Income</button>
+      <button class="hd-cat" onclick="filterCat('deductions',this)">✂️ Deductions</button>
+      <button class="hd-cat" onclick="filterCat('credits',this)">🎁 Credits</button>
+      <button class="hd-cat" onclick="filterCat('basics',this)">📚 Basics</button>
+    </div>
+    <div class="hd-body" id="hd-term-list"></div>
+  </div>
+  <!-- Detail view -->
+  <div class="hd-detail" id="hd-detail-view">
+    <div class="hd-detail-header">
+      <button class="hd-back" onclick="showHelpList()">← Back</button>
+    </div>
+    <div class="hd-detail-body" id="hd-detail-body"></div>
+  </div>
+</div>
+
 </body>
 </html>
