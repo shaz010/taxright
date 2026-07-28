@@ -229,7 +229,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 }
 #help-fab:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(27,79,216,.45)}
 #help-fab .fab-icon{font-size:1rem}
-@media(max-width:1366px){#help-fab{bottom:80px;right:12px;padding:9px 14px 9px 11px}}
+@media(max-width:1366px){#help-fab{bottom:32px;right:12px;padding:9px 14px 9px 11px}}
 
 #help-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;backdrop-filter:blur(2px)}
 #help-overlay.open{display:block}
@@ -485,7 +485,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 /* AUTOSAVE TOAST */
 #autosave-toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(20px);background:#0F172A;color:#fff;padding:9px 18px;border-radius:99px;font-size:.75rem;font-weight:600;z-index:999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;display:flex;align-items:center;gap:7px;box-shadow:0 4px 20px rgba(0,0,0,.25)}
 #autosave-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(max-width:1366px){#autosave-toast{bottom:130px}}
+@media(max-width:1366px){#autosave-toast{bottom:36px}}
 
 /* SESSION RESTORE BANNER */
 #restore-banner{display:none;background:var(--primary-lt);border-bottom:1px solid rgba(27,79,216,.15);padding:10px 24px;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap}
@@ -497,8 +497,12 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .restore-no:hover{background:var(--surface2)}
 
 /* MOBILE BOTTOM NAV */
-.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:200;padding:8px 0 max(24px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}
-.mobile-nav-inner{display:flex;justify-content:space-around;align-items:stretch;gap:2px;padding:0 4px}
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:200;padding:0 0 max(20px,env(safe-area-inset-bottom));box-shadow:0 -2px 16px rgba(0,0,0,.12);transition:transform .38s cubic-bezier(.4,0,.2,1)}
+.mobile-nav.nav-collapsed{transform:translateY(calc(100% - 18px))}
+.nav-handle{display:flex;justify-content:center;align-items:center;padding:6px 0 4px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.nav-handle-pill{width:36px;height:4px;background:var(--border2);border-radius:99px;transition:background .2s,width .2s}
+.nav-collapsed .nav-handle-pill{width:48px;background:var(--primary)}
+.mobile-nav-inner{display:flex;justify-content:space-around;align-items:stretch;gap:2px;padding:4px 4px 0}
 .mnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 6px;border:none;background:none;cursor:pointer;color:var(--tx4);border-radius:10px;transition:.15s;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;flex:1;min-width:44px;min-height:52px;position:relative}
 .mnav-icon{font-size:1.25rem;line-height:1.2;transition:.15s}
 .mnav-btn.active{color:var(--primary);background:var(--primary-lt)}
@@ -524,26 +528,13 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .sb-step.done .sb-pct{color:var(--green);background:var(--green-lt);border-color:rgba(5,150,105,.2)}
 
 /* MOBILE RESPONSIVE IMPROVEMENTS */
-/* ≤1366px: covers all iPads in landscape — show mobile nav + fix nav-bar above it */
+/* ≤1366px: show the mobile nav (covers iPad landscape + all phones) */
 @media(max-width:1366px){
   .mobile-nav{display:block}
-  /* Back/Next bar: fixed above the bottom nav — z-index above mobile-nav (200) */
-  .nav-bar{
-    position:fixed!important;
-    bottom:calc(72px + env(safe-area-inset-bottom, 0px));
-    left:0;right:0;
-    background:var(--surface);
-    border-top:1px solid var(--border);
-    padding:10px 20px;
-    z-index:220;
-    display:flex!important;
-    align-items:center;
-    justify-content:space-between;
-    box-shadow:0 -2px 10px rgba(0,0,0,.1);
-    min-height:58px;
-  }
-  /* push step content up so last card never hides behind the two fixed bars */
-  body{padding-bottom:calc(175px + env(safe-area-inset-bottom, 0px))}
+  /* Back/Next nav-bar: normal flow — auto-hiding bottom nav keeps it clear */
+  .nav-bar{position:static;padding:20px 0 8px}
+  /* padding just needs to clear the collapsed nav handle strip (≈20px) */
+  body{padding-bottom:calc(36px + env(safe-area-inset-bottom, 0px))}
 }
 /* ≤900px: compact visual layout for phones */
 @media(max-width:900px){
@@ -619,7 +610,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       </div>
     </div>
     <button id="theme-btn" onclick="toggleDark()" title="Cycle theme">🌙</button>
-    <span class="build-badge" title="Build number">b16</span>
+    <span class="build-badge" title="Build number">b17</span>
   </div>
 </header>
 
@@ -1698,6 +1689,9 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
 <!-- MOBILE BOTTOM NAV -->
 <nav class="mobile-nav" id="mobile-nav" style="display:none">
+  <div class="nav-handle" id="nav-handle" onclick="expandNav()" title="Show navigation">
+    <div class="nav-handle-pill"></div>
+  </div>
   <div class="mobile-nav-inner">
     <button class="mnav-btn" data-step="1" onclick="goStep(1)"><span class="mnav-icon">👤</span>You</button>
     <button class="mnav-btn" data-step="2" onclick="goStep(2)"><span class="mnav-icon">💰</span>Income</button>
@@ -3201,13 +3195,39 @@ body{font-family:'Inter',system-ui,sans-serif;background:#060C1A;display:flex;al
 // ============================================================
 // MOBILE NAV UPDATE
 // ============================================================
+// ── Auto-hiding mobile nav ────────────────────────────────────────────────
+let _navTimer = null;
+
+function collapseNav() {
+  const nav = document.getElementById('mobile-nav');
+  if (nav) nav.classList.add('nav-collapsed');
+}
+
+function expandNav() {
+  const nav = document.getElementById('mobile-nav');
+  if (nav) nav.classList.remove('nav-collapsed');
+  clearTimeout(_navTimer);
+}
+
+function scheduleNavCollapse(ms) {
+  clearTimeout(_navTimer);
+  _navTimer = setTimeout(collapseNav, ms || 2800);
+}
+
 function updateMobileNav(step) {
   document.querySelectorAll('.mnav-btn').forEach(btn => {
     const s = +btn.dataset.step;
     btn.classList.toggle('active', s === step);
   });
   const mobileNav = document.getElementById('mobile-nav');
-  if (mobileNav) mobileNav.style.display = step === 0 ? 'none' : 'block';
+  if (mobileNav) {
+    mobileNav.style.display = step === 0 ? 'none' : 'block';
+    if (step > 0) {
+      // Show nav briefly so user sees which section they're on, then slide away
+      expandNav();
+      scheduleNavCollapse(2600);
+    }
+  }
 }
 
 // ============================================================
@@ -3237,6 +3257,12 @@ recalc();
 
 // Check for saved session after a brief delay (let page settle)
 setTimeout(checkSavedSession, 300);
+
+// Auto-collapse mobile nav on first load after user has had a moment to see it
+setTimeout(function() {
+  const nav = document.getElementById('mobile-nav');
+  if (nav && nav.style.display !== 'none') collapseNav();
+}, 2200);
 
 // ══════════════════════════════════════════════════════════════════════════
 // TAX HELP KNOWLEDGE BASE
