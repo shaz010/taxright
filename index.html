@@ -229,7 +229,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 }
 #help-fab:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(27,79,216,.45)}
 #help-fab .fab-icon{font-size:1rem}
-@media(max-width:900px){#help-fab{bottom:80px;right:12px;padding:9px 14px 9px 11px}}
+@media(max-width:1366px){#help-fab{bottom:80px;right:12px;padding:9px 14px 9px 11px}}
 
 #help-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;backdrop-filter:blur(2px)}
 #help-overlay.open{display:block}
@@ -471,7 +471,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 /* AUTOSAVE TOAST */
 #autosave-toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(20px);background:#0F172A;color:#fff;padding:9px 18px;border-radius:99px;font-size:.75rem;font-weight:600;z-index:999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;display:flex;align-items:center;gap:7px;box-shadow:0 4px 20px rgba(0,0,0,.25)}
 #autosave-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(max-width:900px){#autosave-toast{bottom:130px}}
+@media(max-width:1366px){#autosave-toast{bottom:130px}}
 
 /* SESSION RESTORE BANNER */
 #restore-banner{display:none;background:var(--primary-lt);border-bottom:1px solid rgba(27,79,216,.15);padding:10px 24px;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap}
@@ -510,10 +510,16 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .sb-step.done .sb-pct{color:var(--green);background:var(--green-lt);border-color:rgba(5,150,105,.2)}
 
 /* MOBILE RESPONSIVE IMPROVEMENTS */
-@media(max-width:900px){
+/* ≤1366px: covers all iPads in landscape — show mobile nav + clear body space */
+@media(max-width:1366px){
   .mobile-nav{display:block}
-  /* nav height + FAB + safe-area-inset for iPad home indicator */
+  /* nav height + FAB + safe-area-inset so Back/Next always clear the bottom chrome */
   body{padding-bottom:calc(160px + env(safe-area-inset-bottom, 0px))}
+  /* nav-bar gets extra bottom margin so Back/Next buttons stay well above FAB */
+  .nav-bar{padding:16px 0;margin-bottom:16px}
+}
+/* ≤900px: compact visual layout for phones */
+@media(max-width:900px){
   .hdr-inner{height:54px;padding:0 12px}
   .logo-text{font-size:.95rem}
   .logo-year{display:none}
@@ -527,8 +533,6 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
   .profile-grid{grid-template-columns:1fr}
   .compare-panel{grid-template-columns:1fr}
   .field-row.two,.field-row.three{grid-template-columns:1fr}
-  /* nav-bar gets extra bottom margin so Back/Next buttons stay well above FAB */
-  .nav-bar{padding:16px 0;margin-bottom:16px}
 }
 @media(max-width:480px){
   .stat-grid{grid-template-columns:1fr 1fr}
@@ -588,7 +592,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       </div>
     </div>
     <button id="theme-btn" onclick="toggleDark()" title="Cycle theme: Light → Dark → Noir">🌙</button>
-    <span class="build-badge" title="Build number">b11</span>
+    <span class="build-badge" title="Build number">b12</span>
   </div>
 </header>
 
