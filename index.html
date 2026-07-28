@@ -557,6 +557,9 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
   .stat-grid{grid-template-columns:1fr 1fr}
   .q-table th,.q-table td{padding:8px 8px;font-size:.8rem}
   .hdr-inner{gap:8px}
+  /* hide Eff. Rate on iPhone so header fits in 390px */
+  .refund-pill > :nth-child(3),.refund-pill > :nth-child(4){display:none}
+  .refund-pill{flex-shrink:1;gap:6px;padding:4px 10px}
 }
 /* WELCOME SCREEN */
 .welcome-hero{text-align:center;padding:32px 0 24px}
@@ -611,7 +614,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       </div>
     </div>
     <button id="theme-btn" onclick="toggleDark()" title="Cycle theme">🌙</button>
-    <span class="build-badge" title="Build number">b24</span>
+    <span class="build-badge" title="Build number">b25</span>
   </div>
 </header>
 
