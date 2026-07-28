@@ -293,6 +293,75 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 [data-noir] .step-nav-btn.active{box-shadow:0 0 0 1px var(--primary),0 0 12px rgba(16,185,129,.25)}
 [data-noir] .card{border:1px solid var(--border2);box-shadow:0 2px 12px rgba(0,0,0,.6)}
 [data-noir] #refund-display{text-shadow:0 0 20px rgba(16,185,129,.4)}
+
+/* ── ICE BLUE THEME ─────────────────────────────────────────────────────── */
+[data-ice] {
+  --bg:#08090F;--surface:#0E1018;--surface2:#14161F;
+  --border:#1E2235;--border2:#262B42;
+  --tx:#E4EEFF;--tx2:#9AAED0;--tx3:#5C6E96;--tx4:#384160;
+  --primary:#7BA3D4;--primary-dk:#4D7AB5;--primary-lt:rgba(103,232,249,.10);
+  --green:#67E8F9;--green-lt:rgba(103,232,249,.10);
+  --amber-lt:rgba(103,232,249,.08);--red-lt:rgba(244,114,182,.10);
+  --sh:0 1px 8px rgba(0,0,0,.7);--sh2:0 4px 28px rgba(0,0,0,.85)
+}
+[data-ice] input,[data-ice] select{background:var(--surface2);color:var(--tx);border-color:var(--border2)}
+[data-ice] input:focus,[data-ice] select:focus{background:#1A1C28;border-color:#4D7AB5;box-shadow:0 0 0 3px rgba(103,232,249,.08)}
+[data-ice] .item-card,[data-ice] .stat-card{background:var(--surface)}
+[data-ice] .sidebar{border-right:1px solid var(--border)}
+[data-ice] .header{border-bottom:1px solid var(--border);background:var(--bg)}
+[data-ice] .step-nav-btn.active{box-shadow:0 0 0 1px #4D7AB5,0 0 14px rgba(103,232,249,.2)}
+[data-ice] .card{border:1px solid var(--border2);box-shadow:0 2px 14px rgba(0,0,0,.65)}
+[data-ice] #refund-display{color:#67E8F9;text-shadow:0 0 24px rgba(103,232,249,.4),0 0 48px rgba(103,232,249,.15)}
+
+/* ── WARM SILVER THEME ──────────────────────────────────────────────────── */
+[data-warm] {
+  --bg:#0C0B0A;--surface:#141210;--surface2:#1A1815;
+  --border:#2A2620;--border2:#352F28;
+  --tx:#EDE8E0;--tx2:#C4B8A8;--tx3:#8A7D6E;--tx4:#524840;
+  --primary:#C4B08A;--primary-dk:#8A7855;--primary-lt:rgba(196,176,138,.10);
+  --green:#6EE7B7;--green-lt:rgba(110,231,183,.10);
+  --amber-lt:rgba(196,176,138,.10);--red-lt:rgba(220,38,38,.10);
+  --sh:0 1px 8px rgba(0,0,0,.7);--sh2:0 4px 28px rgba(0,0,0,.85)
+}
+[data-warm] input,[data-warm] select{background:var(--surface2);color:var(--tx);border-color:var(--border2)}
+[data-warm] input:focus,[data-warm] select:focus{background:#201E1A;border-color:#8A7855;box-shadow:0 0 0 3px rgba(196,176,138,.08)}
+[data-warm] .item-card,[data-warm] .stat-card{background:var(--surface)}
+[data-warm] .sidebar{border-right:1px solid var(--border)}
+[data-warm] .header{border-bottom:1px solid var(--border);background:var(--bg)}
+[data-warm] .step-nav-btn.active{box-shadow:0 0 0 1px #8A7855,0 0 14px rgba(196,176,138,.15)}
+[data-warm] .card{border:1px solid var(--border2);box-shadow:0 2px 14px rgba(0,0,0,.65)}
+[data-warm] #refund-display{color:#6EE7B7;text-shadow:0 0 20px rgba(110,231,183,.35)}
+
+/* ── CRIMSON IRIDESCENT THEME ───────────────────────────────────────────── */
+@keyframes crimson-shimmer{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+[data-crimson] {
+  --bg:#0A0608;--surface:#120B0E;--surface2:#180E12;
+  --border:#2E1520;--border2:#3D1C2A;
+  --tx:#F5E8EE;--tx2:#D4A8BC;--tx3:#9A6070;--tx4:#5E3545;
+  --primary:#CC2244;--primary-dk:#8B0A28;--primary-lt:rgba(180,20,60,.12);
+  --green:#6EE7B7;--green-lt:rgba(110,231,183,.10);
+  --amber-lt:rgba(220,20,60,.08);--red-lt:rgba(220,20,60,.15);
+  --sh:0 1px 8px rgba(0,0,0,.75);--sh2:0 4px 28px rgba(0,0,0,.9)
+}
+[data-crimson] input,[data-crimson] select{background:var(--surface2);color:var(--tx);border-color:var(--border2)}
+[data-crimson] input:focus,[data-crimson] select:focus{background:#1F1118;border-color:#6B1830;box-shadow:0 0 0 3px rgba(180,20,60,.10)}
+[data-crimson] .item-card,[data-crimson] .stat-card{background:var(--surface)}
+[data-crimson] .sidebar{border-right:1px solid var(--border)}
+[data-crimson] .header{border-bottom:1px solid var(--border);background:var(--bg)}
+[data-crimson] .step-nav-btn.active{box-shadow:0 0 0 1px #6B1830,0 0 14px rgba(180,20,60,.25)}
+[data-crimson] .card{border:1px solid var(--border2);box-shadow:0 2px 14px rgba(0,0,0,.7)}
+[data-crimson] #refund-display{
+  background:linear-gradient(135deg,#FF3366 0%,#FF6B6B 25%,#FF0044 50%,#CC0066 75%,#FF3366 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  background-size:200% 100%;
+  animation:crimson-shimmer 4s linear infinite;
+  filter:drop-shadow(0 0 14px rgba(220,20,60,.55)) drop-shadow(0 0 30px rgba(180,0,80,.25));
+}
+
 /* TRANSITION */
 .step-panel{animation:stepIn .32s cubic-bezier(.34,1.56,.64,1)}
 @keyframes stepIn{from{opacity:0;transform:translateX(14px) scale(.99)}to{opacity:1;transform:none}}
@@ -2600,15 +2669,15 @@ function importData() {
 function toggleDark() {
   const root = document.documentElement;
   const btn = document.getElementById('theme-btn');
-  const current = root.hasAttribute('data-noir') ? 'noir'
-                : root.hasAttribute('data-dark') ? 'dark' : 'light';
-  const next = current === 'light' ? 'dark' : current === 'dark' ? 'noir' : 'light';
-  root.removeAttribute('data-dark');
-  root.removeAttribute('data-noir');
-  if (next === 'dark') root.setAttribute('data-dark', '');
-  if (next === 'noir') root.setAttribute('data-noir', '');
-  const icons = { light: '🌙', dark: '🎬', noir: '☀️' };
-  if (btn) btn.textContent = icons[next];
+  const ATTRS = ['data-dark','data-noir','data-ice','data-warm','data-crimson'];
+  const CYCLE = ['light','dark','noir','ice','warm','crimson'];
+  const ICONS = { light:'🌙', dark:'🎬', noir:'💎', ice:'❄️', warm:'🥂', crimson:'🔴' };
+  const NAMES = { light:'Light', dark:'Dark', noir:'Noir', ice:'Ice Blue', warm:'Warm Silver', crimson:'Crimson' };
+  const current = ATTRS.reduce((acc, a) => root.hasAttribute(a) ? a.replace('data-','') : acc, 'light');
+  const next = CYCLE[(CYCLE.indexOf(current) + 1) % CYCLE.length];
+  ATTRS.forEach(a => root.removeAttribute(a));
+  if (next !== 'light') root.setAttribute('data-' + next, '');
+  if (btn) { btn.textContent = ICONS[next]; btn.title = NAMES[next]; }
   localStorage.setItem('taxright_theme', next);
 }
 
@@ -2823,10 +2892,11 @@ function updateMobileNav(step) {
     || (localStorage.getItem('taxright_dark') === '1' ? 'dark' : 'light');
   const root = document.documentElement;
   const btn = document.getElementById('theme-btn');
-  const icons = { light: '🌙', dark: '🎬', noir: '☀️' };
-  if (saved === 'dark') { root.setAttribute('data-dark', ''); }
-  if (saved === 'noir') { root.setAttribute('data-noir', ''); }
-  if (btn) btn.textContent = icons[saved] || '🌙';
+  const ICONS = { light:'🌙', dark:'🎬', noir:'💎', ice:'❄️', warm:'🥂', crimson:'🔴' };
+  const NAMES = { light:'Light', dark:'Dark', noir:'Noir', ice:'Ice Blue', warm:'Warm Silver', crimson:'Crimson' };
+  const valid = ['dark','noir','ice','warm','crimson'];
+  if (valid.includes(saved)) root.setAttribute('data-' + saved, '');
+  if (btn) { btn.textContent = ICONS[saved] || '🌙'; btn.title = NAMES[saved] || 'Light'; }
 })();
 
 // Seed a default W-2
