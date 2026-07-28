@@ -484,7 +484,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .restore-no:hover{background:var(--surface2)}
 
 /* MOBILE BOTTOM NAV */
-.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:200;padding:8px 0 max(10px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:200;padding:8px 0 max(24px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}
 .mobile-nav-inner{display:flex;justify-content:space-around;align-items:stretch;gap:2px;padding:0 4px}
 .mnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 6px;border:none;background:none;cursor:pointer;color:var(--tx4);border-radius:10px;transition:.15s;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;flex:1;min-width:44px;min-height:52px;position:relative}
 .mnav-icon{font-size:1.25rem;line-height:1.2;transition:.15s}
@@ -513,8 +513,8 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 /* MOBILE RESPONSIVE IMPROVEMENTS */
 @media(max-width:900px){
   .mobile-nav{display:block}
-  /* padding-bottom: mobile nav (~72px) + FAB (~44px) + breathing room = 140px */
-  body{padding-bottom:140px}
+  /* nav height + FAB + safe-area-inset for iPad home indicator */
+  body{padding-bottom:calc(160px + env(safe-area-inset-bottom, 0px))}
   .hdr-inner{height:54px;padding:0 12px}
   .logo-text{font-size:.95rem}
   .logo-year{display:none}
@@ -589,7 +589,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       </div>
     </div>
     <button id="theme-btn" onclick="toggleDark()" title="Cycle theme: Light → Dark → Noir">🌙</button>
-    <span class="build-badge" title="Build number">b7</span>
+    <span class="build-badge" title="Build number">b8</span>
   </div>
 </header>
 
