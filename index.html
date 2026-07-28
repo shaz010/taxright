@@ -611,7 +611,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       </div>
     </div>
     <button id="theme-btn" onclick="toggleDark()" title="Cycle theme">🌙</button>
-    <span class="build-badge" title="Build number">b20</span>
+    <span class="build-badge" title="Build number">b21</span>
   </div>
 </header>
 
@@ -3202,17 +3202,20 @@ let _navTimer = null;
 function collapseNav() {
   const nav = document.getElementById('mobile-nav');
   if (nav) nav.classList.add('nav-collapsed');
+  clearTimeout(_navTimer);
 }
 
 function expandNav() {
   const nav = document.getElementById('mobile-nav');
   if (nav) nav.classList.remove('nav-collapsed');
   clearTimeout(_navTimer);
+  // Auto-collapse after 1.8s so user can orient, then it gets out of the way
+  _navTimer = setTimeout(collapseNav, 1800);
 }
 
 function scheduleNavCollapse(ms) {
   clearTimeout(_navTimer);
-  _navTimer = setTimeout(collapseNav, ms || 2800);
+  _navTimer = setTimeout(collapseNav, ms || 1800);
 }
 
 function updateMobileNav(step) {
@@ -3223,13 +3226,16 @@ function updateMobileNav(step) {
   const mobileNav = document.getElementById('mobile-nav');
   if (mobileNav) {
     mobileNav.style.display = step === 0 ? 'none' : 'block';
-    if (step > 0) {
-      // Show nav briefly so user sees which section they're on, then slide away
-      expandNav();
-      scheduleNavCollapse(2600);
-    }
+    if (step > 0) expandNav();
   }
 }
+
+// Tap anywhere on page content while nav is open → collapse immediately
+document.addEventListener('touchstart', function(e) {
+  const nav = document.getElementById('mobile-nav');
+  if (!nav || nav.classList.contains('nav-collapsed')) return;
+  if (!nav.contains(e.target)) collapseNav();
+}, {passive: true});
 
 // ============================================================
 // INIT
