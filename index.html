@@ -1,0 +1,2481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaxRight 2024 — U.S. Federal Tax Preparation</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:#1B4FD8; --primary-dk:#0F2A73; --primary-lt:#EEF2FF;
+  --green:#059669; --green-lt:#ECFDF5;
+  --amber:#D97706; --amber-lt:#FFFBEB;
+  --red:#DC2626; --red-lt:#FEF2F2;
+  --bg:#F0F4F8; --surface:#fff; --surface2:#F8FAFC;
+  --border:#E2E8F0; --border2:#CBD5E1;
+  --tx:#0F172A; --tx2:#374151; --tx3:#64748B; --tx4:#94A3B8;
+  --sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
+  --sh2:0 4px 16px rgba(0,0,0,.08),0 2px 4px rgba(0,0,0,.04);
+  --sh3:0 8px 32px rgba(0,0,0,.1);
+  --r:12px; --rs:8px; --rx:6px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;display:flex;flex-direction:column}
+input,select,textarea,button{font-family:inherit}
+/* LAYOUT */
+#app{display:flex;flex-direction:column;min-height:100vh}
+header{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--sh)}
+.hdr-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--primary-dk));border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
+.logo-text{font-weight:800;font-size:1.1rem;color:var(--tx)}
+.logo-year{font-size:.7rem;font-weight:600;color:var(--tx3);background:var(--surface2);border:1px solid var(--border);padding:2px 6px;border-radius:99px;margin-left:4px}
+.refund-pill{margin-left:auto;display:flex;align-items:center;gap:20px;background:var(--surface2);border:1px solid var(--border);border-radius:99px;padding:8px 20px;flex-shrink:0}
+.rp-item{display:flex;flex-direction:column;align-items:center}
+.rp-label{font-size:.65rem;font-weight:600;color:var(--tx4);text-transform:uppercase;letter-spacing:.05em}
+.rp-value{font-size:1rem;font-weight:700;font-variant-numeric:tabular-nums}
+.rp-value.pos{color:var(--green)}
+.rp-value.neg{color:var(--red)}
+.rp-value.zero{color:var(--tx3)}
+.rp-sep{width:1px;height:28px;background:var(--border)}
+#theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--tx3);font-size:1rem;transition:.2s}
+#theme-btn:hover{background:var(--surface2)}
+/* MAIN */
+.main-wrap{max-width:1200px;margin:0 auto;width:100%;padding:32px 24px;flex:1;display:grid;grid-template-columns:240px 1fr;gap:28px;align-items:start}
+/* SIDEBAR */
+.sidebar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;position:sticky;top:96px;box-shadow:var(--sh)}
+.sb-title{font-size:.7rem;font-weight:700;color:var(--tx4);text-transform:uppercase;letter-spacing:.06em;padding:4px 8px 12px}
+.sb-step{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--rs);cursor:pointer;transition:.15s;margin-bottom:2px}
+.sb-step:hover{background:var(--surface2)}
+.sb-step.active{background:var(--primary-lt)}
+.sb-step.active .sb-num{background:var(--primary);color:#fff}
+.sb-step.done .sb-num{background:var(--green);color:#fff}
+.sb-step.done .sb-num::after{content:'✓'}
+.sb-num{width:24px;height:24px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--tx3);flex-shrink:0;transition:.2s}
+.sb-step.done .sb-num span{display:none}
+.sb-label{font-size:.85rem;font-weight:500;color:var(--tx2);transition:.2s}
+.sb-step.active .sb-label{color:var(--primary);font-weight:600}
+.sb-step.done .sb-label{color:var(--tx3)}
+.sb-sub{font-size:.72rem;color:var(--tx4);margin-top:1px}
+/* CONTENT */
+.content{display:flex;flex-direction:column;gap:0}
+.step-panel{display:none}
+.step-panel.active{display:flex;flex-direction:column;gap:20px}
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px;box-shadow:var(--sh)}
+.card-title{font-size:1.15rem;font-weight:700;color:var(--tx);margin-bottom:4px}
+.card-sub{font-size:.875rem;color:var(--tx3);margin-bottom:20px;line-height:1.5}
+/* FORM ELEMENTS */
+.field-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:16px}
+.field-row.single{grid-template-columns:1fr}
+.field-row.two{grid-template-columns:1fr 1fr}
+.field-row.three{grid-template-columns:1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:5px}
+label{font-size:.8rem;font-weight:600;color:var(--tx2)}
+label .opt{font-weight:400;color:var(--tx4);font-style:italic}
+input[type=text],input[type=number],input[type=email],select{
+  height:44px;padding:0 12px;border:1.5px solid var(--border);border-radius:var(--rs);
+  background:var(--surface2);color:var(--tx);font-size:.95rem;font-weight:500;
+  transition:border-color .15s,box-shadow .15s;outline:none;width:100%}
+input[type=text]:focus,input[type=number]:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(27,79,216,.12);background:#fff}
+input.currency{font-variant-numeric:tabular-nums}
+select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394A3B8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.field-hint{font-size:.75rem;color:var(--tx4);margin-top:2px;line-height:1.4}
+/* CURRENCY INPUT WRAPPER */
+.cur-wrap{position:relative}
+.cur-wrap input{padding-left:28px}
+.cur-wrap::before{content:'$';position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--tx3);font-size:.95rem;font-weight:600;pointer-events:none}
+/* RADIO/TOGGLE GROUP */
+.radio-group{display:flex;gap:8px;flex-wrap:wrap}
+.radio-option{display:flex;align-items:center;gap:8px;padding:10px 16px;border:1.5px solid var(--border);border-radius:var(--rs);cursor:pointer;transition:.15s;font-size:.875rem;font-weight:500;color:var(--tx2);background:var(--surface2)}
+.radio-option:hover{border-color:var(--border2);background:#fff}
+.radio-option.selected{border-color:var(--primary);background:var(--primary-lt);color:var(--primary)}
+.radio-option input{display:none}
+/* CHECKBOX GROUP */
+.check-group{display:flex;flex-direction:column;gap:8px}
+.check-item{display:flex;align-items:flex-start;gap:10px;cursor:pointer}
+.check-item input[type=checkbox]{width:18px;height:18px;border:1.5px solid var(--border2);border-radius:4px;cursor:pointer;accent-color:var(--primary);margin-top:2px;flex-shrink:0}
+.check-label{font-size:.9rem;color:var(--tx2)}
+.check-desc{font-size:.78rem;color:var(--tx4);margin-top:2px}
+/* TOGGLE SWITCH */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-info .t-title{font-size:.9rem;font-weight:600;color:var(--tx2)}
+.toggle-info .t-desc{font-size:.78rem;color:var(--tx4);margin-top:2px}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:var(--border2);border-radius:99px;cursor:pointer;transition:.2s}
+.toggle-slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle input:checked+.toggle-slider{background:var(--primary)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(20px)}
+/* ADD/REMOVE ITEMS */
+.item-list{display:flex;flex-direction:column;gap:12px}
+.item-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:16px;position:relative}
+.item-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.item-card-title{font-size:.85rem;font-weight:700;color:var(--tx2)}
+.remove-btn{background:none;border:none;cursor:pointer;color:var(--tx4);font-size:.85rem;padding:4px 8px;border-radius:6px;transition:.15s}
+.remove-btn:hover{background:var(--red-lt);color:var(--red)}
+.add-btn{display:flex;align-items:center;gap:8px;padding:10px 16px;border:1.5px dashed var(--border2);border-radius:var(--rs);background:none;cursor:pointer;color:var(--primary);font-size:.875rem;font-weight:600;transition:.15s;width:100%;justify-content:center;margin-top:4px}
+.add-btn:hover{background:var(--primary-lt);border-color:var(--primary)}
+/* ALERTS */
+.alert{padding:14px 16px;border-radius:var(--rs);font-size:.875rem;line-height:1.5;display:flex;gap:12px}
+.alert-icon{flex-shrink:0;font-size:1rem;margin-top:1px}
+.alert.info{background:var(--primary-lt);color:var(--primary-dk);border:1px solid rgba(27,79,216,.2)}
+.alert.warn{background:var(--amber-lt);color:#92400E;border:1px solid rgba(217,119,6,.25)}
+.alert.success{background:var(--green-lt);color:#065F46;border:1px solid rgba(5,150,105,.25)}
+.alert.danger{background:var(--red-lt);color:#991B1B;border:1px solid rgba(220,38,38,.25)}
+.alert-body strong{display:block;font-weight:700;margin-bottom:2px}
+/* IMPACT BADGE */
+.impact-badge{display:inline-flex;align-items:center;gap:4px;font-size:.75rem;font-weight:700;padding:3px 8px;border-radius:99px;margin-left:8px}
+.impact-badge.pos{background:var(--green-lt);color:var(--green)}
+.impact-badge.neg{background:var(--red-lt);color:var(--red)}
+/* DEDUCTION ROW */
+.ded-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);gap:16px}
+.ded-row:last-child{border-bottom:none}
+.ded-name{font-size:.9rem;color:var(--tx2);font-weight:500}
+.ded-amount{font-size:.95rem;font-weight:700;color:var(--tx);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ded-risk{font-size:.7rem;font-weight:600;padding:2px 7px;border-radius:99px}
+.risk-low{background:var(--green-lt);color:var(--green)}
+.risk-med{background:var(--amber-lt);color:var(--amber)}
+.risk-high{background:var(--red-lt);color:var(--red)}
+/* NAVIGATION */
+.nav-bar{display:flex;align-items:center;justify-content:space-between;padding:20px 0 4px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:var(--rs);font-size:.9rem;font-weight:600;cursor:pointer;transition:.15s;border:none;text-decoration:none}
+.btn-primary{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(27,79,216,.3)}
+.btn-primary:hover{background:var(--primary-dk);box-shadow:0 4px 12px rgba(27,79,216,.4);transform:translateY(-1px)}
+.btn-secondary{background:var(--surface);color:var(--tx2);border:1.5px solid var(--border)}
+.btn-secondary:hover{background:var(--surface2);border-color:var(--border2)}
+.btn-ghost{background:none;color:var(--tx3);border:none}
+.btn-ghost:hover{color:var(--primary);background:var(--primary-lt)}
+.btn-lg{padding:14px 28px;font-size:1rem}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+/* RESULT STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px}
+.stat-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:18px;text-align:center}
+.stat-card.highlight{background:var(--primary-lt);border-color:rgba(27,79,216,.3)}
+.stat-card.green{background:var(--green-lt);border-color:rgba(5,150,105,.3)}
+.stat-card.red{background:var(--red-lt);border-color:rgba(220,38,38,.3)}
+.stat-label{font-size:.72rem;font-weight:700;color:var(--tx4);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.stat-value{font-size:1.6rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.stat-value.green{color:var(--green)}
+.stat-value.red{color:var(--red)}
+.stat-value.blue{color:var(--primary)}
+.stat-sub{font-size:.75rem;color:var(--tx4);margin-top:4px}
+/* AUDIT RISK */
+.risk-meter{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:20px}
+.risk-bar-wrap{height:12px;background:linear-gradient(90deg,#10B981,#F59E0B 50%,#EF4444);border-radius:99px;position:relative;margin:16px 0 8px}
+.risk-needle{position:absolute;top:-4px;width:4px;height:20px;background:var(--tx);border-radius:2px;transform:translateX(-50%);transition:left .6s cubic-bezier(.34,1.56,.64,1)}
+.risk-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--tx4);font-weight:600}
+/* WATERFALL CHART */
+.chart-wrap{position:relative;height:280px;margin:16px 0}
+/* QUARTERLY TABLE */
+.q-table{width:100%;border-collapse:collapse}
+.q-table th{font-size:.75rem;font-weight:700;color:var(--tx4);text-transform:uppercase;letter-spacing:.04em;padding:8px 12px;border-bottom:2px solid var(--border);text-align:left}
+.q-table td{padding:12px;border-bottom:1px solid var(--border);font-size:.9rem}
+.q-table tr:last-child td{border-bottom:none}
+.q-table .amount{font-variant-numeric:tabular-nums;font-weight:700;color:var(--primary)}
+.q-table .date{color:var(--tx3)}
+.q-table .status-badge{font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:99px}
+/* DETAIL TABLE */
+.detail-table{width:100%}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.detail-row:last-child{border-bottom:none}
+.detail-row.subtotal{padding-top:14px;border-top:2px solid var(--border);border-bottom:none;margin-top:4px}
+.detail-row.total{padding:12px 0;border-top:2px solid var(--tx);border-bottom:none;margin-top:4px}
+.detail-label{font-size:.875rem;color:var(--tx2)}
+.detail-label.indent{padding-left:16px;color:var(--tx3)}
+.detail-value{font-size:.875rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--tx)}
+.detail-value.muted{color:var(--tx4);font-weight:400}
+.detail-value.green{color:var(--green)}
+.detail-value.red{color:var(--red)}
+.detail-row.total .detail-label{font-size:1rem;font-weight:800;color:var(--tx)}
+.detail-row.total .detail-value{font-size:1.1rem;font-weight:800}
+/* HELP TOOLTIP */
+.help-icon{display:inline-flex;width:16px;height:16px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:var(--tx3);cursor:pointer;margin-left:4px;vertical-align:middle;transition:.15s}
+.help-icon:hover{background:var(--primary-lt);border-color:var(--primary);color:var(--primary)}
+.help-panel{display:none;margin-top:8px;padding:12px 14px;background:var(--primary-lt);border:1px solid rgba(27,79,216,.2);border-radius:var(--rs);font-size:.82rem;color:var(--primary-dk);line-height:1.5}
+.help-panel.open{display:block}
+/* DOC CHECKLIST */
+.doc-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.doc-item:last-child{border-bottom:none}
+.doc-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.doc-text strong{display:block;font-size:.875rem;font-weight:600;color:var(--tx)}
+.doc-text span{font-size:.78rem;color:var(--tx3)}
+/* STEP HEADER */
+.step-header{margin-bottom:4px}
+.step-header h2{font-size:1.5rem;font-weight:800;color:var(--tx);margin-bottom:6px}
+.step-header p{font-size:.925rem;color:var(--tx3);line-height:1.5}
+.step-badge{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:700;color:var(--tx4);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.step-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--primary)}
+/* COMPARISON PANEL */
+.compare-panel{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.compare-card{padding:18px;border-radius:var(--rs);border:2px solid var(--border);transition:.2s;cursor:pointer}
+.compare-card:hover{border-color:var(--border2)}
+.compare-card.winner{border-color:var(--green);background:var(--green-lt)}
+.compare-card.loser{opacity:.65}
+.compare-title{font-size:.8rem;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.compare-amount{font-size:1.4rem;font-weight:800;font-variant-numeric:tabular-nums}
+.compare-card.winner .compare-amount{color:var(--green)}
+.compare-savings{font-size:.8rem;color:var(--tx3);margin-top:4px}
+.compare-badge{font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:99px;display:inline-block;margin-top:8px}
+.winner .compare-badge{background:var(--green);color:#fff}
+/* PROFILE CARDS (welcome) */
+.profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+.profile-card{border:2px solid var(--border);border-radius:var(--r);padding:24px 20px;cursor:pointer;transition:.2s;background:var(--surface2);text-align:center}
+.profile-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:var(--sh2)}
+.profile-card.selected{border-color:var(--primary);background:var(--primary-lt)}
+.profile-icon{font-size:2.2rem;margin-bottom:12px}
+.profile-name{font-size:.95rem;font-weight:700;color:var(--tx);margin-bottom:6px}
+.profile-desc{font-size:.8rem;color:var(--tx3);line-height:1.4}
+.profile-card.selected .profile-name{color:var(--primary)}
+/* RESPONSIVE */
+@media(max-width:900px){
+  .main-wrap{grid-template-columns:1fr;padding:16px}
+  .sidebar{position:static;display:none}
+  .profile-grid{grid-template-columns:1fr}
+  .compare-panel{grid-template-columns:1fr}
+  .hdr-inner{padding:0 16px}
+  .refund-pill{padding:6px 12px;gap:12px}
+  .rp-value{font-size:.85rem}
+}
+@media(max-width:600px){
+  .field-row.two,.field-row.three{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:1fr 1fr}
+}
+/* PRINT */
+@media print{
+  header,.sidebar,.nav-bar,.add-btn,.remove-btn{display:none!important}
+  .main-wrap{grid-template-columns:1fr;padding:0}
+  .step-panel{display:flex!important}
+  .card{break-inside:avoid;border:1px solid #ccc;box-shadow:none}
+}
+/* DARK MODE */
+[data-dark] {
+  --bg:#0B1120;--surface:#161F2E;--surface2:#1C2A3E;
+  --border:#233047;--border2:#2E3F58;
+  --tx:#F0F4F8;--tx2:#C8D3E0;--tx3:#7F8EA3;--tx4:#4A5568;
+  --primary-lt:rgba(27,79,216,.18);--green-lt:rgba(5,150,105,.15);
+  --amber-lt:rgba(217,119,6,.15);--red-lt:rgba(220,38,38,.15);
+  --sh:0 1px 3px rgba(0,0,0,.3);--sh2:0 4px 16px rgba(0,0,0,.4)
+}
+[data-dark] input,[data-dark] select{background:var(--surface);color:var(--tx);border-color:var(--border2)}
+[data-dark] input:focus,[data-dark] select:focus{background:var(--surface2)}
+[data-dark] .item-card{background:var(--surface)}
+[data-dark] .stat-card{background:var(--surface)}
+/* TRANSITION */
+.step-panel{animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* WELCOME SCREEN */
+.welcome-hero{text-align:center;padding:32px 0 24px}
+.welcome-hero h1{font-size:2.2rem;font-weight:800;margin-bottom:12px;line-height:1.2}
+.welcome-hero h1 span{color:var(--primary)}
+.welcome-hero p{font-size:1.05rem;color:var(--tx3);max-width:540px;margin:0 auto 8px;line-height:1.6}
+.feature-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+.feature-pill{font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:99px;background:var(--surface2);border:1px solid var(--border);color:var(--tx3);display:flex;align-items:center;gap:5px}
+.feature-pill span{color:var(--primary)}
+/* PROGRESS BAR HEADER */
+.progress-strip{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;overflow-x:auto}
+.progress-steps{display:flex;max-width:1200px;margin:0 auto;min-width:700px}
+.ps-step{flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 8px;position:relative;cursor:pointer;transition:.2s}
+.ps-step::after{content:'';position:absolute;right:0;top:50%;width:1px;height:40%;background:var(--border);transform:translateY(-50%)}
+.ps-step:last-child::after{display:none}
+.ps-num{width:26px;height:26px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;color:var(--tx4);margin-bottom:4px;transition:.2s}
+.ps-step.active .ps-num{border-color:var(--primary);background:var(--primary);color:#fff}
+.ps-step.done .ps-num{border-color:var(--green);background:var(--green);color:#fff}
+.ps-name{font-size:.68rem;font-weight:600;color:var(--tx4);text-align:center;line-height:1.3}
+.ps-step.active .ps-name{color:var(--primary);font-weight:700}
+.ps-step.done .ps-name{color:var(--green)}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+  <div class="hdr-inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">⚖️</div>
+      <span class="logo-text">TaxRight<span class="logo-year">2024</span></span>
+    </a>
+    <div class="refund-pill">
+      <div class="rp-item">
+        <span class="rp-label">Fed. Refund</span>
+        <span class="rp-value zero" id="hdr-refund">—</span>
+      </div>
+      <div class="rp-sep"></div>
+      <div class="rp-item">
+        <span class="rp-label">Eff. Rate</span>
+        <span class="rp-value zero" id="hdr-rate">—</span>
+      </div>
+      <div class="rp-sep"></div>
+      <div class="rp-item">
+        <span class="rp-label">Tax Owed</span>
+        <span class="rp-value zero" id="hdr-tax">—</span>
+      </div>
+    </div>
+    <button id="theme-btn" onclick="toggleDark()" title="Toggle dark mode">🌙</button>
+  </div>
+</header>
+
+<!-- PROGRESS STRIP -->
+<div class="progress-strip" id="progress-strip" style="display:none">
+  <div class="progress-steps" id="progress-steps"></div>
+</div>
+
+<div class="main-wrap">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar" style="display:none">
+    <div class="sb-title">Your Return</div>
+    <div id="sb-nav"></div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;font-size:.8rem" onclick="exportData()">💾 Save Progress</button>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;font-size:.8rem;margin-top:4px" onclick="importData()">📂 Load Saved</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content" id="main-content">
+
+    <!-- STEP 0: WELCOME -->
+    <div class="step-panel active" id="step-0">
+      <div class="card">
+        <div class="welcome-hero">
+          <h1>Your 2024 Tax Return,<br><span>Done Right.</span></h1>
+          <p>Free, private, and thorough. All calculations happen in your browser — your data never leaves your device.</p>
+          <div class="feature-pills">
+            <div class="feature-pill"><span>✓</span> 100% Free</div>
+            <div class="feature-pill"><span>🔒</span> No Data Leaves Your Browser</div>
+            <div class="feature-pill"><span>⚖️</span> Audit Risk Scoring</div>
+            <div class="feature-pill"><span>📅</span> Quarterly Estimate Planner</div>
+            <div class="feature-pill"><span>📊</span> Live Refund Calculator</div>
+          </div>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:8px 0 24px">
+        <div class="card-title">What best describes your 2024 income?</div>
+        <div class="card-sub">Select all that apply — we'll show you exactly the right sections.</div>
+        <div class="profile-grid" id="profile-grid">
+          <div class="profile-card" data-type="employee" onclick="toggleProfile('employee')">
+            <div class="profile-icon">👔</div>
+            <div class="profile-name">W-2 Employee</div>
+            <div class="profile-desc">You work for an employer who withholds taxes from your paycheck</div>
+          </div>
+          <div class="profile-card" data-type="freelancer" onclick="toggleProfile('freelancer')">
+            <div class="profile-icon">💼</div>
+            <div class="profile-name">Freelancer / Self-Employed</div>
+            <div class="profile-desc">You receive 1099s, do contract work, or run a side business</div>
+          </div>
+          <div class="profile-card" data-type="investor" onclick="toggleProfile('investor')">
+            <div class="profile-icon">📈</div>
+            <div class="profile-name">Investor / Other Income</div>
+            <div class="profile-desc">Dividends, capital gains, rental income, retirement distributions</div>
+          </div>
+        </div>
+        <div style="margin-top:24px;text-align:center">
+          <button class="btn btn-primary btn-lg" onclick="startReturn()" id="start-btn">
+            Start My 2024 Return →
+          </button>
+          <div style="font-size:.78rem;color:var(--tx4);margin-top:10px">Takes about 10–20 minutes · All 2024 IRS figures built in</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 1: ABOUT YOU -->
+    <div class="step-panel" id="step-1">
+      <div class="step-header">
+        <div class="step-badge"><span class="step-badge-dot"></span>Step 1 of 7</div>
+        <h2>About You</h2>
+        <p>Filing status has the biggest impact on your tax bill — choose carefully.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Filing Status</div>
+        <div class="card-sub">Select the status that applied on December 31, 2024.</div>
+        <div class="radio-group" id="filing-status-group">
+          <label class="radio-option selected" onclick="setFilingStatus('single')"><input type="radio" name="fs" value="single" checked> Single</label>
+          <label class="radio-option" onclick="setFilingStatus('mfj')"><input type="radio" name="fs" value="mfj"> Married Filing Jointly</label>
+          <label class="radio-option" onclick="setFilingStatus('mfs')"><input type="radio" name="fs" value="mfs"> Married Filing Separately</label>
+          <label class="radio-option" onclick="setFilingStatus('hoh')"><input type="radio" name="fs" value="hoh"> Head of Household</label>
+          <label class="radio-option" onclick="setFilingStatus('qss')"><input type="radio" name="fs" value="qss"> Qualifying Surviving Spouse</label>
+        </div>
+        <div id="fs-explanation" class="alert info" style="margin-top:16px">
+          <span class="alert-icon">ℹ️</span>
+          <div class="alert-body"><strong>Single</strong> Standard deduction: <strong>$14,600</strong>. Use this if you were unmarried or legally separated on Dec 31, 2024.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Personal Information</div>
+        <div class="field-row two">
+          <div class="field">
+            <label>First Name</label>
+            <input type="text" id="first-name" placeholder="Jane" oninput="st('firstName',this.value)">
+          </div>
+          <div class="field">
+            <label>Last Name</label>
+            <input type="text" id="last-name" placeholder="Smith" oninput="st('lastName',this.value)">
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Your Age (as of Dec 31, 2024)</label>
+            <input type="number" id="age" min="0" max="120" placeholder="35" oninput="st('age',+this.value);recalc()">
+            <div class="field-hint">If 65+, you qualify for a larger standard deduction</div>
+          </div>
+          <div class="field" id="spouse-age-field" style="display:none">
+            <label>Spouse's Age</label>
+            <input type="number" id="spouse-age" min="0" max="120" placeholder="34" oninput="st('spouseAge',+this.value);recalc()">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label><input type="checkbox" id="blind-check" onchange="st('blind',this.checked);recalc()"> I am legally blind</label>
+          </div>
+          <div class="field" id="spouse-blind-field" style="display:none">
+            <label><input type="checkbox" id="spouse-blind-check" onchange="st('spouseBlind',this.checked);recalc()"> Spouse is legally blind</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Dependents</div>
+        <div class="card-sub">Children or other qualifying persons you can claim.</div>
+        <div class="item-list" id="dependents-list"></div>
+        <button class="add-btn" onclick="addDependent()">+ Add Dependent</button>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-ghost" onclick="goStep(0)">← Back</button>
+        <button class="btn btn-primary" onclick="goStep(2)">Income →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: INCOME -->
+    <div class="step-panel" id="step-2">
+      <div class="step-header">
+        <div class="step-badge"><span class="step-badge-dot"></span>Step 2 of 7</div>
+        <h2>Your Income</h2>
+        <p>Enter all income received in 2024. Every source is totaled automatically.</p>
+      </div>
+
+      <!-- W-2 -->
+      <div class="card" id="w2-section">
+        <div class="card-title">W-2 Employment Income</div>
+        <div class="card-sub">Add one entry per employer. Find these figures on your W-2 form.</div>
+        <div class="item-list" id="w2-list"></div>
+        <button class="add-btn" onclick="addW2()">+ Add W-2 Employer</button>
+      </div>
+
+      <!-- FREELANCE / 1099 -->
+      <div class="card" id="freelance-section" style="display:none">
+        <div class="card-title">Freelance &amp; 1099 Income</div>
+        <div class="card-sub">Include all 1099-NEC, 1099-MISC (box 3), and cash payments for services.</div>
+        <div id="se-warning" class="alert warn" style="margin-bottom:16px">
+          <span class="alert-icon">⚠️</span>
+          <div class="alert-body"><strong>Self-Employment Tax Alert</strong> In addition to income tax, self-employed income is subject to a 15.3% SE tax (Social Security + Medicare). This is calculated automatically — many first-time freelancers are surprised by this!</div>
+        </div>
+        <div class="item-list" id="freelance-list"></div>
+        <button class="add-btn" onclick="addFreelance()">+ Add 1099 / Freelance Income</button>
+      </div>
+
+      <!-- INVESTMENT -->
+      <div class="card" id="investment-section" style="display:none">
+        <div class="card-title">Investment &amp; Passive Income</div>
+        <div class="card-sub">From 1099-DIV, 1099-INT, 1099-B, and Schedule K-1 forms.</div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Ordinary Dividends (1099-DIV Box 1a) <span class="help-icon" onclick="toggleHelp('h-ord-div')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="ord-div" oninput="st('ordinaryDividends',+this.value);recalc()"></div>
+            <div class="help-panel" id="h-ord-div">Total dividends received. May be reduced by qualified dividends taxed at lower rates.</div>
+          </div>
+          <div class="field">
+            <label>Qualified Dividends (1099-DIV Box 1b) <span class="help-icon" onclick="toggleHelp('h-qual-div')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="qual-div" oninput="st('qualifiedDividends',+this.value);recalc()"></div>
+            <div class="help-panel" id="h-qual-div">Subset of ordinary dividends taxed at 0%, 15%, or 20% — always ≤ ordinary dividends.</div>
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Taxable Interest (1099-INT)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="interest-income" oninput="st('interestIncome',+this.value);recalc()"></div>
+          </div>
+          <div class="field">
+            <label>Short-Term Capital Gains <span class="help-icon" onclick="toggleHelp('h-stcg')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" placeholder="0" id="stcg" oninput="st('shortTermGains',+this.value);recalc()"></div>
+            <div class="help-panel" id="h-stcg">Assets held ≤ 1 year. Taxed as ordinary income. Can be negative (loss).</div>
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Long-Term Capital Gains <span class="help-icon" onclick="toggleHelp('h-ltcg')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" placeholder="0" id="ltcg" oninput="st('longTermGains',+this.value);recalc()"></div>
+            <div class="help-panel" id="h-ltcg">Assets held &gt;1 year. Taxed at 0%, 15%, or 20% depending on your income.</div>
+          </div>
+          <div class="field">
+            <label>Capital Loss Carryforward <span class="help-icon" onclick="toggleHelp('h-clf')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="cap-loss-cf" oninput="st('capLossCarryforward',+this.value);recalc()"></div>
+            <div class="help-panel" id="h-clf">Unused capital losses from prior years (from prior Schedule D). Up to $3,000 offsets ordinary income annually.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RENTAL -->
+      <div class="card" id="rental-section" style="display:none">
+        <div class="card-title">Rental Income <span class="opt" style="font-size:.8rem;color:var(--tx4);font-weight:400">(Schedule E)</span></div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Gross Rental Income</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="rental-income" oninput="st('rentalIncome',+this.value);recalc()"></div>
+          </div>
+          <div class="field">
+            <label>Total Rental Expenses</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="rental-expenses" oninput="st('rentalExpenses',+this.value);recalc()"></div>
+            <div class="field-hint">Mortgage interest, taxes, repairs, depreciation, insurance, etc.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OTHER -->
+      <div class="card">
+        <div class="card-title">Other Income</div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Social Security Benefits <span class="help-icon" onclick="toggleHelp('h-ss')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="ss-benefits" oninput="st('socialSecurityBenefits',+this.value);recalc()"></div>
+            <div class="help-panel" id="h-ss">Enter Box 5 of SSA-1099. Up to 85% may be taxable depending on your total income.</div>
+          </div>
+          <div class="field">
+            <label>Other Taxable Income</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="other-income" oninput="st('otherIncome',+this.value);recalc()"></div>
+            <div class="field-hint">Gambling winnings, alimony received (pre-2019 divorce), 1099-K marketplace sales, etc.</div>
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field">
+            <label>IRA / 401k Distributions <span class="help-icon" onclick="toggleHelp('h-dist')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="ira-distributions" oninput="st('iraDistributions',+this.value);recalc()"></div>
+            <div class="help-panel" id="h-dist">Taxable amount from 1099-R (Box 2a). Early distributions (under 59½) add a 10% penalty.</div>
+          </div>
+          <div class="field">
+            <label>Early Distribution? <span class="help-icon" onclick="toggleHelp('h-early')">?</span></label>
+            <select id="early-dist" onchange="st('earlyDist',this.value==='yes');recalc()">
+              <option value="no">No (59½ or older / qualified exception)</option>
+              <option value="yes">Yes (under 59½, no exception) — 10% penalty</option>
+            </select>
+            <div class="help-panel" id="h-early">10% early withdrawal penalty applies unless you qualify for an exception (disability, SEPP, first home, etc.)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1099-K WIZARD -->
+      <div class="card">
+        <div class="card-title">Did you receive a 1099-K? <span class="help-icon" onclick="toggleHelp('h-1099k')">?</span></div>
+        <div class="help-panel open" id="h-1099k" style="margin-bottom:16px">
+          <strong>New 2024 rule:</strong> Payment platforms (PayPal, Venmo, Etsy, eBay, etc.) must send a 1099-K if they paid you $5,000+ in 2024. This includes personal sales and reimbursements — not all of it is taxable! Use this guide to sort it out.
+        </div>
+        <div class="field-row single">
+          <div class="field">
+            <label>1099-K Amount(s) Received (total across all platforms)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="k1099-total" oninput="st('k1099Total',+this.value);recalc1099k()"></div>
+          </div>
+        </div>
+        <div id="k1099-wizard" style="display:none;margin-top:12px">
+          <div class="field-row three">
+            <div class="field">
+              <label>Personal sales of items at a loss (not taxable)</label>
+              <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="k1099-personal" oninput="recalc1099k()"></div>
+              <div class="field-hint">e.g., sold old furniture for less than you paid</div>
+            </div>
+            <div class="field">
+              <label>Reimbursements received (not income)</label>
+              <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="k1099-reimb" oninput="recalc1099k()"></div>
+              <div class="field-hint">Friends paying you back via PayPal/Venmo</div>
+            </div>
+            <div class="field">
+              <label>Business/service income (taxable)</label>
+              <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="k1099-business" oninput="recalc1099k()"></div>
+              <div class="field-hint">This goes on your Schedule C / business income</div>
+            </div>
+          </div>
+          <div id="k1099-result" class="alert info" style="margin-top:12px"></div>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-ghost" onclick="goStep(1)">← Back</button>
+        <button class="btn btn-primary" onclick="goStep(3)" id="step2-next">Business Expenses →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: BUSINESS EXPENSES -->
+    <div class="step-panel" id="step-3">
+      <div class="step-header">
+        <div class="step-badge"><span class="step-badge-dot"></span>Step 3 of 7</div>
+        <h2>Business Expenses</h2>
+        <p>Schedule C deductions reduce your taxable income and your self-employment tax.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Business Revenue</div>
+        <div class="card-sub">Enter your total gross receipts (before expenses). Freelance income already entered in Step 2 is included below.</div>
+        <div class="field-row single">
+          <div class="field">
+            <label>Additional Business Revenue (not already entered as 1099 above)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="biz-revenue" oninput="st('businessRevenue',+this.value);recalc()"></div>
+          </div>
+        </div>
+        <div id="total-biz-revenue" class="alert success" style="margin-top:8px">
+          <span class="alert-icon">📊</span><div class="alert-body">Total business revenue: <strong id="total-rev-amt">$0</strong></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Business Expenses <span class="help-icon" onclick="toggleHelp('h-sched-c')">?</span></div>
+        <div class="help-panel" id="h-sched-c" style="margin-bottom:16px">All expenses must be "ordinary and necessary" for your business. Keep receipts for everything over $75 — the IRS can disallow deductions without documentation.</div>
+        <div class="card-sub">Enter annual totals for each category. Leave blank if not applicable.</div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Advertising &amp; Marketing</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-advertising" oninput="updateExpense('advertising',+this.value)"></div>
+          </div>
+          <div class="field">
+            <label>Professional Services (Legal, Accounting)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-legal" oninput="updateExpense('legalProfessional',+this.value)"></div>
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Office &amp; Supplies</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-office" oninput="updateExpense('officeExpense',+this.value)"></div>
+          </div>
+          <div class="field">
+            <label>Software &amp; Subscriptions</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-software" oninput="updateExpense('software',+this.value)"></div>
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Phone &amp; Internet (business %)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-phone" oninput="updateExpense('phone',+this.value)"></div>
+          </div>
+          <div class="field">
+            <label>Travel (airfare, hotels — not commuting)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-travel" oninput="updateExpense('travel',+this.value)"></div>
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Business Meals (50% limit applied automatically) <span class="help-icon" onclick="toggleHelp('h-meals')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-meals" oninput="updateExpense('meals',+this.value)"></div>
+            <div class="help-panel" id="h-meals">Enter the full amount you spent. Only 50% is deductible — the calculation is done for you.</div>
+          </div>
+          <div class="field">
+            <label>Contract Labor / Subcontractors <span class="help-icon" onclick="toggleHelp('h-contract')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-contract" oninput="updateExpense('contractLabor',+this.value)"></div>
+            <div class="help-panel" id="h-contract">Payments to independent contractors. Issue a 1099-NEC if you paid any single contractor $600+.</div>
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Insurance (business)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-insurance" oninput="updateExpense('insurance',+this.value)"></div>
+          </div>
+          <div class="field">
+            <label>Rent / Lease (office, equipment)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-rent" oninput="updateExpense('rent',+this.value)"></div>
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Equipment &amp; Depreciation <span class="help-icon" onclick="toggleHelp('h-sec179')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-depreciation" oninput="updateExpense('depreciation',+this.value)"></div>
+            <div class="help-panel" id="h-sec179">Section 179 lets you deduct the full cost of equipment in year of purchase (up to $1,220,000 in 2024). Bonus depreciation is 60% for 2024.</div>
+          </div>
+          <div class="field">
+            <label>Education &amp; Training (business-related)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-education" oninput="updateExpense('education',+this.value)"></div>
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Other Business Expenses</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-other" oninput="updateExpense('other',+this.value)"></div>
+          </div>
+          <div class="field">
+            <label>Cost of Goods Sold (product businesses)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="exp-cogs" oninput="updateExpense('cogs',+this.value)"></div>
+          </div>
+        </div>
+        <div id="total-expenses-display" class="alert success" style="margin-top:8px">
+          <span class="alert-icon">📊</span><div class="alert-body">Total business expenses: <strong id="total-exp-amt">$0</strong> &nbsp;|&nbsp; Estimated net profit: <strong id="net-profit-amt">$0</strong></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Home Office Deduction <span class="help-icon" onclick="toggleHelp('h-home-office')">?</span></div>
+        <div class="help-panel" id="h-home-office" style="margin-bottom:16px"><strong>Eligibility:</strong> Your home office must be used <em>regularly and exclusively</em> for business — no personal use allowed in that space. Must be your principal place of business.</div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <div class="t-title">I have a qualifying home office</div>
+            <div class="t-desc">Dedicated space used exclusively for business</div>
+          </div>
+          <label class="toggle"><input type="checkbox" id="home-office-toggle" onchange="toggleHomeOffice(this.checked)"><span class="toggle-slider"></span></label>
+        </div>
+        <div id="home-office-fields" style="display:none;margin-top:16px">
+          <div class="field-row two" style="margin-bottom:16px">
+            <div class="field">
+              <label>Calculation Method</label>
+              <select id="home-office-method" onchange="st('homeOfficeMethod',this.value);recalc()">
+                <option value="simplified">Simplified ($5/sq ft, max 300 sq ft = max $1,500)</option>
+                <option value="actual">Actual Expenses (larger deduction, requires Form 8829)</option>
+              </select>
+            </div>
+          </div>
+          <div id="home-office-simplified" class="field-row two">
+            <div class="field">
+              <label>Office Square Footage (max 300)</label>
+              <input type="number" min="0" max="300" placeholder="150" id="office-sqft" oninput="st('officeSqft',+this.value);recalc()">
+            </div>
+            <div class="field">
+              <label style="color:var(--green)">Estimated Deduction</label>
+              <input type="text" id="home-office-deduction-display" readonly style="background:var(--green-lt);border-color:rgba(5,150,105,.3);color:var(--green);font-weight:700">
+            </div>
+          </div>
+          <div id="home-office-actual" style="display:none">
+            <div class="field-row three">
+              <div class="field">
+                <label>Office Sq Ft</label>
+                <input type="number" min="0" placeholder="200" id="office-sqft-actual" oninput="calcActualHomeOffice()">
+              </div>
+              <div class="field">
+                <label>Total Home Sq Ft</label>
+                <input type="number" min="0" placeholder="1500" id="home-sqft" oninput="calcActualHomeOffice()">
+              </div>
+              <div class="field">
+                <label>Total Home Expenses (annual)</label>
+                <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="18000" id="home-expenses" oninput="calcActualHomeOffice()"></div>
+                <div class="field-hint">Rent/mortgage + utilities + insurance + repairs</div>
+              </div>
+            </div>
+            <div id="actual-home-office-result" class="alert success" style="margin-top:8px"></div>
+          </div>
+          <div class="alert warn" style="margin-top:12px">
+            <span class="alert-icon">📋</span>
+            <div class="alert-body"><strong>Documentation required:</strong> Keep a floor plan or measurements showing office dimensions. No personal use of this space, ever.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Vehicle / Mileage Deduction <span class="help-icon" onclick="toggleHelp('h-vehicle')">?</span></div>
+        <div class="help-panel" id="h-vehicle" style="margin-bottom:16px"><strong>2024 Standard Mileage Rate: 67¢/mile.</strong> You must elect the standard mileage method in the first year you use a vehicle for business. A contemporaneous mileage log (date, destination, business purpose, miles) is required — reconstructed logs are frequently disallowed in audits.</div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <div class="t-title">I used a vehicle for business</div>
+          </div>
+          <label class="toggle"><input type="checkbox" id="vehicle-toggle" onchange="toggleVehicle(this.checked)"><span class="toggle-slider"></span></label>
+        </div>
+        <div id="vehicle-fields" style="display:none;margin-top:16px">
+          <div class="field-row two" style="margin-bottom:12px">
+            <div class="field">
+              <label>Method</label>
+              <select id="vehicle-method" onchange="st('vehicleMethod',this.value);calcVehicleDeduction()">
+                <option value="mileage">Standard Mileage Rate (67¢/mile)</option>
+                <option value="actual">Actual Expenses (fuel, insurance, depreciation, etc.)</option>
+              </select>
+            </div>
+          </div>
+          <div id="vehicle-mileage-fields">
+            <div class="field-row three">
+              <div class="field">
+                <label>Business Miles Driven</label>
+                <input type="number" min="0" placeholder="8500" id="biz-miles" oninput="calcVehicleDeduction()">
+              </div>
+              <div class="field">
+                <label>Total Miles (all purposes)</label>
+                <input type="number" min="0" placeholder="15000" id="total-miles" oninput="calcVehicleDeduction()">
+              </div>
+              <div class="field">
+                <label style="color:var(--green)">Mileage Deduction</label>
+                <input type="text" id="mileage-deduction-display" readonly style="background:var(--green-lt);border-color:rgba(5,150,105,.3);color:var(--green);font-weight:700">
+              </div>
+            </div>
+          </div>
+          <div id="vehicle-actual-fields" style="display:none">
+            <div class="field-row two">
+              <div class="field">
+                <label>Total Vehicle Expenses</label>
+                <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="vehicle-actual-exp" oninput="calcVehicleDeduction()"></div>
+              </div>
+              <div class="field">
+                <label>Business Use % (0-100)</label>
+                <input type="number" min="0" max="100" placeholder="65" id="vehicle-biz-pct" oninput="calcVehicleDeduction()">
+                <div class="field-hint">100% is automatically flagged as a high audit risk</div>
+              </div>
+            </div>
+          </div>
+          <div id="vehicle-100pct-warning" class="alert warn" style="margin-top:12px;display:none">
+            <span class="alert-icon">⚠️</span>
+            <div class="alert-body"><strong>High Audit Risk:</strong> Claiming 100% business use of a vehicle is one of the top IRS audit triggers. The IRS assumes at least some personal use. Document every single trip with dates, destinations, and business purpose.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-ghost" onclick="goStep(2)">← Back</button>
+        <button class="btn btn-primary" onclick="goStep(4)">Deductions →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: DEDUCTIONS & ADJUSTMENTS -->
+    <div class="step-panel" id="step-4">
+      <div class="step-header">
+        <div class="step-badge"><span class="step-badge-dot"></span>Step 4 of 7</div>
+        <h2>Deductions &amp; Adjustments</h2>
+        <p>We'll compare standard vs. itemized and pick what saves you more.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Above-the-Line Adjustments <span class="help-icon" onclick="toggleHelp('h-atl')">?</span></div>
+        <div class="help-panel" id="h-atl" style="margin-bottom:16px">These deductions reduce your AGI directly — they benefit you even if you take the standard deduction.</div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Student Loan Interest <span class="help-icon" onclick="toggleHelp('h-sli')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="student-loan-int" oninput="st('studentLoanInterest',+this.value);recalc()"></div>
+            <div class="help-panel" id="h-sli">Max $2,500. Phases out: $75K–$90K (single), $155K–$185K (MFJ). Box 1 of Form 1098-E.</div>
+          </div>
+          <div class="field">
+            <label>Traditional IRA Contribution <span class="help-icon" onclick="toggleHelp('h-ira')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="ira-contrib" oninput="st('iraContribution',+this.value);recalc()"></div>
+            <div class="help-panel" id="h-ira">Max $7,000 (under 50) or $8,000 (50+). Deductibility phases out if covered by a workplace plan. Can contribute until April 15, 2025.</div>
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Covered by Workplace Retirement Plan?</label>
+            <select id="covered-by-plan" onchange="st('coveredByPlan',this.value==='yes');recalc()">
+              <option value="no">No — full IRA deduction available</option>
+              <option value="yes">Yes — deduction may phase out at higher incomes</option>
+            </select>
+          </div>
+          <div class="field" id="spouse-plan-field" style="display:none">
+            <label>Spouse Covered by Workplace Plan?</label>
+            <select id="spouse-plan" onchange="st('spouseCoveredByPlan',this.value==='yes');recalc()">
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field">
+            <label>HSA Contribution <span class="help-icon" onclick="toggleHelp('h-hsa')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="hsa-contrib" oninput="st('hsaContribution',+this.value);recalc()"></div>
+            <div class="help-panel" id="h-hsa">Must be enrolled in an HDHP. 2024 limits: $4,150 (self-only) or $8,300 (family). Age 55+: add $1,000. Check Box 12 Code W on your W-2 for employer contributions.</div>
+          </div>
+          <div class="field">
+            <label>HSA Coverage Type</label>
+            <select id="hsa-coverage" onchange="st('hsaCoverage',this.value);recalc()">
+              <option value="self">Self-Only (max $4,150)</option>
+              <option value="family">Family (max $8,300)</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row two" id="se-adj-fields" style="display:none">
+          <div class="field">
+            <label>Self-Employed Health Insurance Premiums <span class="help-icon" onclick="toggleHelp('h-sehi')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="se-health" oninput="st('seHealthInsurance',+this.value);recalc()"></div>
+            <div class="help-panel" id="h-sehi">100% deductible for medical, dental, vision, and LTC premiums. Cannot exceed your net SE income. Cannot claim for months you were eligible for employer-sponsored coverage.</div>
+          </div>
+          <div class="field">
+            <label>SEP-IRA / Solo 401k Contribution <span class="help-icon" onclick="toggleHelp('h-sep')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="sep-ira" oninput="st('sepIraContribution',+this.value);recalc()"></div>
+            <div class="help-panel" id="h-sep">SEP-IRA: up to 25% of net SE earnings, max $69,000. Solo 401k: up to $23,000 employee + 20% employer, max $69,000 combined.</div>
+          </div>
+        </div>
+        <div id="half-se-tax-display" style="display:none" class="alert success">
+          <span class="alert-icon">✓</span>
+          <div class="alert-body">Half of self-employment tax deducted automatically: <strong id="half-se-display-amt">$0</strong></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Standard vs. Itemized Deductions</div>
+        <div id="std-vs-itemized-compare" class="compare-panel">
+          <div class="compare-card" id="std-card">
+            <div class="compare-title">Standard Deduction</div>
+            <div class="compare-amount" id="std-deduction-amt">$14,600</div>
+            <div class="compare-savings">No receipts required</div>
+          </div>
+          <div class="compare-card" id="item-card">
+            <div class="compare-title">Itemized Deductions</div>
+            <div class="compare-amount" id="item-deduction-amt">$0</div>
+            <div class="compare-savings" id="item-gap-text">Enter items below to compare</div>
+          </div>
+        </div>
+        <div id="deduction-recommendation" class="alert info">
+          <span class="alert-icon">💡</span>
+          <div class="alert-body" id="ded-rec-text">Fill in your itemized deductions below to see which saves more.</div>
+        </div>
+
+        <div style="margin-top:20px">
+          <div class="card-title" style="font-size:1rem">Itemized Deduction Details <span class="opt" style="font-weight:400;color:var(--tx4);font-size:.8rem">Schedule A</span></div>
+          <div class="field-row two" style="margin-top:12px">
+            <div class="field">
+              <label>Mortgage Interest Paid (1098) <span class="help-icon" onclick="toggleHelp('h-mort')">?</span></label>
+              <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="mortgage-interest" oninput="st('mortgageInterest',+this.value);recalc()"></div>
+              <div class="help-panel" id="h-mort">Interest on loans up to $750,000 (acquired after 12/15/2017) or $1M (older loans). Box 1 of Form 1098.</div>
+            </div>
+            <div class="field">
+              <label>Property Tax Paid <span class="help-icon" onclick="toggleHelp('h-salt')">?</span></label>
+              <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="property-tax" oninput="st('propertyTax',+this.value);recalc()"></div>
+              <div class="help-panel" id="h-salt">Combined with state income/sales tax, capped at $10,000 total ($5,000 if MFS). No deduction for federal income taxes.</div>
+            </div>
+          </div>
+          <div class="field-row two">
+            <div class="field">
+              <label>State &amp; Local Income Tax Paid <span class="help-icon" onclick="toggleHelp('h-slit')">?</span></label>
+              <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="state-income-tax" oninput="st('stateTax',+this.value);recalc()"></div>
+              <div class="help-panel" id="h-slit">Combined with property tax, the SALT cap is $10,000. Can alternatively deduct sales tax (use IRS tables) if higher.</div>
+            </div>
+            <div class="field">
+              <label>SALT Total (auto-capped at $10,000)</label>
+              <input type="text" id="salt-display" readonly style="background:var(--surface2);font-weight:700;color:var(--primary)">
+            </div>
+          </div>
+          <div class="field-row two">
+            <div class="field">
+              <label>Charitable Cash Donations <span class="help-icon" onclick="toggleHelp('h-charity')">?</span></label>
+              <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="charity-cash" oninput="st('charitableCash',+this.value);recalc()"></div>
+              <div class="help-panel" id="h-charity">Keep bank records or written acknowledgment for all donations. For $250+, you need a contemporaneous written acknowledgment from the charity.</div>
+            </div>
+            <div class="field">
+              <label>Non-Cash Charitable Donations <span class="help-icon" onclick="toggleHelp('h-noncash')">?</span></label>
+              <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="charity-noncash" oninput="st('charitableNonCash',+this.value);recalc()"></div>
+              <div class="help-panel" id="h-noncash">Clothing, household items to Goodwill/Salvation Army, etc. Deduct fair market value. Form 8283 required for $500+. Appraisal required for $5,000+.</div>
+            </div>
+          </div>
+          <div class="field-row two">
+            <div class="field">
+              <label>Medical &amp; Dental Expenses <span class="help-icon" onclick="toggleHelp('h-medical')">?</span></label>
+              <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="medical-expenses" oninput="st('medicalExpenses',+this.value);recalc()"></div>
+              <div class="help-panel" id="h-medical">Only expenses exceeding 7.5% of your AGI are deductible. The threshold is calculated automatically.</div>
+            </div>
+            <div class="field">
+              <label>Deductible Medical (after 7.5% AGI floor)</label>
+              <input type="text" id="medical-display" readonly style="background:var(--surface2);font-weight:700;color:var(--primary)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-ghost" onclick="goStep(3)">← Back</button>
+        <button class="btn btn-primary" onclick="goStep(5)">Credits →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: CREDITS -->
+    <div class="step-panel" id="step-5">
+      <div class="step-header">
+        <div class="step-badge"><span class="step-badge-dot"></span>Step 5 of 7</div>
+        <h2>Tax Credits</h2>
+        <p>Credits directly reduce your tax bill — they're more valuable than deductions.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Child Tax Credit <span class="help-icon" onclick="toggleHelp('h-ctc')">?</span></div>
+        <div class="help-panel" id="h-ctc" style="margin-bottom:12px"><strong>$2,000 per qualifying child</strong> under 17 on Dec 31, 2024. Up to $1,700 is refundable (ACTC). Phases out at $200K (single) / $400K (MFJ) — $50 per $1,000 over threshold.</div>
+        <div id="ctc-auto-display" class="alert info">
+          <span class="alert-icon">👨‍👩‍👧</span>
+          <div class="alert-body" id="ctc-auto-text">Based on your dependents, we'll calculate this automatically.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Child &amp; Dependent Care Credit <span class="help-icon" onclick="toggleHelp('h-cdcc')">?</span></div>
+        <div class="help-panel" id="h-cdcc" style="margin-bottom:12px">For childcare costs while you (and spouse) worked or looked for work. Max qualifying expenses: $3,000 (1 child) / $6,000 (2+ children). Credit: 20–35% depending on income.</div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Childcare Expenses Paid <span class="help-icon" onclick="toggleHelp('h-cc2')">?</span></label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="childcare-exp" oninput="st('childCareExpenses',+this.value);recalc()"></div>
+            <div class="help-panel" id="h-cc2">Daycare, after-school care, summer camps (but not overnight camps). Both spouses must have earned income.</div>
+          </div>
+          <div class="field">
+            <label>Employer-Provided Dependent Care FSA</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="dep-care-fsa" oninput="st('depCareFSA',+this.value);recalc()"></div>
+            <div class="field-hint">From W-2 Box 10. Reduces qualifying expenses for credit.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Education Credits</div>
+        <div class="alert info" style="margin-bottom:16px">
+          <span class="alert-icon">🎓</span>
+          <div class="alert-body"><strong>AOTC</strong> ($2,500 max, 40% refundable) for first 4 years of college. &nbsp;<strong>Lifetime Learning Credit</strong> ($2,000 max, non-refundable) for any post-secondary courses. Can't claim both for same student.</div>
+        </div>
+        <div class="item-list" id="education-list"></div>
+        <button class="add-btn" onclick="addEducation()">+ Add Student</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Earned Income Tax Credit (EITC)</div>
+        <div id="eitc-display" class="alert info">
+          <span class="alert-icon">💰</span>
+          <div class="alert-body" id="eitc-text">Calculating based on your income and dependents...</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Retirement Savings Contribution Credit <span class="help-icon" onclick="toggleHelp('h-saver')">?</span></div>
+        <div class="help-panel" id="h-saver" style="margin-bottom:12px">Also called the "Saver's Credit." 10–50% of retirement contributions (IRA, 401k, etc.), up to $2,000 contribution ($4,000 MFJ). Non-refundable. Income limits: $38,250 (single) / $76,500 (MFJ) for 2024.</div>
+        <div class="field-row single">
+          <div class="field">
+            <label>Total 2024 Retirement Contributions (IRA + 401k + SIMPLE + SEP)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="saver-contrib" oninput="st('saverContribution',+this.value);recalc()"></div>
+          </div>
+        </div>
+        <div id="saver-credit-display" class="alert success" style="margin-top:8px;display:none"></div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-ghost" onclick="goStep(4)">← Back</button>
+        <button class="btn btn-primary" onclick="goStep(6)">Payments →</button>
+      </div>
+    </div>
+
+    <!-- STEP 6: PAYMENTS -->
+    <div class="step-panel" id="step-6">
+      <div class="step-header">
+        <div class="step-badge"><span class="step-badge-dot"></span>Step 6 of 7</div>
+        <h2>Withholding &amp; Payments</h2>
+        <p>What you've already paid toward your 2024 tax bill.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Federal Tax Withheld</div>
+        <div class="card-sub">Your W-2 withholding has been imported from Step 2. Add any additional withholding below.</div>
+        <div id="withholding-summary" class="detail-table"></div>
+        <div class="field-row single" style="margin-top:16px">
+          <div class="field">
+            <label>Additional Federal Withholding (from 1099s, backup withholding, etc.)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="extra-withholding" oninput="st('additionalWithheld',+this.value);recalc()"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Estimated Tax Payments Made <span class="help-icon" onclick="toggleHelp('h-est')">?</span></div>
+        <div class="help-panel" id="h-est" style="margin-bottom:16px">If you're self-employed or had income without withholding, you may have made quarterly payments to the IRS using Form 1040-ES. Enter the amounts you actually paid.</div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Q1 Payment (paid April 15, 2024)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="est-q1" oninput="updateEst(0,+this.value)"></div>
+          </div>
+          <div class="field">
+            <label>Q2 Payment (paid June 17, 2024)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="est-q2" oninput="updateEst(1,+this.value)"></div>
+          </div>
+        </div>
+        <div class="field-row two">
+          <div class="field">
+            <label>Q3 Payment (paid Sept 16, 2024)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="est-q3" oninput="updateEst(2,+this.value)"></div>
+          </div>
+          <div class="field">
+            <label>Q4 Payment (paid Jan 15, 2025)</label>
+            <div class="cur-wrap"><input class="currency" type="number" min="0" placeholder="0" id="est-q4" oninput="updateEst(3,+this.value)"></div>
+          </div>
+        </div>
+        <div id="underpayment-warning" class="alert warn" style="display:none;margin-top:12px">
+          <span class="alert-icon">⚠️</span>
+          <div class="alert-body" id="underpayment-text"></div>
+        </div>
+      </div>
+
+      <div class="nav-bar">
+        <button class="btn btn-ghost" onclick="goStep(5)">← Back</button>
+        <button class="btn btn-primary btn-lg" onclick="goStep(7)">View My Results →</button>
+      </div>
+    </div>
+
+    <!-- STEP 7: RESULTS -->
+    <div class="step-panel" id="step-7">
+      <div class="step-header">
+        <div class="step-badge"><span class="step-badge-dot"></span>Your 2024 Federal Tax Summary</div>
+        <h2 id="result-headline">Your Complete Tax Picture</h2>
+        <p id="result-subline">Based on the information you provided. Review carefully before filing.</p>
+      </div>
+
+      <!-- BIG REFUND/OWED DISPLAY -->
+      <div class="card" id="result-main-card">
+        <div class="stat-grid" id="main-stats"></div>
+      </div>
+
+      <!-- WATERFALL BREAKDOWN -->
+      <div class="card">
+        <div class="card-title">Income to Refund — How It All Flows</div>
+        <div class="card-sub">Follow your money from gross income to final refund or balance due.</div>
+        <div class="chart-wrap"><canvas id="waterfall-chart"></canvas></div>
+      </div>
+
+      <!-- TAX DETAIL TABLE -->
+      <div class="card">
+        <div class="card-title">Full Calculation Breakdown</div>
+        <div class="detail-table" id="full-breakdown"></div>
+      </div>
+
+      <!-- BRACKET CHART -->
+      <div class="card">
+        <div class="card-title">Your Tax Bracket Position</div>
+        <div class="card-sub">Marginal rate is the rate on your last dollar earned — effective rate is what you actually pay overall.</div>
+        <div class="chart-wrap" style="height:200px"><canvas id="bracket-chart"></canvas></div>
+        <div style="display:flex;gap:24px;justify-content:center;margin-top:12px">
+          <div style="text-align:center"><div style="font-size:.72rem;color:var(--tx4);font-weight:700;text-transform:uppercase">Marginal Rate</div><div style="font-size:1.5rem;font-weight:800;color:var(--primary)" id="marginal-rate-display">—</div></div>
+          <div style="text-align:center"><div style="font-size:.72rem;color:var(--tx4);font-weight:700;text-transform:uppercase">Effective Rate</div><div style="font-size:1.5rem;font-weight:800;color:var(--green)" id="effective-rate-display">—</div></div>
+          <div style="text-align:center"><div style="font-size:.72rem;color:var(--tx4);font-weight:700;text-transform:uppercase">Income to Next Bracket</div><div style="font-size:1.5rem;font-weight:800;color:var(--amber)" id="next-bracket-display">—</div></div>
+        </div>
+      </div>
+
+      <!-- AUDIT RISK -->
+      <div class="card">
+        <div class="card-title">Audit Risk Assessment</div>
+        <div class="card-sub">Based on your deductions relative to income and known IRS scrutiny patterns.</div>
+        <div class="risk-meter">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <span style="font-size:.85rem;font-weight:600;color:var(--tx2)">Risk Score</span>
+            <span style="font-size:1.4rem;font-weight:800;color:var(--tx)" id="risk-score-display">—</span>
+          </div>
+          <div class="risk-bar-wrap"><div class="risk-needle" id="risk-needle" style="left:10%"></div></div>
+          <div class="risk-labels"><span>Low</span><span>Moderate</span><span>High</span></div>
+        </div>
+        <div id="risk-factors" style="margin-top:16px"></div>
+      </div>
+
+      <!-- QUARTERLY ESTIMATES -->
+      <div class="card" id="quarterly-card" style="display:none">
+        <div class="card-title">2025 Quarterly Estimated Tax Payments</div>
+        <div class="card-sub">Based on your 2024 tax liability. The safe harbor method ensures you avoid underpayment penalties.</div>
+        <div id="quarterly-safe-harbor-info" class="alert info" style="margin-bottom:16px"></div>
+        <table class="q-table" id="quarterly-table"></table>
+        <div class="alert warn" style="margin-top:16px">
+          <span class="alert-icon">📅</span>
+          <div class="alert-body"><strong>Mark these dates:</strong> Missing a quarterly payment triggers a penalty calculated at the federal short-term rate + 3%, compounding daily. Pay by the due date, not a day after.</div>
+        </div>
+      </div>
+
+      <!-- DOCUMENTATION CHECKLIST -->
+      <div class="card">
+        <div class="card-title">Documentation Checklist</div>
+        <div class="card-sub">Keep these records for at least 3 years from filing date (6 years if income was understated by 25%+).</div>
+        <div id="doc-checklist"></div>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="card" style="text-align:center">
+        <div style="font-size:1.1rem;font-weight:700;margin-bottom:8px">Your return is ready to review</div>
+        <div style="font-size:.875rem;color:var(--tx3);margin-bottom:20px">TaxRight calculates your federal tax. For state taxes, visit your state's tax website. To actually file, use the IRS Free File program or a tax professional.</div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button class="btn btn-primary btn-lg" onclick="window.print()">🖨️ Print Summary</button>
+          <button class="btn btn-secondary btn-lg" onclick="exportData()">💾 Save My Data</button>
+          <button class="btn btn-ghost btn-lg" onclick="goStep(1)">✏️ Edit Return</button>
+        </div>
+        <div style="margin-top:20px;padding:16px;background:var(--surface2);border-radius:var(--rs);font-size:.8rem;color:var(--tx4);line-height:1.6">
+          <strong style="color:var(--tx3)">IRS Resources:</strong> &nbsp;
+          <a href="https://www.irs.gov/filing/free-file-do-your-federal-taxes-for-free" target="_blank" style="color:var(--primary)">Free File Program</a> ·
+          <a href="https://www.irs.gov/payments/direct-pay" target="_blank" style="color:var(--primary)">IRS Direct Pay</a> ·
+          <a href="https://www.irs.gov/wheres-my-refund" target="_blank" style="color:var(--primary)">Where's My Refund?</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+const S = {
+  profiles: [],
+  // Personal
+  filingStatus: 'single', firstName: '', lastName: '',
+  age: 0, spouseAge: 0, blind: false, spouseBlind: false,
+  dependents: [], // [{name, age, relationship, months}]
+  // Income
+  w2s: [], // [{employer, wages, federalWithheld, stateWithheld}]
+  freelanceItems: [], // [{source, amount}]
+  ordinaryDividends: 0, qualifiedDividends: 0,
+  interestIncome: 0, shortTermGains: 0, longTermGains: 0,
+  capLossCarryforward: 0,
+  rentalIncome: 0, rentalExpenses: 0,
+  socialSecurityBenefits: 0, otherIncome: 0,
+  iraDistributions: 0, earlyDist: false,
+  k1099Total: 0,
+  // Business / Schedule C
+  businessRevenue: 0,
+  expenses: {advertising:0,legalProfessional:0,officeExpense:0,software:0,phone:0,
+    travel:0,meals:0,contractLabor:0,insurance:0,rent:0,depreciation:0,education:0,other:0,cogs:0},
+  hasHomeOffice: false, homeOfficeMethod: 'simplified', officeSqft: 150,
+  officeSqftActual: 0, homeSqft: 0, homeExpenses: 0,
+  hasVehicle: false, vehicleMethod: 'mileage',
+  bizMiles: 0, totalMiles: 0, vehicleActualExp: 0, vehicleBizPct: 0,
+  // Adjustments
+  studentLoanInterest: 0, iraContribution: 0,
+  coveredByPlan: false, spouseCoveredByPlan: false,
+  hsaContribution: 0, hsaCoverage: 'self',
+  seHealthInsurance: 0, sepIraContribution: 0,
+  // Itemized
+  mortgageInterest: 0, propertyTax: 0, stateTax: 0,
+  charitableCash: 0, charitableNonCash: 0, medicalExpenses: 0,
+  // Credits
+  childCareExpenses: 0, depCareFSA: 0,
+  educationItems: [], // [{name, expenses, type, year}]
+  saverContribution: 0,
+  // Payments
+  additionalWithheld: 0,
+  estimatedPayments: [0,0,0,0],
+};
+
+function st(k, v) { S[k] = v; }
+
+// ============================================================
+// 2024 TAX BRACKETS
+// ============================================================
+const BRACKETS = {
+  single: [[11600,.10],[47150,.12],[100525,.22],[191950,.24],[243725,.32],[609350,.35],[Infinity,.37]],
+  mfj:    [[23200,.10],[94300,.12],[201050,.22],[383900,.24],[487450,.32],[731200,.35],[Infinity,.37]],
+  mfs:    [[11600,.10],[47150,.12],[100525,.22],[191950,.24],[243725,.32],[365600,.35],[Infinity,.37]],
+  hoh:    [[16550,.10],[63100,.12],[100500,.22],[191950,.24],[243700,.32],[609350,.35],[Infinity,.37]],
+  qss:    [[23200,.10],[94300,.12],[201050,.22],[383900,.24],[487450,.32],[731200,.35],[Infinity,.37]],
+};
+// LTCG thresholds (0%/15%/20%)
+const LTCG_THRESH = {
+  single:[47025,518900], mfj:[94050,583750], mfs:[47025,291850], hoh:[63000,551350], qss:[94050,583750]
+};
+// Standard deductions 2024
+const STD_DED = {single:14600, mfj:29200, mfs:14600, hoh:21900, qss:29200};
+const STD_DED_SENIOR = {single:1950, mfj:1550, mfs:1550, hoh:1950, qss:1550}; // per person
+
+function calcRegularTax(income, fs) {
+  if (income <= 0) return 0;
+  const brackets = BRACKETS[fs] || BRACKETS.single;
+  let tax = 0, prev = 0;
+  for (const [top, rate] of brackets) {
+    if (income <= prev) break;
+    tax += (Math.min(income, top) - prev) * rate;
+    prev = top;
+  }
+  return tax;
+}
+function getMarginalRate(income, fs) {
+  if (income <= 0) return .10;
+  const brackets = BRACKETS[fs] || BRACKETS.single;
+  let prev = 0;
+  for (const [top, rate] of brackets) {
+    if (income <= top) return rate;
+    prev = top;
+  }
+  return .37;
+}
+function getNextBracketRoom(income, fs) {
+  const brackets = BRACKETS[fs] || BRACKETS.single;
+  let prev = 0;
+  for (const [top, rate] of brackets) {
+    if (income <= top) return top - income;
+    prev = top;
+  }
+  return 0;
+}
+function calcCapGainsTax(gains, ordIncome, fs) {
+  if (gains <= 0) return 0;
+  const [thresh0, thresh15] = LTCG_THRESH[fs] || LTCG_THRESH.single;
+  const room0 = Math.max(0, thresh0 - ordIncome);
+  const inZero = Math.min(gains, room0);
+  const inFifteen = Math.min(Math.max(0, gains - room0), thresh15 - Math.max(ordIncome, thresh0));
+  const inTwenty = Math.max(0, gains - inZero - inFifteen);
+  return inFifteen * .15 + inTwenty * .20;
+}
+
+// ============================================================
+// STANDARD DEDUCTION
+// ============================================================
+function calcStdDed() {
+  const fs = S.filingStatus;
+  let ded = STD_DED[fs] || 14600;
+  const addl = STD_DED_SENIOR[fs] || 1550;
+  const age = S.age || 0, sa = S.spouseAge || 0;
+  if (age >= 65) ded += addl;
+  if (S.blind) ded += addl;
+  if ((fs==='mfj'||fs==='mfs'||fs==='qss') && sa >= 65) ded += addl;
+  if (S.spouseBlind) ded += addl;
+  return ded;
+}
+
+// ============================================================
+// SCHEDULE C NET
+// ============================================================
+function calcScheduleCNet() {
+  const freelanceTotal = S.freelanceItems.reduce((s,f) => s+(+f.amount||0), 0);
+  const bizRev = (+S.businessRevenue||0) + freelanceTotal;
+  const exp = S.expenses;
+  const rawExpenses =
+    (+exp.advertising||0) + (+exp.legalProfessional||0) + (+exp.officeExpense||0) +
+    (+exp.software||0) + (+exp.phone||0) + (+exp.travel||0) + (+exp.meals||0)*.5 +
+    (+exp.contractLabor||0) + (+exp.insurance||0) + (+exp.rent||0) +
+    (+exp.depreciation||0) + (+exp.education||0) + (+exp.other||0) + (+exp.cogs||0);
+  const homeOff = calcHomeOfficeDeduction();
+  const veh = calcVehicleDeduction();
+  return bizRev - rawExpenses - homeOff - veh;
+}
+function calcHomeOfficeDeduction() {
+  if (!S.hasHomeOffice) return 0;
+  if (S.homeOfficeMethod === 'simplified') {
+    return Math.min(300, +S.officeSqft||0) * 5;
+  } else {
+    const sqft = +S.officeSqftActual||0, homeSqft = +S.homeSqft||0;
+    if (!homeSqft) return 0;
+    return (+S.homeExpenses||0) * (sqft / homeSqft);
+  }
+}
+function calcVehicleDeduction() {
+  if (!S.hasVehicle) return 0;
+  if (S.vehicleMethod === 'mileage') {
+    return (+S.bizMiles||0) * 0.67;
+  } else {
+    const pct = Math.min(100, +S.vehicleBizPct||0) / 100;
+    return (+S.vehicleActualExp||0) * pct;
+  }
+}
+
+// ============================================================
+// SE TAX
+// ============================================================
+function calcSETax(netSE) {
+  if (netSE <= 0) return 0;
+  const base = netSE * 0.9235;
+  const ssBase = Math.min(base, 168600);
+  return ssBase * 0.124 + base * 0.029;
+}
+
+// ============================================================
+// SS TAXABLE
+// ============================================================
+function calcSSRaxable(benefits, agi) {
+  if (!benefits) return 0;
+  // Provisional income = AGI + 50% SS (simplified — excludes tax-exempt interest)
+  const prov = agi + benefits * 0.5;
+  const fs = S.filingStatus;
+  const [low, high] = fs === 'mfj' ? [32000, 44000] : [25000, 34000];
+  if (prov <= low) return 0;
+  if (prov <= high) return Math.min(benefits * 0.5, (prov - low) * 0.5);
+  const tier1 = (high - low) * 0.5;
+  const tier2 = (prov - high) * 0.85;
+  return Math.min(benefits * 0.85, tier1 + tier2);
+}
+
+// ============================================================
+// QBI DEDUCTION (§199A)
+// ============================================================
+function calcQBI(scheduleCNet, agi, netCapGains, fs) {
+  if (scheduleCNet <= 0) return 0;
+  const qbi = scheduleCNet;
+  const taxableInc = Math.max(0, agi - netCapGains);
+  const baseQBI = Math.min(qbi * 0.2, taxableInc * 0.2);
+  // Phase-out thresholds
+  const [lower, upper] = fs === 'mfj' ? [383900, 483900] : [191950, 241950];
+  if (agi <= lower) return Math.max(0, baseQBI);
+  if (agi >= upper) return 0; // Simplified: no W-2 wage calculation here
+  // Phase-out
+  const ratio = (agi - lower) / (upper - lower);
+  return Math.max(0, baseQBI * (1 - ratio));
+}
+
+// ============================================================
+// IRA DEDUCTION
+// ============================================================
+function calcIRADeduction(contrib, agi, fs) {
+  if (!contrib || S.iraType === 'roth') return 0;
+  const age = S.age || 0;
+  const limit = age >= 50 ? 8000 : 7000;
+  const contribution = Math.min(+contrib||0, limit);
+  if (!S.coveredByPlan && !S.spouseCoveredByPlan) return contribution;
+  // Phase-out ranges for covered by plan
+  let [phaseLow, phaseHigh] = [0, 0];
+  if (S.coveredByPlan) {
+    const ranges = {single:[77000,87000],hoh:[77000,87000],mfj:[123000,143000],mfs:[0,10000],qss:[123000,143000]};
+    [phaseLow, phaseHigh] = ranges[fs] || [77000, 87000];
+  } else if (S.spouseCoveredByPlan && (fs==='mfj'||fs==='qss')) {
+    [phaseLow, phaseHigh] = [230000, 240000];
+  }
+  if (!phaseLow) return contribution;
+  if (agi <= phaseLow) return contribution;
+  if (agi >= phaseHigh) return 0;
+  const ratio = (phaseHigh - agi) / (phaseHigh - phaseLow);
+  return Math.round(contribution * ratio / 10) * 10; // round to nearest $10
+}
+
+// ============================================================
+// STUDENT LOAN INTEREST
+// ============================================================
+function calcStudentLoanDeduction(interest, agi, fs) {
+  if (!interest) return 0;
+  const [low, high] = (fs === 'mfj') ? [155000, 185000] : [75000, 90000];
+  if (agi >= high) return 0;
+  const deductible = Math.min(+interest||0, 2500);
+  if (agi <= low) return deductible;
+  return deductible * (high - agi) / (high - low);
+}
+
+// ============================================================
+// HSA DEDUCTION
+// ============================================================
+function calcHSADeduction(contrib, coverage) {
+  const limit = coverage === 'family' ? 8300 : 4150;
+  const age = S.age || 0;
+  const catchup = age >= 55 ? 1000 : 0;
+  return Math.min(+contrib||0, limit + catchup);
+}
+
+// ============================================================
+// CHILD TAX CREDIT
+// ============================================================
+function calcCTC(agi, fs) {
+  const qualifying = S.dependents.filter(d => (+d.age||0) < 17);
+  const count = qualifying.length;
+  if (!count) return {nonRef:0, ref:0};
+  const maxCredit = count * 2000;
+  const threshold = (fs==='mfj'||fs==='qss') ? 400000 : 200000;
+  const reduction = Math.max(0, Math.ceil((agi - threshold) / 1000)) * 50;
+  const credit = Math.max(0, maxCredit - reduction);
+  // Refundable portion (ACTC): 15% of earned income over $2500, up to $1700/child
+  const earnedIncome = S.w2s.reduce((s,w) => s+(+w.wages||0), 0) + Math.max(0, calcScheduleCNet());
+  const actcMax = count * 1700;
+  const actc = Math.min(actcMax, Math.max(0, earnedIncome - 2500) * 0.15);
+  // Non-refundable portion first
+  return {nonRef: Math.min(credit, actcMax - actc), ref: Math.min(actc, credit)};
+}
+
+// ============================================================
+// CHILD CARE CREDIT
+// ============================================================
+function calcChildCareCredit(expenses, agi) {
+  const qualifying = S.dependents.filter(d => (+d.age||0) < 13).length;
+  if (!qualifying) return 0;
+  const adjExp = Math.max(0, (+expenses||0) - (+S.depCareFSA||0));
+  const maxQual = qualifying >= 2 ? 6000 : 3000;
+  const qualExp = Math.min(adjExp, maxQual);
+  // Rate: 35% at AGI ≤$15K, decreases 1% per $2K, floors at 20% at AGI ≥$43K
+  let rate = 0.35;
+  if (agi > 15000) rate = Math.max(0.20, 0.35 - Math.floor((agi - 15000) / 2000) * 0.01);
+  return qualExp * rate;
+}
+
+// ============================================================
+// EDUCATION CREDITS
+// ============================================================
+function calcEducationCredits(agi, fs) {
+  const [phaseLow, phaseHigh] = (fs==='mfj'||fs==='qss') ? [160000,180000] : [80000,90000];
+  const phaseRatio = agi >= phaseHigh ? 0 : agi <= phaseLow ? 1 : (phaseHigh - agi) / (phaseHigh - phaseLow);
+  let aotcNonRef = 0, aotcRef = 0, llc = 0;
+  for (const ed of S.educationItems) {
+    const exp = +ed.expenses || 0;
+    if (ed.type === 'aotc' && +ed.year <= 4) {
+      const raw = Math.min(2000, exp) * 1 + Math.min(Math.max(0, exp - 2000), 2000) * 0.25;
+      const credit = raw * phaseRatio;
+      aotcRef += credit * 0.4;
+      aotcNonRef += credit * 0.6;
+    } else if (ed.type === 'llc') {
+      llc = Math.min(llc + Math.min(exp, 10000) * 0.2 * phaseRatio, 2000);
+    }
+  }
+  return {aotcNonRef, aotcRef, llc};
+}
+
+// ============================================================
+// EITC
+// ============================================================
+function calcEITC(agi, earnedIncome, fs) {
+  if (fs === 'mfs') return 0; // MFS not eligible
+  const investmentIncome = (+S.ordinaryDividends||0) + (+S.interestIncome||0) +
+    Math.max(0, +S.longTermGains||0) + Math.max(0, +S.shortTermGains||0);
+  if (investmentIncome > 11600) return 0;
+  const children = S.dependents.filter(d => (+d.age||0) < 19 || +d.age < 24).length;
+  const kids = Math.min(children, 3);
+  // 2024 EITC max credits and income limits
+  const maxCredits = [632, 4213, 6960, 7830];
+  const singleLimits = [18591, 49084, 55768, 59899];
+  const mfjLimits    = [25511, 56004, 62688, 66819];
+  const limits = (fs === 'mfj') ? mfjLimits : singleLimits;
+  const ei = Math.min(earnedIncome, agi);
+  if (ei <= 0 || agi > limits[kids]) return 0;
+  const maxC = maxCredits[kids];
+  const limit = limits[kids];
+  // Simplified: linear phase-out in upper range
+  const phaseRange = limit * 0.25;
+  const phaseStart = limit - phaseRange;
+  if (agi > phaseStart) {
+    return maxC * Math.max(0, (limit - agi) / phaseRange);
+  }
+  // Phase-in for low earners (simplified)
+  const phaseInRates = [.0765, .34, .40, .45];
+  const phaseInEnd = maxC / phaseInRates[kids];
+  if (ei < phaseInEnd) return ei * phaseInRates[kids];
+  return maxC;
+}
+
+// ============================================================
+// SAVER'S CREDIT
+// ============================================================
+function calcSaverCredit(contrib, agi, fs) {
+  const [lim0, lim50, lim10] = fs === 'mfj' ? [76500, 57375, 38250] : [38250, 28688, 19125];
+  if (agi > lim0) return 0;
+  const maxContrib = fs === 'mfj' ? 4000 : 2000;
+  const base = Math.min(+contrib||0, maxContrib);
+  const rate = agi <= lim10 ? 0.50 : agi <= lim50 ? 0.20 : 0.10;
+  return base * rate;
+}
+
+// ============================================================
+// MASTER TAX CALCULATION
+// ============================================================
+function recalc() {
+  const fs = S.filingStatus;
+
+  // 1. INCOME
+  const w2Wages = S.w2s.reduce((s,w) => s+(+w.wages||0), 0);
+  const scheduleCNet = calcScheduleCNet();
+  const netCapGains = Math.max(0, (+S.longTermGains||0) + (+S.qualifiedDividends||0)
+    - Math.min(3000, +S.capLossCarryforward||0));
+  const netSTCG = +S.shortTermGains || 0;
+  const ordDiv = Math.max(0, (+S.ordinaryDividends||0) - (+S.qualifiedDividends||0));
+  const interest = +S.interestIncome || 0;
+  const rentalNet = (+S.rentalIncome||0) - (+S.rentalExpenses||0);
+  const grossWages = w2Wages;
+  const baseSS = +S.socialSecurityBenefits || 0;
+  const other = +S.otherIncome || 0;
+  const iraDist = +S.iraDistributions || 0;
+  // Calculate provisional SS taxable (first pass without SS itself in AGI)
+  const provisionalAGI = grossWages + Math.max(0,scheduleCNet) + ordDiv + interest + netSTCG + rentalNet + other + iraDist + netCapGains;
+  const ssTaxable = calcSSRaxable(baseSS, provisionalAGI);
+  const grossIncome = provisionalAGI + ssTaxable;
+
+  // 2. SE TAX
+  const netSEPositive = Math.max(0, scheduleCNet);
+  const seTax = calcSETax(netSEPositive);
+  const halfSE = seTax / 2;
+
+  // 3. ADJUSTMENTS
+  const studentLoan = calcStudentLoanDeduction(S.studentLoanInterest, grossIncome, fs);
+  const agi1 = Math.max(0, grossIncome - halfSE - (+S.sepIraContribution||0));
+  const iraDeduction = calcIRADeduction(S.iraContribution, agi1, fs);
+  const hsaDed = calcHSADeduction(S.hsaContribution, S.hsaCoverage);
+  const seHI = Math.min(+S.seHealthInsurance||0, netSEPositive);
+  const totalAdj = halfSE + studentLoan + iraDeduction + hsaDed + seHI + (+S.sepIraContribution||0);
+  const agi = Math.max(0, grossIncome - totalAdj);
+
+  // 4. DEDUCTION
+  const stdDed = calcStdDed();
+  const saltCap = fs === 'mfs' ? 5000 : 10000;
+  const salt = Math.min((+S.propertyTax||0) + (+S.stateTax||0), saltCap);
+  const charity = (+S.charitableCash||0) + Math.min(+S.charitableNonCash||0, agi * 0.30);
+  const medFloor = agi * 0.075;
+  const medDed = Math.max(0, (+S.medicalExpenses||0) - medFloor);
+  const mortgage = +S.mortgageInterest || 0;
+  const itemized = salt + charity + medDed + mortgage;
+  const deduction = Math.max(stdDed, itemized);
+  const usingItemized = itemized > stdDed;
+
+  // 5. QBI
+  const qbi = calcQBI(scheduleCNet, agi, netCapGains, fs);
+
+  // 6. TAXABLE INCOME
+  const taxableIncome = Math.max(0, agi - deduction - qbi);
+  const ordinaryTaxableIncome = Math.max(0, taxableIncome - netCapGains);
+
+  // 7. TAX
+  const regularTax = calcRegularTax(ordinaryTaxableIncome, fs);
+  const capGainsTax = calcCapGainsTax(netCapGains, ordinaryTaxableIncome, fs);
+  const earlyDistPenalty = S.earlyDist ? iraDist * 0.10 : 0;
+  const totalTaxBeforeCredits = regularTax + capGainsTax + seTax + earlyDistPenalty;
+
+  // 8. CREDITS
+  const ctc = calcCTC(agi, fs);
+  const childCareCred = calcChildCareCredit(S.childCareExpenses, agi);
+  const edCreds = calcEducationCredits(agi, fs);
+  const eitc = calcEITC(agi, grossWages + netSEPositive, fs);
+  const saverCred = calcSaverCredit(S.saverContribution || S.iraContribution, agi, fs);
+  const totalNonRef = Math.min(totalTaxBeforeCredits, ctc.nonRef + childCareCred + edCreds.aotcNonRef + edCreds.llc + saverCred);
+  const totalRef = ctc.ref + edCreds.aotcRef + eitc;
+  const totalTax = Math.max(0, totalTaxBeforeCredits - totalNonRef);
+
+  // 9. PAYMENTS
+  const w2Withheld = S.w2s.reduce((s,w) => s+(+w.federalWithheld||0), 0);
+  const estPayments = S.estimatedPayments.reduce((s,p) => s+(+p||0), 0);
+  const totalPayments = w2Withheld + (+S.additionalWithheld||0) + estPayments + totalRef;
+  const balance = totalPayments - totalTax;
+  const effectiveRate = grossIncome > 0 ? (totalTax / grossIncome) * 100 : 0;
+  const marginalRate = getMarginalRate(ordinaryTaxableIncome, fs);
+  const nextBracketRoom = getNextBracketRoom(ordinaryTaxableIncome, fs);
+
+  // 10. QUARTERLY ESTIMATES (safe harbor for next year)
+  const safeHarborMultiplier = agi > 150000 ? 1.10 : 1.00;
+  const totalSafeHarborAmt = totalTax * safeHarborMultiplier;
+  const annualEstNeeded = Math.max(0, totalSafeHarborAmt - (w2Withheld + (+S.additionalWithheld||0)));
+  const quarterlyEst = annualEstNeeded / 4;
+
+  // 11. AUDIT RISK
+  const risk = calcAuditRisk(grossIncome, scheduleCNet, usingItemized, itemized, agi);
+
+  const R = {
+    grossIncome, w2Wages, scheduleCNet, netSEPositive, netCapGains, ordDiv, interest, ssTaxable, ordinaryDividends: +S.ordinaryDividends||0,
+    seTax, halfSE, studentLoan, iraDeduction, hsaDed, seHI, totalAdj, agi,
+    stdDed, salt, charity, medDed, mortgage, itemized, deduction, usingItemized,
+    qbi, taxableIncome, ordinaryTaxableIncome,
+    regularTax, capGainsTax, earlyDistPenalty, totalTaxBeforeCredits,
+    ctcNonRef: ctc.nonRef, ctcRef: ctc.ref, childCareCred, edAotcNonRef: edCreds.aotcNonRef, edAotcRef: edCreds.aotcRef, edLLC: edCreds.llc, eitc, saverCred,
+    totalNonRef, totalRef, totalTax,
+    w2Withheld, estPayments, totalPayments, balance,
+    effectiveRate, marginalRate, nextBracketRoom,
+    quarterlyEst, annualEstNeeded, safeHarborMultiplier,
+    risk
+  };
+
+  updateHeader(R);
+  updateDynamicFields(R);
+  return R;
+}
+
+// ============================================================
+// AUDIT RISK
+// ============================================================
+function calcAuditRisk(grossIncome, scheduleCNet, usingItemized, itemized, agi) {
+  let score = 10; // baseline
+  const factors = [];
+  if (scheduleCNet > 0) {
+    score += 5; // self-employed, higher base
+    const mealsPct = (+S.expenses.meals||0) / Math.max(1, scheduleCNet);
+    if (mealsPct > 0.05) { score += 12; factors.push({icon:'🍽️',label:'High meals-to-revenue ratio',detail:`${(mealsPct*100).toFixed(1)}% of revenue — IRS norm is under 2-3% for most industries`,level:'high'}); }
+    const travelPct = (+S.expenses.travel||0) / Math.max(1, scheduleCNet);
+    if (travelPct > 0.15) { score += 8; factors.push({icon:'✈️',label:'High travel expenses',detail:`${(travelPct*100).toFixed(1)}% of revenue — keep detailed receipts & itineraries`,level:'med'}); }
+    if (S.hasHomeOffice) { score += 6; factors.push({icon:'🏠',label:'Home office claimed',detail:'Ensure space is used exclusively for business. Measure and document sq footage.',level:'med'}); }
+    if (S.hasVehicle && S.vehicleMethod === 'mileage' && S.vehicleBizPct >= 100) { score += 15; factors.push({icon:'🚗',label:'100% vehicle business use claimed',detail:'Nearly always scrutinized. The IRS assumes personal use exists.',level:'high'}); }
+    if (scheduleCNet < -5000) { score += 12; factors.push({icon:'📉',label:'Schedule C loss claimed',detail:'Losses claimed 3+ years in a row trigger hobby-loss scrutiny (§183). Document profit motive.',level:'high'}); }
+  }
+  if (usingItemized) {
+    const charityPct = ((+S.charitableCash||0)+(+S.charitableNonCash||0)) / Math.max(1, grossIncome);
+    if (charityPct > 0.10) { score += 10; factors.push({icon:'🏛️',label:'Large charitable deductions',detail:`${(charityPct*100).toFixed(1)}% of income donated — get written acknowledgment for all gifts $250+`,level:'high'}); }
+  }
+  if ((+S.ordinaryDividends||0) > 50000) { score += 5; factors.push({icon:'💹',label:'Significant investment income',detail:'Ensure all basis is reported correctly — IRS receives 1099-B data from brokers.',level:'low'}); }
+  if (grossIncome > 200000) { score += 5; factors.push({icon:'📊',label:'Higher income bracket',detail:'Returns over $200K face higher audit rates. Ensure all forms are complete.',level:'low'}); }
+  // Positive factors
+  if (score < 20) factors.push({icon:'✅',label:'Low overall risk profile',detail:'Your return looks straightforward. Standard documentation should be sufficient.',level:'low'});
+  const level = score < 25 ? 'Low' : score < 50 ? 'Moderate' : 'Elevated';
+  return {score: Math.min(100,score), level, factors};
+}
+
+// ============================================================
+// HEADER LIVE UPDATE
+// ============================================================
+function fmt(n) { return '$' + Math.abs(Math.round(n)).toLocaleString(); }
+function fmtPct(n) { return n.toFixed(1) + '%'; }
+
+let prevBalance = null;
+function updateHeader(R) {
+  const refundEl = document.getElementById('hdr-refund');
+  const rateEl = document.getElementById('hdr-rate');
+  const taxEl = document.getElementById('hdr-tax');
+  const bal = R.balance;
+  const newBal = Math.round(bal);
+  if (refundEl) {
+    if (bal > 0) {
+      refundEl.textContent = fmt(bal);
+      refundEl.className = 'rp-value pos';
+    } else if (bal < 0) {
+      refundEl.textContent = '-' + fmt(-bal);
+      refundEl.className = 'rp-value neg';
+    } else {
+      refundEl.textContent = '$0';
+      refundEl.className = 'rp-value zero';
+    }
+    // Animate if changed
+    if (prevBalance !== null && prevBalance !== newBal) {
+      animateCounter(refundEl, prevBalance, newBal, bal > 0 ? 'pos' : bal < 0 ? 'neg' : 'zero');
+    }
+    prevBalance = newBal;
+  }
+  if (rateEl) {
+    rateEl.textContent = R.grossIncome > 100 ? fmtPct(R.effectiveRate) : '—';
+    rateEl.className = 'rp-value ' + (R.grossIncome > 100 ? 'zero' : 'zero');
+  }
+  if (taxEl) {
+    taxEl.textContent = R.totalTax > 0 ? fmt(R.totalTax) : '—';
+    taxEl.className = 'rp-value ' + (R.totalTax > 0 ? 'neg' : 'zero');
+  }
+}
+
+function animateCounter(el, from, to, cls) {
+  const start = performance.now();
+  const dur = 500;
+  function tick(now) {
+    const t = Math.min(1, (now - start) / dur);
+    const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+    const val = Math.round(from + (to - from) * ease);
+    if (to >= 0) el.textContent = '$' + Math.abs(val).toLocaleString();
+    else el.textContent = '-$' + Math.abs(val).toLocaleString();
+    if (t < 1) requestAnimationFrame(tick);
+    else el.className = 'rp-value ' + cls;
+  }
+  requestAnimationFrame(tick);
+}
+
+// ============================================================
+// DYNAMIC FIELD UPDATES
+// ============================================================
+function updateDynamicFields(R) {
+  // Filing status explanation
+  const fsDesc = {
+    single: {label:'Single', std:'$14,600', desc:'Use if unmarried or legally separated on Dec 31, 2024.'},
+    mfj: {label:'Married Filing Jointly', std:'$29,200', desc:'Generally the most beneficial status for married couples.'},
+    mfs: {label:'Married Filing Separately', std:'$14,600', desc:'Usually less beneficial — consider comparing to MFJ first.'},
+    hoh: {label:'Head of Household', std:'$21,900', desc:'Must be unmarried and paid >50% of home costs for a qualifying person.'},
+    qss: {label:'Qualifying Surviving Spouse', std:'$29,200', desc:'Widow(er) with dependent child — benefits from MFJ rates for 2 years after spouse\'s death.'},
+  };
+  const fsd = fsDesc[S.filingStatus] || fsDesc.single;
+  const fsEl = document.getElementById('fs-explanation');
+  if (fsEl) fsEl.querySelector('.alert-body').innerHTML = `<strong>${fsd.label}</strong> Standard deduction: <strong>${fsd.std}</strong>. ${fsd.desc}`;
+
+  // Show/hide spouse fields
+  const isMFJ = S.filingStatus === 'mfj' || S.filingStatus === 'qss';
+  ['spouse-age-field','spouse-blind-field','spouse-plan-field'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = isMFJ ? '' : 'none';
+  });
+
+  // Standard vs itemized compare
+  const stdEl = document.getElementById('std-deduction-amt');
+  const itemEl = document.getElementById('item-deduction-amt');
+  const itemGap = document.getElementById('item-gap-text');
+  const stdCard = document.getElementById('std-card');
+  const itemCard = document.getElementById('item-card');
+  const dedRec = document.getElementById('ded-rec-text');
+  if (stdEl) stdEl.textContent = '$' + R.stdDed.toLocaleString();
+  if (itemEl) itemEl.textContent = '$' + Math.round(R.itemized).toLocaleString();
+  if (R.usingItemized) {
+    stdCard && stdCard.classList.add('loser');
+    stdCard && stdCard.classList.remove('winner');
+    itemCard && itemCard.classList.add('winner');
+    itemCard && itemCard.classList.remove('loser');
+    if (itemCard) itemCard.querySelector('.compare-savings').textContent = `Saves ${fmt(R.itemized - R.stdDed)} more than standard`;
+    if (dedRec) dedRec.innerHTML = `<strong>Using Itemized Deductions</strong> — saves you <strong>${fmt(R.itemized - R.stdDed)}</strong> vs. standard. Receipts and documentation are required.`;
+  } else {
+    itemCard && itemCard.classList.add('loser');
+    itemCard && itemCard.classList.remove('winner');
+    stdCard && stdCard.classList.add('winner');
+    stdCard && stdCard.classList.remove('loser');
+    const gap = R.stdDed - R.itemized;
+    if (itemGap) itemGap.textContent = gap > 0 ? `You need ${fmt(gap)} more to beat standard` : 'At threshold';
+    if (dedRec) dedRec.innerHTML = `<strong>Using Standard Deduction</strong> — you'd need ${fmt(Math.max(0, gap))} more in deductible expenses to benefit from itemizing.`;
+  }
+
+  // SALT display
+  const saltEl = document.getElementById('salt-display');
+  if (saltEl) saltEl.value = '$' + Math.round(R.salt).toLocaleString() + (((+S.propertyTax||0)+(+S.stateTax||0)) > (S.filingStatus==='mfs'?5000:10000) ? ' (capped)' : '');
+
+  // Medical display
+  const medEl = document.getElementById('medical-display');
+  if (medEl) {
+    const floor = R.agi * 0.075;
+    medEl.value = R.medDed > 0 ? '$' + Math.round(R.medDed).toLocaleString() : `$0 (need >${fmt(floor)} total)`;
+  }
+
+  // SE adjustments visibility
+  const hasFreelance = S.profiles.includes('freelancer') || S.freelanceItems.length > 0 || S.businessRevenue > 0;
+  const seAdj = document.getElementById('se-adj-fields');
+  if (seAdj) seAdj.style.display = hasFreelance ? '' : 'none';
+  const halfSEDisp = document.getElementById('half-se-tax-display');
+  if (halfSEDisp) {
+    halfSEDisp.style.display = R.seTax > 0 ? '' : 'none';
+    const amt = document.getElementById('half-se-display-amt');
+    if (amt) amt.textContent = fmt(R.halfSE);
+  }
+
+  // Total biz revenue display
+  const totalRevEl = document.getElementById('total-rev-amt');
+  if (totalRevEl) {
+    const freelanceTotal = S.freelanceItems.reduce((s,f)=>s+(+f.amount||0),0);
+    totalRevEl.textContent = fmt((+S.businessRevenue||0) + freelanceTotal);
+  }
+  // Total expenses display
+  const totalExpEl = document.getElementById('total-exp-amt');
+  const netProfEl = document.getElementById('net-profit-amt');
+  if (totalExpEl) {
+    const exp = S.expenses;
+    const total = (+exp.advertising||0)+(+exp.legalProfessional||0)+(+exp.officeExpense||0)+
+      (+exp.software||0)+(+exp.phone||0)+(+exp.travel||0)+(+exp.meals||0)*.5+
+      (+exp.contractLabor||0)+(+exp.insurance||0)+(+exp.rent||0)+
+      (+exp.depreciation||0)+(+exp.education||0)+(+exp.other||0)+(+exp.cogs||0)+
+      calcHomeOfficeDeduction()+calcVehicleDeduction();
+    totalExpEl.textContent = fmt(total);
+  }
+  if (netProfEl) netProfEl.textContent = fmt(R.scheduleCNet);
+
+  // Home office deduction display
+  const hoDisplay = document.getElementById('home-office-deduction-display');
+  if (hoDisplay) hoDisplay.value = fmt(calcHomeOfficeDeduction());
+
+  // Mileage deduction display
+  const mileageDisplay = document.getElementById('mileage-deduction-display');
+  if (mileageDisplay) mileageDisplay.value = fmt(calcVehicleDeduction());
+
+  // 100% vehicle warning
+  const v100 = document.getElementById('vehicle-100pct-warning');
+  if (v100) v100.style.display = S.hasVehicle && (S.vehicleMethod==='mileage' && S.bizMiles>=S.totalMiles && S.totalMiles>0 || S.vehicleMethod==='actual' && S.vehicleBizPct>=100) ? '' : 'none';
+
+  // CTC display
+  const ctcText = document.getElementById('ctc-auto-text');
+  if (ctcText) {
+    const qualifying = S.dependents.filter(d=>+d.age<17).length;
+    if (qualifying === 0) ctcText.textContent = 'No qualifying children (under 17) found. Add dependents in Step 1 if applicable.';
+    else ctcText.innerHTML = `<strong>${qualifying} qualifying child${qualifying>1?'ren':''}</strong> → Non-refundable credit: ${fmt(R.ctcNonRef)} + Refundable ACTC: ${fmt(R.ctcRef)}`;
+  }
+
+  // EITC display
+  const eitcText = document.getElementById('eitc-text');
+  if (eitcText) {
+    if (R.eitc > 0) eitcText.innerHTML = `<strong>You qualify for the Earned Income Tax Credit!</strong> Estimated EITC: <strong>${fmt(R.eitc)}</strong> (refundable — paid to you even if you owe no tax)`;
+    else eitcText.textContent = 'Based on your income and filing status, you likely don\'t qualify for the EITC, or the amount is minimal.';
+  }
+
+  // Saver's credit display
+  const saverDisp = document.getElementById('saver-credit-display');
+  if (saverDisp) {
+    if (R.saverCred > 0) {
+      saverDisp.style.display = '';
+      saverDisp.innerHTML = `<span class="alert-icon">✅</span><div class="alert-body">Saver's Credit: <strong>${fmt(R.saverCred)}</strong> (non-refundable)</div>`;
+    } else saverDisp.style.display = 'none';
+  }
+
+  // Withholding summary
+  const whSum = document.getElementById('withholding-summary');
+  if (whSum) {
+    let html = '';
+    S.w2s.forEach(w => {
+      html += `<div class="detail-row"><span class="detail-label indent">${w.employer||'Employer'} (W-2)</span><span class="detail-value">${fmt(+w.federalWithheld||0)}</span></div>`;
+    });
+    if (html) html = `<div class="detail-row"><span class="detail-label">W-2 Federal Withholding</span><span class="detail-value">${fmt(R.w2Withheld)}</span></div>` + html;
+    whSum.innerHTML = html || '<div class="detail-row"><span class="detail-label muted">No W-2 withholding entered</span><span class="detail-value muted">$0</span></div>';
+  }
+
+  // Underpayment warning
+  const underpayEl = document.getElementById('underpayment-warning');
+  const underpayText = document.getElementById('underpayment-text');
+  if (underpayEl && underpayText && R.totalTax > 1000) {
+    const safeHarborNeeded = R.totalTax * 0.9;
+    if (R.totalPayments < safeHarborNeeded && S.profiles.includes('freelancer')) {
+      underpayEl.style.display = '';
+      underpayText.innerHTML = `<strong>Potential Underpayment Penalty:</strong> The IRS requires you to pay at least 90% of your tax (or 100% of prior year's tax) through withholding and estimated payments to avoid penalties. You may want to consult a tax professional about Form 2210.`;
+    } else underpayEl.style.display = 'none';
+  }
+}
+
+// ============================================================
+// NAVIGATION & STEPS
+// ============================================================
+const STEPS = [
+  {id:0, label:'Welcome', sub:''},
+  {id:1, label:'About You', sub:'Filing status & personal info'},
+  {id:2, label:'Income', sub:'W-2, 1099, investments'},
+  {id:3, label:'Expenses', sub:'Schedule C & deductions'},
+  {id:4, label:'Deductions', sub:'Standard or itemized'},
+  {id:5, label:'Credits', sub:'CTC, EITC, education'},
+  {id:6, label:'Payments', sub:'Withholding & estimates'},
+  {id:7, label:'Results', sub:'Your complete tax picture'},
+];
+
+let currentStep = 0;
+const completedSteps = new Set();
+
+function goStep(n) {
+  completedSteps.add(currentStep);
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('step-'+n);
+  if (panel) panel.classList.add('active');
+  currentStep = n;
+  updateSidebar();
+  updateProgressStrip();
+  if (n === 7) renderResults();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function updateSidebar() {
+  const nav = document.getElementById('sb-nav');
+  if (!nav) return;
+  const sidebar = document.getElementById('sidebar');
+  if (sidebar) sidebar.style.display = currentStep === 0 ? 'none' : '';
+  const progressStrip = document.getElementById('progress-strip');
+  if (progressStrip) progressStrip.style.display = currentStep === 0 ? 'none' : '';
+  let html = '';
+  STEPS.filter(s => s.id > 0).forEach(s => {
+    const isDone = completedSteps.has(s.id);
+    const isActive = currentStep === s.id;
+    html += `<div class="sb-step ${isActive?'active':''} ${isDone?'done':''}" onclick="goStep(${s.id})">
+      <div class="sb-num"><span>${s.id}</span></div>
+      <div><div class="sb-label">${s.label}</div>${s.sub?`<div class="sb-sub">${s.sub}</div>`:''}</div>
+    </div>`;
+  });
+  nav.innerHTML = html;
+}
+
+function updateProgressStrip() {
+  const strip = document.getElementById('progress-steps');
+  if (!strip) return;
+  let html = '';
+  STEPS.filter(s => s.id > 0).forEach(s => {
+    const isDone = completedSteps.has(s.id);
+    const isActive = currentStep === s.id;
+    html += `<div class="ps-step ${isActive?'active':''} ${isDone?'done':''}" onclick="goStep(${s.id})">
+      <div class="ps-num">${isDone?'✓':s.id}</div>
+      <div class="ps-name">${s.label}</div>
+    </div>`;
+  });
+  strip.innerHTML = html;
+}
+
+// ============================================================
+// PROFILE SELECTION
+// ============================================================
+function toggleProfile(type) {
+  const card = document.querySelector(`[data-type="${type}"]`);
+  if (!card) return;
+  const idx = S.profiles.indexOf(type);
+  if (idx > -1) { S.profiles.splice(idx, 1); card.classList.remove('selected'); }
+  else { S.profiles.push(type); card.classList.add('selected'); }
+}
+
+function startReturn() {
+  if (!S.profiles.length) { S.profiles.push('employee'); document.querySelector('[data-type="employee"]')?.classList.add('selected'); }
+  // Show/hide sections based on profile
+  const hasFreelance = S.profiles.includes('freelancer');
+  const hasInvestor = S.profiles.includes('investor');
+  document.getElementById('freelance-section').style.display = hasFreelance ? '' : 'none';
+  document.getElementById('investment-section').style.display = hasInvestor ? '' : 'none';
+  document.getElementById('rental-section').style.display = hasInvestor ? '' : 'none';
+  const nextBtn = document.getElementById('step2-next');
+  if (nextBtn) nextBtn.textContent = hasFreelance ? 'Business Expenses →' : 'Deductions →';
+  goStep(1);
+}
+
+// ============================================================
+// DYNAMIC LIST ITEMS
+// ============================================================
+function addW2() {
+  S.w2s.push({employer:'', wages:0, federalWithheld:0, stateWithheld:0});
+  renderW2List();
+}
+function renderW2List() {
+  const list = document.getElementById('w2-list');
+  if (!list) return;
+  list.innerHTML = '';
+  S.w2s.forEach((w, i) => {
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    div.innerHTML = `
+      <div class="item-card-header"><div class="item-card-title">Employer ${i+1}</div><button class="remove-btn" onclick="removeW2(${i})">✕ Remove</button></div>
+      <div class="field-row three">
+        <div class="field"><label>Employer Name</label><input type="text" value="${w.employer||''}" placeholder="ABC Corp" oninput="S.w2s[${i}].employer=this.value;recalc()"></div>
+        <div class="field"><label>Wages (Box 1)</label><div class="cur-wrap"><input class="currency" type="number" min="0" value="${w.wages||''}" placeholder="50000" oninput="S.w2s[${i}].wages=+this.value;recalc()"></div></div>
+        <div class="field"><label>Fed Tax Withheld (Box 2)</label><div class="cur-wrap"><input class="currency" type="number" min="0" value="${w.federalWithheld||''}" placeholder="7000" oninput="S.w2s[${i}].federalWithheld=+this.value;recalc()"></div></div>
+      </div>`;
+    list.appendChild(div);
+  });
+  if (!S.w2s.length) list.innerHTML = '<div style="color:var(--tx4);font-size:.875rem;padding:8px 0">No W-2s added yet</div>';
+}
+function removeW2(i) { S.w2s.splice(i,1); renderW2List(); recalc(); }
+
+function addFreelance() {
+  S.freelanceItems.push({source:'', amount:0});
+  renderFreelanceList();
+}
+function renderFreelanceList() {
+  const list = document.getElementById('freelance-list');
+  if (!list) return;
+  list.innerHTML = '';
+  S.freelanceItems.forEach((f, i) => {
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    div.innerHTML = `
+      <div class="item-card-header"><div class="item-card-title">1099 Income ${i+1}</div><button class="remove-btn" onclick="removeFreelance(${i})">✕</button></div>
+      <div class="field-row two">
+        <div class="field"><label>Client / Source</label><input type="text" value="${f.source||''}" placeholder="Client Name / Platform" oninput="S.freelanceItems[${i}].source=this.value"></div>
+        <div class="field"><label>Amount Received</label><div class="cur-wrap"><input class="currency" type="number" min="0" value="${f.amount||''}" placeholder="0" oninput="S.freelanceItems[${i}].amount=+this.value;recalc()"></div></div>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+function removeFreelance(i) { S.freelanceItems.splice(i,1); renderFreelanceList(); recalc(); }
+
+function addDependent() {
+  S.dependents.push({name:'', age:0, relationship:'child'});
+  renderDependentList();
+}
+function renderDependentList() {
+  const list = document.getElementById('dependents-list');
+  if (!list) return;
+  list.innerHTML = '';
+  S.dependents.forEach((d, i) => {
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    div.innerHTML = `
+      <div class="item-card-header"><div class="item-card-title">Dependent ${i+1}</div><button class="remove-btn" onclick="removeDependent(${i})">✕</button></div>
+      <div class="field-row three">
+        <div class="field"><label>Name</label><input type="text" value="${d.name||''}" placeholder="Child's Name" oninput="S.dependents[${i}].name=this.value;recalc()"></div>
+        <div class="field"><label>Age</label><input type="number" min="0" max="120" value="${d.age||''}" placeholder="8" oninput="S.dependents[${i}].age=+this.value;recalc()"></div>
+        <div class="field"><label>Relationship</label><select oninput="S.dependents[${i}].relationship=this.value;recalc()">
+          <option value="child" ${d.relationship==='child'?'selected':''}>Child / Stepchild</option>
+          <option value="parent" ${d.relationship==='parent'?'selected':''}>Parent</option>
+          <option value="sibling" ${d.relationship==='sibling'?'selected':''}>Sibling</option>
+          <option value="other" ${d.relationship==='other'?'selected':''}>Other Relative</option>
+        </select></div>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+function removeDependent(i) { S.dependents.splice(i,1); renderDependentList(); recalc(); }
+
+function addEducation() {
+  S.educationItems.push({name:'', expenses:0, type:'aotc', year:1});
+  renderEducationList();
+}
+function renderEducationList() {
+  const list = document.getElementById('education-list');
+  if (!list) return;
+  list.innerHTML = '';
+  S.educationItems.forEach((ed, i) => {
+    const div = document.createElement('div');
+    div.className = 'item-card';
+    div.innerHTML = `
+      <div class="item-card-header"><div class="item-card-title">Student ${i+1}</div><button class="remove-btn" onclick="removeEducation(${i})">✕</button></div>
+      <div class="field-row two">
+        <div class="field"><label>Student Name</label><input type="text" value="${ed.name||''}" placeholder="Student Name" oninput="S.educationItems[${i}].name=this.value"></div>
+        <div class="field"><label>Credit Type</label><select onchange="S.educationItems[${i}].type=this.value;recalc()">
+          <option value="aotc" ${ed.type==='aotc'?'selected':''}>AOTC (first 4 years)</option>
+          <option value="llc" ${ed.type==='llc'?'selected':''}>Lifetime Learning Credit</option>
+        </select></div>
+      </div>
+      <div class="field-row two">
+        <div class="field"><label>Qualified Expenses (tuition, fees, books)</label><div class="cur-wrap"><input class="currency" type="number" min="0" value="${ed.expenses||''}" placeholder="0" oninput="S.educationItems[${i}].expenses=+this.value;recalc()"></div></div>
+        <div class="field"><label>Year in School (AOTC only, 1-4)</label><input type="number" min="1" max="4" value="${ed.year||1}" oninput="S.educationItems[${i}].year=+this.value;recalc()"></div>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+function removeEducation(i) { S.educationItems.splice(i,1); renderEducationList(); recalc(); }
+
+// ============================================================
+// EXPENSE UPDATES
+// ============================================================
+function updateExpense(key, val) { S.expenses[key] = val; recalc(); }
+function updateEst(i, val) { S.estimatedPayments[i] = val; recalc(); }
+
+// ============================================================
+// TOGGLES
+// ============================================================
+function toggleHomeOffice(on) {
+  S.hasHomeOffice = on;
+  document.getElementById('home-office-fields').style.display = on ? '' : 'none';
+  recalc();
+}
+function toggleVehicle(on) {
+  S.hasVehicle = on;
+  document.getElementById('vehicle-fields').style.display = on ? '' : 'none';
+  recalc();
+}
+function toggleHelp(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+function setFilingStatus(fs) {
+  S.filingStatus = fs;
+  document.querySelectorAll('#filing-status-group .radio-option').forEach(o => {
+    o.classList.toggle('selected', o.querySelector('input')?.value === fs);
+  });
+  recalc();
+}
+
+// ============================================================
+// HOME OFFICE ACTUAL
+// ============================================================
+function calcActualHomeOffice() {
+  const officeSqft = +document.getElementById('office-sqft-actual')?.value || 0;
+  const homeSqft = +document.getElementById('home-sqft')?.value || 0;
+  const homeExp = +document.getElementById('home-expenses')?.value || 0;
+  S.officeSqftActual = officeSqft; S.homeSqft = homeSqft; S.homeExpenses = homeExp;
+  const pct = homeSqft > 0 ? (officeSqft / homeSqft * 100) : 0;
+  const ded = homeExp * (officeSqft / Math.max(1, homeSqft));
+  const result = document.getElementById('actual-home-office-result');
+  if (result) result.innerHTML = `<span class="alert-icon">✅</span><div class="alert-body">Business use: <strong>${pct.toFixed(1)}%</strong> &nbsp;|&nbsp; Estimated deduction: <strong>${fmt(ded)}</strong></div>`;
+  recalc();
+}
+
+// ============================================================
+// VEHICLE METHOD SWITCH
+// ============================================================
+document.addEventListener('change', function(e) {
+  if (e.target.id === 'home-office-method') {
+    const isActual = e.target.value === 'actual';
+    document.getElementById('home-office-simplified').style.display = isActual ? 'none' : '';
+    document.getElementById('home-office-actual').style.display = isActual ? '' : 'none';
+    recalc();
+  }
+  if (e.target.id === 'vehicle-method') {
+    const isActual = e.target.value === 'actual';
+    document.getElementById('vehicle-mileage-fields').style.display = isActual ? 'none' : '';
+    document.getElementById('vehicle-actual-fields').style.display = isActual ? '' : 'none';
+    recalc();
+  }
+});
+
+// ============================================================
+// VEHICLE DEDUCTION DISPLAY
+// ============================================================
+function calcVehicleDeduction_display() {
+  const bizMiles = +document.getElementById('biz-miles')?.value || 0;
+  const totalMiles = +document.getElementById('total-miles')?.value || 0;
+  S.bizMiles = bizMiles; S.totalMiles = totalMiles;
+  const ded = bizMiles * 0.67;
+  const disp = document.getElementById('mileage-deduction-display');
+  if (disp) disp.value = '$' + ded.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  // 100% check
+  const warn = document.getElementById('vehicle-100pct-warning');
+  if (warn) warn.style.display = (totalMiles > 0 && bizMiles >= totalMiles) ? '' : 'none';
+  recalc();
+}
+// Override the input listeners for vehicle
+document.addEventListener('input', function(e) {
+  if (e.target.id === 'biz-miles' || e.target.id === 'total-miles') {
+    S.bizMiles = +document.getElementById('biz-miles')?.value || 0;
+    S.totalMiles = +document.getElementById('total-miles')?.value || 0;
+    calcVehicleDeduction_display();
+  }
+  if (e.target.id === 'vehicle-actual-exp' || e.target.id === 'vehicle-biz-pct') {
+    S.vehicleActualExp = +document.getElementById('vehicle-actual-exp')?.value || 0;
+    S.vehicleBizPct = +document.getElementById('vehicle-biz-pct')?.value || 0;
+    const warn = document.getElementById('vehicle-100pct-warning');
+    if (warn) warn.style.display = S.vehicleBizPct >= 100 ? '' : 'none';
+    recalc();
+  }
+  if (e.target.id === 'office-sqft') {
+    S.officeSqft = +e.target.value || 0;
+    recalc();
+  }
+});
+
+// ============================================================
+// 1099-K WIZARD
+// ============================================================
+function recalc1099k() {
+  const total = +document.getElementById('k1099-total')?.value || 0;
+  const wizard = document.getElementById('k1099-wizard');
+  if (wizard) wizard.style.display = total > 0 ? '' : 'none';
+  const personal = +document.getElementById('k1099-personal')?.value || 0;
+  const reimb = +document.getElementById('k1099-reimb')?.value || 0;
+  const biz = +document.getElementById('k1099-business')?.value || 0;
+  const taxable = Math.max(0, total - personal - reimb);
+  const result = document.getElementById('k1099-result');
+  if (result && total > 0) result.innerHTML = `<span class="alert-icon">💡</span><div class="alert-body"><strong>Taxable 1099-K Income: ${fmt(taxable)}</strong> — Add this to your business income (Step 2) or Schedule C income. Keep records showing the non-taxable portions (personal sales receipts, screenshots of reimbursement chats, etc.).</div>`;
+}
+
+// ============================================================
+// RESULTS RENDERING
+// ============================================================
+let waterfallChart = null, bracketChart = null;
+
+function renderResults() {
+  const R = recalc();
+
+  // HEADLINE
+  const hl = document.getElementById('result-headline');
+  const sl = document.getElementById('result-subline');
+  if (R.balance > 0) {
+    hl.textContent = `You're getting ${fmt(R.balance)} back`;
+    sl.textContent = 'The IRS owes you a refund. Here\'s the full breakdown of how we got there.';
+    document.getElementById('result-main-card').style.background = 'linear-gradient(135deg,#ECFDF5,#D1FAE5)';
+  } else if (R.balance < 0) {
+    hl.textContent = `You owe ${fmt(-R.balance)} to the IRS`;
+    sl.textContent = 'Here\'s the complete breakdown. Payment is due by the filing deadline.';
+    document.getElementById('result-main-card').style.background = 'linear-gradient(135deg,#FEF2F2,#FEE2E2)';
+  } else {
+    hl.textContent = 'You break even — $0 owed';
+    sl.textContent = 'Your withholding and tax perfectly matched.';
+  }
+
+  // MAIN STATS
+  const stats = document.getElementById('main-stats');
+  const balClass = R.balance > 0 ? 'green' : R.balance < 0 ? 'red' : '';
+  stats.innerHTML = `
+    <div class="stat-card ${R.balance > 0 ? 'green' : R.balance < 0 ? 'red' : ''}">
+      <div class="stat-label">${R.balance >= 0 ? 'Federal Refund' : 'Balance Due'}</div>
+      <div class="stat-value ${balClass}">${R.balance >= 0 ? fmt(R.balance) : fmt(-R.balance)}</div>
+      <div class="stat-sub">${R.balance >= 0 ? '→ Direct deposit in 21 days' : '→ Due by filing deadline'}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Tax</div>
+      <div class="stat-value blue">${fmt(R.totalTax)}</div>
+      <div class="stat-sub">After all credits</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Effective Rate</div>
+      <div class="stat-value">${fmtPct(R.effectiveRate)}</div>
+      <div class="stat-sub">Actual % of income paid</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Adjusted Gross Income</div>
+      <div class="stat-value">${fmt(R.agi)}</div>
+      <div class="stat-sub">After above-line deductions</div>
+    </div>`;
+
+  // BRACKET DISPLAYS
+  document.getElementById('marginal-rate-display').textContent = Math.round(R.marginalRate * 100) + '%';
+  document.getElementById('effective-rate-display').textContent = fmtPct(R.effectiveRate);
+  document.getElementById('next-bracket-display').textContent = R.nextBracketRoom > 0 ? fmt(R.nextBracketRoom) : '—';
+
+  // FULL BREAKDOWN TABLE
+  const breakdown = document.getElementById('full-breakdown');
+  breakdown.innerHTML = `
+    <div class="detail-row"><span class="detail-label">W-2 Wages</span><span class="detail-value">${fmt(R.w2Wages)}</span></div>
+    ${R.scheduleCNet !== 0 ? `<div class="detail-row"><span class="detail-label">Schedule C Net ${R.scheduleCNet < 0 ? '(Loss)' : 'Profit'}</span><span class="detail-value ${R.scheduleCNet < 0 ? 'red' : ''}">${R.scheduleCNet < 0 ? '-' : ''}${fmt(R.scheduleCNet)}</span></div>` : ''}
+    ${R.ordDiv > 0 ? `<div class="detail-row"><span class="detail-label">Ordinary Dividends</span><span class="detail-value">${fmt(R.ordDiv)}</span></div>` : ''}
+    ${R.netCapGains > 0 ? `<div class="detail-row"><span class="detail-label">Qualified Div. + Long-Term Gains</span><span class="detail-value">${fmt(R.netCapGains)}</span></div>` : ''}
+    ${R.interest > 0 ? `<div class="detail-row"><span class="detail-label">Interest Income</span><span class="detail-value">${fmt(R.interest)}</span></div>` : ''}
+    ${R.ssTaxable > 0 ? `<div class="detail-row"><span class="detail-label">Social Security (taxable portion)</span><span class="detail-value">${fmt(R.ssTaxable)}</span></div>` : ''}
+    <div class="detail-row subtotal"><span class="detail-label" style="font-weight:700">Gross Income</span><span class="detail-value">${fmt(R.grossIncome)}</span></div>
+    ${R.totalAdj > 0 ? `<div class="detail-row"><span class="detail-label indent">− Adjustments (SE tax, IRA, HSA, etc.)</span><span class="detail-value red">−${fmt(R.totalAdj)}</span></div>` : ''}
+    <div class="detail-row subtotal"><span class="detail-label" style="font-weight:700">Adjusted Gross Income (AGI)</span><span class="detail-value">${fmt(R.agi)}</span></div>
+    <div class="detail-row"><span class="detail-label indent">− ${R.usingItemized ? 'Itemized' : 'Standard'} Deduction</span><span class="detail-value red">−${fmt(R.deduction)}</span></div>
+    ${R.qbi > 0 ? `<div class="detail-row"><span class="detail-label indent">− QBI Deduction (§199A)</span><span class="detail-value red">−${fmt(R.qbi)}</span></div>` : ''}
+    <div class="detail-row subtotal"><span class="detail-label" style="font-weight:700">Taxable Income</span><span class="detail-value">${fmt(R.taxableIncome)}</span></div>
+    <div class="detail-row"><span class="detail-label indent">Regular Income Tax</span><span class="detail-value">${fmt(R.regularTax)}</span></div>
+    ${R.capGainsTax > 0 ? `<div class="detail-row"><span class="detail-label indent">Capital Gains / Qualified Div. Tax</span><span class="detail-value">${fmt(R.capGainsTax)}</span></div>` : ''}
+    ${R.seTax > 0 ? `<div class="detail-row"><span class="detail-label indent">Self-Employment Tax (15.3%)</span><span class="detail-value">${fmt(R.seTax)}</span></div>` : ''}
+    ${R.earlyDistPenalty > 0 ? `<div class="detail-row"><span class="detail-label indent">Early Withdrawal Penalty (10%)</span><span class="detail-value red">${fmt(R.earlyDistPenalty)}</span></div>` : ''}
+    <div class="detail-row subtotal"><span class="detail-label" style="font-weight:700">Tax Before Credits</span><span class="detail-value">${fmt(R.totalTaxBeforeCredits)}</span></div>
+    ${R.ctcNonRef > 0 ? `<div class="detail-row"><span class="detail-label indent">− Child Tax Credit</span><span class="detail-value green">−${fmt(R.ctcNonRef)}</span></div>` : ''}
+    ${R.childCareCred > 0 ? `<div class="detail-row"><span class="detail-label indent">− Child & Dependent Care Credit</span><span class="detail-value green">−${fmt(R.childCareCred)}</span></div>` : ''}
+    ${R.edAotcNonRef > 0 ? `<div class="detail-row"><span class="detail-label indent">− AOTC Education Credit</span><span class="detail-value green">−${fmt(R.edAotcNonRef)}</span></div>` : ''}
+    ${R.edLLC > 0 ? `<div class="detail-row"><span class="detail-label indent">− Lifetime Learning Credit</span><span class="detail-value green">−${fmt(R.edLLC)}</span></div>` : ''}
+    ${R.saverCred > 0 ? `<div class="detail-row"><span class="detail-label indent">− Saver's Credit</span><span class="detail-value green">−${fmt(R.saverCred)}</span></div>` : ''}
+    <div class="detail-row total"><span class="detail-label">Total Federal Tax</span><span class="detail-value ${R.totalTax > 0 ? 'red' : 'green'}">${fmt(R.totalTax)}</span></div>
+    <div class="detail-row"><span class="detail-label indent">W-2 + Additional Withholding</span><span class="detail-value green">${fmt(R.w2Withheld + (+S.additionalWithheld||0))}</span></div>
+    ${R.estPayments > 0 ? `<div class="detail-row"><span class="detail-label indent">Estimated Tax Payments</span><span class="detail-value green">${fmt(R.estPayments)}</span></div>` : ''}
+    ${R.ctcRef > 0 ? `<div class="detail-row"><span class="detail-label indent">+ Refundable ACTC</span><span class="detail-value green">+${fmt(R.ctcRef)}</span></div>` : ''}
+    ${R.edAotcRef > 0 ? `<div class="detail-row"><span class="detail-label indent">+ Refundable AOTC</span><span class="detail-value green">+${fmt(R.edAotcRef)}</span></div>` : ''}
+    ${R.eitc > 0 ? `<div class="detail-row"><span class="detail-label indent">+ Earned Income Tax Credit</span><span class="detail-value green">+${fmt(R.eitc)}</span></div>` : ''}
+    <div class="detail-row total"><span class="detail-label">${R.balance >= 0 ? '= Federal Refund' : '= Balance Due'}</span><span class="detail-value ${R.balance >= 0 ? 'green' : 'red'}">${R.balance >= 0 ? fmt(R.balance) : '-'+fmt(-R.balance)}</span></div>
+  `;
+
+  // AUDIT RISK
+  const riskScore = R.risk.score;
+  document.getElementById('risk-score-display').textContent = R.risk.level + ' (' + riskScore + '/100)';
+  const needle = document.getElementById('risk-needle');
+  if (needle) needle.style.left = riskScore + '%';
+  const riskFactors = document.getElementById('risk-factors');
+  if (riskFactors) {
+    riskFactors.innerHTML = R.risk.factors.map(f =>
+      `<div class="doc-item"><div class="doc-icon">${f.icon}</div><div class="doc-text"><strong>${f.label}</strong><span>${f.detail}</span></div></div>`
+    ).join('');
+  }
+
+  // QUARTERLY ESTIMATES
+  const qCard = document.getElementById('quarterly-card');
+  const hasIncomeTax = R.totalTax > 400;
+  if (qCard) qCard.style.display = hasIncomeTax ? '' : 'none';
+  if (hasIncomeTax) {
+    const qAmt = R.quarterlyEst;
+    const shInfo = document.getElementById('quarterly-safe-harbor-info');
+    if (shInfo) shInfo.innerHTML = `<span class="alert-icon">🛡️</span><div class="alert-body"><strong>Safe Harbor Method:</strong> Pay ${R.safeHarborMultiplier > 1 ? '110%' : '100%'} of your 2024 tax liability in 4 equal installments${R.safeHarborMultiplier > 1 ? ' (110% because your AGI exceeded $150,000)' : ''}. Quarterly payment: <strong>${fmt(qAmt)}</strong>.</div>`;
+    const qTable = document.getElementById('quarterly-table');
+    if (qTable) qTable.innerHTML = `
+      <thead><tr><th>Quarter</th><th>Period</th><th>Due Date</th><th>Amount</th></tr></thead>
+      <tbody>
+        <tr><td>Q1 2025</td><td>Jan 1 – Mar 31</td><td class="date">April 15, 2025</td><td class="amount">${fmt(qAmt)}</td></tr>
+        <tr><td>Q2 2025</td><td>Apr 1 – May 31</td><td class="date">June 16, 2025</td><td class="amount">${fmt(qAmt)}</td></tr>
+        <tr><td>Q3 2025</td><td>Jun 1 – Aug 31</td><td class="date">September 15, 2025</td><td class="amount">${fmt(qAmt)}</td></tr>
+        <tr><td>Q4 2025</td><td>Sep 1 – Dec 31</td><td class="date">January 15, 2026</td><td class="amount">${fmt(qAmt)}</td></tr>
+        <tr style="background:var(--primary-lt)"><td colspan="3" style="font-weight:700;padding:12px">Total 2025 Estimated Payments</td><td class="amount" style="font-size:1.05rem">${fmt(qAmt*4)}</td></tr>
+      </tbody>`;
+  }
+
+  // DOC CHECKLIST
+  const checklist = document.getElementById('doc-checklist');
+  const docs = [
+    {icon:'📄', label:'W-2 Forms', desc:'From each employer — keep all copies with your return'},
+    {icon:'💳', label:'Bank & Brokerage Statements', desc:'1099-INT, 1099-DIV, 1099-B — verify against your entries'},
+  ];
+  if (R.netSEPositive > 0) {
+    docs.push({icon:'📊', label:'1099-NEC / Income Records', desc:'From each client — and records of any cash payments received'});
+    docs.push({icon:'🧾', label:'Business Expense Receipts', desc:'All receipts over $75, plus credit card/bank statements as backup'});
+  }
+  if (S.hasVehicle) docs.push({icon:'🚗', label:'Mileage Log', desc:'Date, destination, business purpose, and miles for every trip — contemporaneous records only'});
+  if (S.hasHomeOffice) docs.push({icon:'📐', label:'Home Office Documentation', desc:'Floor plan / measurements showing office dimensions; photos of dedicated workspace'});
+  if (R.usingItemized) {
+    docs.push({icon:'🏠', label:'Mortgage Statements (1098)', desc:'Keep Form 1098 showing interest paid'});
+    docs.push({icon:'🏛️', label:'Charitable Donation Receipts', desc:'Written acknowledgment required for donations $250+; Form 8283 for non-cash $500+'});
+    docs.push({icon:'💊', label:'Medical Expense Records', desc:'EOB statements, receipts, insurance correspondence'});
+  }
+  docs.push({icon:'📁', label:'Prior Year Return', desc:'Keep for reference — IRS can audit 3 years back (6 if income understated by 25%+)'});
+  if (checklist) checklist.innerHTML = docs.map(d => `<div class="doc-item"><div class="doc-icon">${d.icon}</div><div class="doc-text"><strong>${d.label}</strong><span>${d.desc}</span></div></div>`).join('');
+
+  // RENDER CHARTS (async to not block render)
+  setTimeout(() => {
+    renderWaterfallChart(R);
+    renderBracketChart(R);
+  }, 100);
+}
+
+// ============================================================
+// CHARTS
+// ============================================================
+function renderWaterfallChart(R) {
+  const ctx = document.getElementById('waterfall-chart');
+  if (!ctx) return;
+  if (waterfallChart) { waterfallChart.destroy(); waterfallChart = null; }
+  const labels = ['Gross Income'];
+  const starts = [0];
+  const values = [R.grossIncome];
+  const colors = ['#1B4FD8'];
+  if (R.totalAdj > 0) { labels.push('Adjustments'); starts.push(R.grossIncome - R.totalAdj); values.push(R.totalAdj); colors.push('#EF4444'); }
+  labels.push('AGI'); starts.push(0); values.push(R.agi); colors.push('#1B4FD8');
+  labels.push('Deduction'); starts.push(R.agi - R.deduction); values.push(R.deduction); colors.push('#EF4444');
+  if (R.qbi > 0) { labels.push('QBI Ded.'); starts.push(R.agi - R.deduction - R.qbi); values.push(R.qbi); colors.push('#DC2626'); }
+  labels.push('Taxable'); starts.push(0); values.push(R.taxableIncome); colors.push('#1B4FD8');
+  labels.push('Total Tax'); starts.push(0); values.push(R.totalTax); colors.push('#EF4444');
+  if (R.totalRef > 0) { labels.push('Credits'); starts.push(0); values.push(R.totalRef); colors.push('#059669'); }
+  labels.push(R.balance >= 0 ? 'Refund' : 'Owed'); starts.push(0); values.push(Math.abs(R.balance)); colors.push(R.balance >= 0 ? '#059669' : '#DC2626');
+
+  waterfallChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: values.map((v,i) => v),
+        backgroundColor: colors,
+        borderRadius: 6,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: {display: false},
+        tooltip: {
+          callbacks: {
+            label: (c) => ' ' + fmt(c.raw)
+          }
+        }
+      },
+      scales: {
+        x: {grid: {display: false}, ticks: {font: {size: 11, family: 'Inter'}}},
+        y: {
+          ticks: {
+            callback: v => '$' + (v >= 1000 ? (v/1000).toFixed(0)+'K' : v),
+            font: {size: 11, family: 'Inter'}
+          },
+          grid: {color: 'rgba(0,0,0,0.06)'}
+        }
+      }
+    }
+  });
+}
+
+function renderBracketChart(R) {
+  const ctx = document.getElementById('bracket-chart');
+  if (!ctx) return;
+  if (bracketChart) { bracketChart.destroy(); bracketChart = null; }
+  const brackets = BRACKETS[S.filingStatus] || BRACKETS.single;
+  const labels = [], data = [], bgColors = [];
+  const bracketColors = ['#93C5FD','#60A5FA','#3B82F6','#2563EB','#1D4ED8','#1E40AF','#1E3A8A'];
+  let prev = 0;
+  brackets.forEach(([top, rate], i) => {
+    const size = Math.min(top, R.taxableIncome > 0 ? R.taxableIncome * 1.3 : 100000) - prev;
+    if (size <= 0) return;
+    labels.push(Math.round(rate*100) + '%');
+    data.push(size);
+    bgColors.push(R.ordinaryTaxableIncome > prev ? bracketColors[Math.min(i, bracketColors.length-1)] : '#E2E8F0');
+    prev = top;
+    if (prev >= (R.taxableIncome > 0 ? R.taxableIncome * 1.3 : 100000)) return false;
+  });
+  bracketChart = new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets: [{ data, backgroundColor: bgColors, borderRadius: 4, borderSkipped: false }] },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: {display: false},
+        tooltip: {
+          callbacks: {
+            label: (c) => ' Income in this bracket: ' + fmt(c.raw),
+            title: (c) => c[0].label + ' tax rate'
+          }
+        }
+      },
+      scales: {
+        x: {ticks: {callback: v => '$'+(v>=1000?(v/1000).toFixed(0)+'K':v), font:{size:11}}, grid:{color:'rgba(0,0,0,.05)'}},
+        y: {ticks: {font:{size:12, weight:'600'}}, grid:{display:false}}
+      }
+    }
+  });
+}
+
+// ============================================================
+// EXPORT / IMPORT
+// ============================================================
+function exportData() {
+  const json = JSON.stringify(S, null, 2);
+  const blob = new Blob([json], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'taxright-2024-data.json';
+  a.click(); URL.revokeObjectURL(url);
+}
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        Object.assign(S, data);
+        // Re-render UI elements that depend on state
+        renderW2List(); renderFreelanceList(); renderDependentList(); renderEducationList();
+        recalc();
+        alert('Data loaded successfully!');
+      } catch { alert('Invalid data file.'); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// ============================================================
+// DARK MODE
+// ============================================================
+function toggleDark() {
+  document.documentElement.toggleAttribute('data-dark');
+  const btn = document.getElementById('theme-btn');
+  if (btn) btn.textContent = document.documentElement.hasAttribute('data-dark') ? '☀️' : '🌙';
+}
+
+// ============================================================
+// INIT
+// ============================================================
+// Seed a default W-2
+S.w2s.push({employer:'', wages:0, federalWithheld:0, stateWithheld:0});
+renderW2List();
+renderDependentList();
+recalc();
+</script>
+</body>
+</html>
