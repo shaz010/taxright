@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>TaxRight 2024 — U.S. Federal Tax Preparation</title>
+<title>TaxRight — U.S. Federal Tax Preparation</title>
 
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
@@ -468,7 +468,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
   <div class="hdr-inner">
     <a class="logo" href="#">
       <div class="logo-icon">⚖️</div>
-      <span class="logo-text">TaxRight<span class="logo-year">2024</span></span>
+      <span class="logo-text">TaxRight<span class="logo-year" id="logo-year">2024</span></span>
     </a>
     <div class="refund-pill">
       <div class="rp-item">
@@ -514,7 +514,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
     <div class="step-panel active" id="step-0">
       <div class="card welcome-anim">
         <div class="welcome-hero">
-          <h1>Your 2024 Tax Return,<br><span>Done Right.</span></h1>
+          <h1>Your <span id="wy-year">2024</span> Tax Return,<br><span>Done Right.</span></h1>
           <p>Free, private, and thorough. All calculations happen in your browser — your data never leaves your device.</p>
           <div class="feature-pills">
             <div class="feature-pill"><span>✓</span> 100% Free</div>
@@ -525,7 +525,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
           </div>
         </div>
         <hr style="border:none;border-top:1px solid var(--border);margin:8px 0 24px">
-        <div class="card-title">What best describes your 2024 income?</div>
+        <div class="card-title">What best describes your <span class="ty">2024</span> income?</div>
         <div class="card-sub">Select all that apply — we'll show you exactly the right sections.</div>
         <div class="profile-grid" id="profile-grid">
           <div class="profile-card" data-type="employee" onclick="toggleProfile('employee')">
@@ -546,7 +546,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
         </div>
         <div style="margin-top:24px;text-align:center">
           <button class="btn btn-primary btn-lg" onclick="startReturn()" id="start-btn">
-            Start My 2024 Return →
+            Start My <span class="ty">2024</span> Return →
           </button>
           <div style="font-size:.78rem;color:var(--tx4);margin-top:10px">Takes about 10–20 minutes · All 2024 IRS figures built in</div>
         </div>
@@ -563,7 +563,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
       <div class="card">
         <div class="card-title">Filing Status</div>
-        <div class="card-sub">Select the status that applied on December 31, 2024.</div>
+        <div class="card-sub">Select the status that applied on December 31, <span class="ty">2024</span>.</div>
         <div class="radio-group" id="filing-status-group">
           <label class="radio-option selected" onclick="setFilingStatus('single')"><input type="radio" name="fs" value="single" checked> Single</label>
           <label class="radio-option" onclick="setFilingStatus('mfj')"><input type="radio" name="fs" value="mfj"> Married Filing Jointly</label>
@@ -591,7 +591,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
         </div>
         <div class="field-row two">
           <div class="field">
-            <label>Your Age (as of Dec 31, 2024)</label>
+            <label>Your Age (as of Dec 31, <span class="ty">2024</span>)</label>
             <input type="number" id="age" min="0" max="120" placeholder="35" oninput="st('age',+this.value);recalc()">
             <div class="field-hint">If 65+, you qualify for a larger standard deduction</div>
           </div>
@@ -628,7 +628,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <div class="step-header">
         <div class="step-badge"><span class="step-badge-dot"></span>Step 2 of 7</div>
         <h2>Your Income</h2>
-        <p>Enter all income received in 2024. Every source is totaled automatically.</p>
+        <p>Enter all income received in <span class="ty">2024</span>. Every source is totaled automatically.</p>
       </div>
 
       <!-- W-2 -->
@@ -1222,7 +1222,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <div class="step-header">
         <div class="step-badge"><span class="step-badge-dot"></span>Step 6 of 7</div>
         <h2>Withholding &amp; Payments</h2>
-        <p>What you've already paid toward your 2024 tax bill.</p>
+        <p>What you've already paid toward your <span class="ty">2024</span> tax bill.</p>
       </div>
 
       <div class="card">
@@ -1275,7 +1275,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
     <!-- STEP 7: RESULTS -->
     <div class="step-panel" id="step-7">
       <div class="step-header">
-        <div class="step-badge"><span class="step-badge-dot"></span>Your 2024 Federal Tax Summary</div>
+        <div class="step-badge"><span class="step-badge-dot"></span>Your <span class="ty">2024</span> Federal Tax Summary</div>
         <h2 id="result-headline">Your Complete Tax Picture</h2>
         <p id="result-subline">Based on the information you provided. Review carefully before filing.</p>
       </div>
@@ -1328,7 +1328,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <!-- QUARTERLY ESTIMATES -->
       <div class="card" id="quarterly-card" style="display:none">
         <div class="card-title">2025 Quarterly Estimated Tax Payments</div>
-        <div class="card-sub">Based on your 2024 tax liability. The safe harbor method ensures you avoid underpayment penalties.</div>
+        <div class="card-sub">Based on your <span class="ty">2024</span> tax liability. The safe harbor method ensures you avoid underpayment penalties.</div>
         <div id="quarterly-safe-harbor-info" class="alert info" style="margin-bottom:16px"></div>
         <table class="q-table" id="quarterly-table"></table>
         <div class="alert warn" style="margin-top:16px">
@@ -1392,6 +1392,12 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
 <script>
 // ============================================================
+// ============================================================
+// TAX YEAR — update this + IRS figures below each November
+// ============================================================
+const TAX_YEAR = 2024;
+const FILING_YEAR = TAX_YEAR + 1; // year in which you file
+
 // STATE
 // ============================================================
 const S = {
@@ -2639,7 +2645,7 @@ function exportData() {
   const blob = new Blob([json], {type: 'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'taxright-2024-data.json';
+  a.href = url; a.download = `taxright-${TAX_YEAR}-data.json`;
   a.click(); URL.revokeObjectURL(url);
 }
 function importData() {
@@ -2802,7 +2808,7 @@ function generateShareCard() {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TaxRight 2024 — ${name} Tax Summary</title>
+<title>TaxRight ${TAX_YEAR} — ${name} Tax Summary</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -2837,9 +2843,9 @@ body{font-family:'Inter',system-ui,sans-serif;background:#060C1A;display:flex;al
   <div class="top">
     <div class="brand">
       <div class="brand-icon">⚖️</div>
-      <div><div class="brand-name">TaxRight</div><div class="brand-sub">2024 Federal Return</div></div>
+      <div><div class="brand-name">TaxRight</div><div class="brand-sub">${TAX_YEAR} Federal Return</div></div>
     </div>
-    <div class="badge">Tax Year 2024</div>
+    <div class="badge">Tax Year ${TAX_YEAR}</div>
   </div>
   <div class="big-number">
     <div class="big-label">${bigLabel}</div>
@@ -2886,6 +2892,9 @@ function updateMobileNav(step) {
 // ============================================================
 // INIT
 // ============================================================
+// Stamp TAX_YEAR into all display spans
+document.querySelectorAll('.ty, #logo-year, #wy-year').forEach(el => el.textContent = TAX_YEAR);
+
 // Restore theme preference (supports legacy 'taxright_dark' key)
 (function() {
   const saved = localStorage.getItem('taxright_theme')
