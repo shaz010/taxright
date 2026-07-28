@@ -391,74 +391,88 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 [data-noir] .header{border-bottom:1px solid #111;background:#000}
 [data-noir] .step-nav-btn.active{box-shadow:0 0 0 1px var(--primary),0 0 12px rgba(16,185,129,.25)}
 [data-noir] .card{border:1px solid var(--border2);box-shadow:0 2px 12px rgba(0,0,0,.6)}
-[data-noir] #refund-display{text-shadow:0 0 20px rgba(16,185,129,.4)}
+[data-noir] #refund-display{
+  background:linear-gradient(135deg,#10B981 0%,#6EE7B7 25%,#059669 50%,#34D399 75%,#10B981 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  background-size:200% 100%;animation:noir-shimmer 4s linear infinite;
+  filter:drop-shadow(0 0 16px rgba(16,185,129,.55)) drop-shadow(0 0 32px rgba(5,150,105,.28));
+}
 
-/* ── ICE BLUE THEME ─────────────────────────────────────────────────────── */
+/* ── NOIR · SAPPHIRE ────────────────────────────────────────────────────── */
 [data-ice] {
-  --bg:#08090F;--surface:#0E1018;--surface2:#14161F;
-  --border:#1E2235;--border2:#262B42;
-  --tx:#E4EEFF;--tx2:#BDD0EE;--tx3:#8AAAD8;--tx4:#5070A8;
-  --primary:#7BA3D4;--primary-dk:#4D7AB5;--primary-lt:rgba(103,232,249,.10);
+  --bg:#000000;--surface:#0A0A0A;--surface2:#111111;
+  --border:#1A1A1A;--border2:#222222;
+  --tx:#EEF4FF;--tx2:#90B8FF;--tx3:#4A7AE8;--tx4:#1E3A8A;
+  --primary:#5B8FE8;--primary-dk:#3A6BC0;--primary-lt:rgba(91,143,232,.13);
   --green:#67E8F9;--green-lt:rgba(103,232,249,.10);
-  --amber-lt:rgba(103,232,249,.08);--red-lt:rgba(244,114,182,.10);
-  --sh:0 1px 8px rgba(0,0,0,.7);--sh2:0 4px 28px rgba(0,0,0,.85)
+  --amber-lt:rgba(91,143,232,.08);--red-lt:rgba(244,114,182,.12);
+  --sh:0 1px 6px rgba(0,0,0,.7);--sh2:0 4px 24px rgba(0,0,0,.85)
 }
 [data-ice] input,[data-ice] select{background:var(--surface2);color:var(--tx);border-color:var(--border2)}
-[data-ice] input:focus,[data-ice] select:focus{background:#1A1C28;border-color:#4D7AB5;box-shadow:0 0 0 3px rgba(103,232,249,.08)}
+[data-ice] input:focus,[data-ice] select:focus{background:#161616;border-color:#3A6BC0;box-shadow:0 0 0 3px rgba(91,143,232,.12)}
 [data-ice] .item-card,[data-ice] .stat-card{background:var(--surface)}
-[data-ice] .sidebar{border-right:1px solid var(--border)}
-[data-ice] .header{border-bottom:1px solid var(--border);background:var(--bg)}
-[data-ice] .step-nav-btn.active{box-shadow:0 0 0 1px #4D7AB5,0 0 14px rgba(103,232,249,.2)}
-[data-ice] .card{border:1px solid var(--border2);box-shadow:0 2px 14px rgba(0,0,0,.65)}
-[data-ice] #refund-display{color:#67E8F9;text-shadow:0 0 24px rgba(103,232,249,.4),0 0 48px rgba(103,232,249,.15)}
+[data-ice] .sidebar{border-right:1px solid #1a1a1a}
+[data-ice] .header{border-bottom:1px solid #111;background:#000}
+[data-ice] .step-nav-btn.active{box-shadow:0 0 0 1px #3A6BC0,0 0 14px rgba(91,143,232,.28)}
+[data-ice] .card{border:1px solid var(--border2);box-shadow:0 2px 12px rgba(0,0,0,.7)}
+[data-ice] #refund-display{
+  background:linear-gradient(135deg,#60A5FA 0%,#818CF8 30%,#38BDF8 55%,#6366F1 80%,#60A5FA 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  background-size:200% 100%;animation:noir-shimmer 4s linear infinite;
+  filter:drop-shadow(0 0 16px rgba(96,165,250,.55)) drop-shadow(0 0 32px rgba(99,102,241,.28));
+}
 
-/* ── WARM SILVER THEME ──────────────────────────────────────────────────── */
+/* ── NOIR · GOLD ─────────────────────────────────────────────────────────── */
 [data-warm] {
-  --bg:#0C0B0A;--surface:#141210;--surface2:#1A1815;
-  --border:#2A2620;--border2:#352F28;
-  --tx:#EDE8E0;--tx2:#DDD5C5;--tx3:#B8A898;--tx4:#6E6052;
-  --primary:#C4B08A;--primary-dk:#8A7855;--primary-lt:rgba(196,176,138,.10);
+  --bg:#000000;--surface:#0A0A0A;--surface2:#111111;
+  --border:#1A1A1A;--border2:#222222;
+  --tx:#FFF9EE;--tx2:#F5CC60;--tx3:#D4A020;--tx4:#7A5C10;
+  --primary:#F0B020;--primary-dk:#C08810;--primary-lt:rgba(240,176,32,.12);
   --green:#6EE7B7;--green-lt:rgba(110,231,183,.10);
-  --amber-lt:rgba(196,176,138,.10);--red-lt:rgba(220,38,38,.10);
-  --sh:0 1px 8px rgba(0,0,0,.7);--sh2:0 4px 28px rgba(0,0,0,.85)
+  --amber-lt:rgba(240,176,32,.10);--red-lt:rgba(220,38,38,.12);
+  --sh:0 1px 6px rgba(0,0,0,.7);--sh2:0 4px 24px rgba(0,0,0,.85)
 }
 [data-warm] input,[data-warm] select{background:var(--surface2);color:var(--tx);border-color:var(--border2)}
-[data-warm] input:focus,[data-warm] select:focus{background:#201E1A;border-color:#8A7855;box-shadow:0 0 0 3px rgba(196,176,138,.08)}
+[data-warm] input:focus,[data-warm] select:focus{background:#161616;border-color:#C08810;box-shadow:0 0 0 3px rgba(240,176,32,.10)}
 [data-warm] .item-card,[data-warm] .stat-card{background:var(--surface)}
-[data-warm] .sidebar{border-right:1px solid var(--border)}
-[data-warm] .header{border-bottom:1px solid var(--border);background:var(--bg)}
-[data-warm] .step-nav-btn.active{box-shadow:0 0 0 1px #8A7855,0 0 14px rgba(196,176,138,.15)}
-[data-warm] .card{border:1px solid var(--border2);box-shadow:0 2px 14px rgba(0,0,0,.65)}
-[data-warm] #refund-display{color:#6EE7B7;text-shadow:0 0 20px rgba(110,231,183,.35)}
+[data-warm] .sidebar{border-right:1px solid #1a1a1a}
+[data-warm] .header{border-bottom:1px solid #111;background:#000}
+[data-warm] .step-nav-btn.active{box-shadow:0 0 0 1px #C08810,0 0 14px rgba(240,176,32,.25)}
+[data-warm] .card{border:1px solid var(--border2);box-shadow:0 2px 12px rgba(0,0,0,.7)}
+[data-warm] #refund-display{
+  background:linear-gradient(135deg,#FCD34D 0%,#F59E0B 25%,#FDE68A 50%,#D97706 75%,#FCD34D 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  background-size:200% 100%;animation:noir-shimmer 4s linear infinite;
+  filter:drop-shadow(0 0 16px rgba(251,191,36,.6)) drop-shadow(0 0 32px rgba(217,119,6,.3));
+}
 
-/* ── CRIMSON IRIDESCENT THEME ───────────────────────────────────────────── */
-@keyframes crimson-shimmer{
+/* ── NOIR · CRIMSON ──────────────────────────────────────────────────────── */
+@keyframes noir-shimmer{
   0%{background-position:0% 50%}
   50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
 [data-crimson] {
-  --bg:#0A0608;--surface:#120B0E;--surface2:#180E12;
-  --border:#2E1520;--border2:#3D1C2A;
-  --tx:#F5E8EE;--tx2:#EAC8D8;--tx3:#C890A4;--tx4:#7E5268;
-  --primary:#CC2244;--primary-dk:#8B0A28;--primary-lt:rgba(180,20,60,.12);
+  --bg:#000000;--surface:#0A0A0A;--surface2:#111111;
+  --border:#1A1A1A;--border2:#222222;
+  --tx:#FFF0F4;--tx2:#FF8AAA;--tx3:#D83058;--tx4:#881828;
+  --primary:#E83058;--primary-dk:#B01038;--primary-lt:rgba(232,48,88,.12);
   --green:#6EE7B7;--green-lt:rgba(110,231,183,.10);
-  --amber-lt:rgba(220,20,60,.08);--red-lt:rgba(220,20,60,.15);
-  --sh:0 1px 8px rgba(0,0,0,.75);--sh2:0 4px 28px rgba(0,0,0,.9)
+  --amber-lt:rgba(232,48,88,.08);--red-lt:rgba(232,48,88,.15);
+  --sh:0 1px 6px rgba(0,0,0,.7);--sh2:0 4px 24px rgba(0,0,0,.85)
 }
 [data-crimson] input,[data-crimson] select{background:var(--surface2);color:var(--tx);border-color:var(--border2)}
-[data-crimson] input:focus,[data-crimson] select:focus{background:#1F1118;border-color:#6B1830;box-shadow:0 0 0 3px rgba(180,20,60,.10)}
+[data-crimson] input:focus,[data-crimson] select:focus{background:#161616;border-color:#B01038;box-shadow:0 0 0 3px rgba(232,48,88,.12)}
 [data-crimson] .item-card,[data-crimson] .stat-card{background:var(--surface)}
-[data-crimson] .sidebar{border-right:1px solid var(--border)}
-[data-crimson] .header{border-bottom:1px solid var(--border);background:var(--bg)}
-[data-crimson] .step-nav-btn.active{box-shadow:0 0 0 1px #6B1830,0 0 14px rgba(180,20,60,.25)}
-[data-crimson] .card{border:1px solid var(--border2);box-shadow:0 2px 14px rgba(0,0,0,.7)}
+[data-crimson] .sidebar{border-right:1px solid #1a1a1a}
+[data-crimson] .header{border-bottom:1px solid #111;background:#000}
+[data-crimson] .step-nav-btn.active{box-shadow:0 0 0 1px #B01038,0 0 14px rgba(232,48,88,.28)}
+[data-crimson] .card{border:1px solid var(--border2);box-shadow:0 2px 12px rgba(0,0,0,.7)}
 [data-crimson] #refund-display{
-  background:linear-gradient(135deg,#FF3366 0%,#FF6B6B 25%,#FF0044 50%,#CC0066 75%,#FF3366 100%);
+  background:linear-gradient(135deg,#FF3366 0%,#FF6B9D 25%,#FF0055 50%,#FF4080 75%,#FF3366 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  background-size:200% 100%;
-  animation:crimson-shimmer 4s linear infinite;
-  filter:drop-shadow(0 0 14px rgba(220,20,60,.55)) drop-shadow(0 0 30px rgba(180,0,80,.25));
+  background-size:200% 100%;animation:noir-shimmer 4s linear infinite;
+  filter:drop-shadow(0 0 16px rgba(255,51,102,.6)) drop-shadow(0 0 32px rgba(232,48,88,.3));
 }
 
 /* TRANSITION */
@@ -603,8 +617,8 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
         <span class="rp-value zero" id="hdr-tax">—</span>
       </div>
     </div>
-    <button id="theme-btn" onclick="toggleDark()" title="Cycle theme: Light → Dark → Noir">🌙</button>
-    <span class="build-badge" title="Build number">b13</span>
+    <button id="theme-btn" onclick="toggleDark()" title="Cycle theme">🌙</button>
+    <span class="build-badge" title="Build number">b14</span>
   </div>
 </header>
 
@@ -2983,8 +2997,8 @@ function toggleDark() {
   const btn = document.getElementById('theme-btn');
   const ATTRS = ['data-dark','data-noir','data-ice','data-warm','data-crimson'];
   const CYCLE = ['light','dark','noir','ice','warm','crimson'];
-  const ICONS = { light:'🌙', dark:'🎬', noir:'💎', ice:'❄️', warm:'🥂', crimson:'🔴' };
-  const NAMES = { light:'Light', dark:'Dark', noir:'Noir', ice:'Ice Blue', warm:'Warm Silver', crimson:'Crimson' };
+  const ICONS = { light:'🌙', dark:'🎬', noir:'💚', ice:'💙', warm:'✨', crimson:'❤️' };
+  const NAMES = { light:'Light', dark:'Dark', noir:'Noir · Emerald', ice:'Noir · Sapphire', warm:'Noir · Gold', crimson:'Noir · Crimson' };
   const current = ATTRS.reduce((acc, a) => root.hasAttribute(a) ? a.replace('data-','') : acc, 'light');
   const next = CYCLE[(CYCLE.indexOf(current) + 1) % CYCLE.length];
   ATTRS.forEach(a => root.removeAttribute(a));
@@ -3207,8 +3221,8 @@ document.querySelectorAll('.ty, #logo-year, #wy-year').forEach(el => el.textCont
     || (localStorage.getItem('taxright_dark') === '1' ? 'dark' : 'light');
   const root = document.documentElement;
   const btn = document.getElementById('theme-btn');
-  const ICONS = { light:'🌙', dark:'🎬', noir:'💎', ice:'❄️', warm:'🥂', crimson:'🔴' };
-  const NAMES = { light:'Light', dark:'Dark', noir:'Noir', ice:'Ice Blue', warm:'Warm Silver', crimson:'Crimson' };
+  const ICONS = { light:'🌙', dark:'🎬', noir:'💚', ice:'💙', warm:'✨', crimson:'❤️' };
+  const NAMES = { light:'Light', dark:'Dark', noir:'Noir · Emerald', ice:'Noir · Sapphire', warm:'Noir · Gold', crimson:'Noir · Crimson' };
   const valid = ['dark','noir','ice','warm','crimson'];
   if (valid.includes(saved)) root.setAttribute('data-' + saved, '');
   if (btn) { btn.textContent = ICONS[saved] || '🌙'; btn.title = NAMES[saved] || 'Light'; }
