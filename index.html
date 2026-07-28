@@ -273,6 +273,25 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 [data-dark] input:focus,[data-dark] select:focus{background:var(--surface2)}
 [data-dark] .item-card{background:var(--surface)}
 [data-dark] .stat-card{background:var(--surface)}
+
+/* ── NOIR THEME ────────────────────────────────────────────────────────── */
+[data-noir] {
+  --bg:#000000;--surface:#0A0A0A;--surface2:#111111;
+  --border:#1A1A1A;--border2:#222222;
+  --tx:#E8F5E9;--tx2:#A5D6A7;--tx3:#4CAF50;--tx4:#2E7D32;
+  --primary:#10B981;--primary-dk:#059669;--primary-lt:rgba(16,185,129,.12);
+  --green:#10B981;--green-lt:rgba(16,185,129,.10);
+  --amber-lt:rgba(217,119,6,.12);--red-lt:rgba(220,38,38,.12);
+  --sh:0 1px 6px rgba(0,0,0,.7);--sh2:0 4px 24px rgba(0,0,0,.8)
+}
+[data-noir] input,[data-noir] select{background:var(--surface2);color:var(--tx);border-color:var(--border2)}
+[data-noir] input:focus,[data-noir] select:focus{background:#161616;border-color:var(--primary)}
+[data-noir] .item-card,[data-noir] .stat-card{background:var(--surface)}
+[data-noir] .sidebar{border-right:1px solid #1a1a1a}
+[data-noir] .header{border-bottom:1px solid #111;background:#000}
+[data-noir] .step-nav-btn.active{box-shadow:0 0 0 1px var(--primary),0 0 12px rgba(16,185,129,.25)}
+[data-noir] .card{border:1px solid var(--border2);box-shadow:0 2px 12px rgba(0,0,0,.6)}
+[data-noir] #refund-display{text-shadow:0 0 20px rgba(16,185,129,.4)}
 /* TRANSITION */
 .step-panel{animation:stepIn .32s cubic-bezier(.34,1.56,.64,1)}
 @keyframes stepIn{from{opacity:0;transform:translateX(14px) scale(.99)}to{opacity:1;transform:none}}
@@ -397,7 +416,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
         <span class="rp-value zero" id="hdr-tax">—</span>
       </div>
     </div>
-    <button id="theme-btn" onclick="toggleDark()" title="Toggle dark mode">🌙</button>
+    <button id="theme-btn" onclick="toggleDark()" title="Cycle theme: Light → Dark → Noir">🌙</button>
   </div>
 </header>
 
@@ -2577,10 +2596,18 @@ function importData() {
 // DARK MODE
 // ============================================================
 function toggleDark() {
-  document.documentElement.toggleAttribute('data-dark');
+  const root = document.documentElement;
   const btn = document.getElementById('theme-btn');
-  if (btn) btn.textContent = document.documentElement.hasAttribute('data-dark') ? '☀️' : '🌙';
-  localStorage.setItem('taxright_dark', document.documentElement.hasAttribute('data-dark') ? '1' : '0');
+  const current = root.hasAttribute('data-noir') ? 'noir'
+                : root.hasAttribute('data-dark') ? 'dark' : 'light';
+  const next = current === 'light' ? 'dark' : current === 'dark' ? 'noir' : 'light';
+  root.removeAttribute('data-dark');
+  root.removeAttribute('data-noir');
+  if (next === 'dark') root.setAttribute('data-dark', '');
+  if (next === 'noir') root.setAttribute('data-noir', '');
+  const icons = { light: '🌙', dark: '🎬', noir: '☀️' };
+  if (btn) btn.textContent = icons[next];
+  localStorage.setItem('taxright_theme', next);
 }
 
 // ============================================================
@@ -2788,12 +2815,17 @@ function updateMobileNav(step) {
 // ============================================================
 // INIT
 // ============================================================
-// Restore dark mode preference
-if (localStorage.getItem('taxright_dark') === '1') {
-  document.documentElement.setAttribute('data-dark', '');
+// Restore theme preference (supports legacy 'taxright_dark' key)
+(function() {
+  const saved = localStorage.getItem('taxright_theme')
+    || (localStorage.getItem('taxright_dark') === '1' ? 'dark' : 'light');
+  const root = document.documentElement;
   const btn = document.getElementById('theme-btn');
-  if (btn) btn.textContent = '☀️';
-}
+  const icons = { light: '🌙', dark: '🎬', noir: '☀️' };
+  if (saved === 'dark') { root.setAttribute('data-dark', ''); }
+  if (saved === 'noir') { root.setAttribute('data-noir', ''); }
+  if (btn) btn.textContent = icons[saved] || '🌙';
+})();
 
 // Seed a default W-2
 S.w2s.push({employer:'', wages:0, federalWithheld:0, stateWithheld:0});
