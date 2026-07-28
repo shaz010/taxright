@@ -227,7 +227,8 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 }
 #help-fab:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(27,79,216,.45)}
 #help-fab .fab-icon{font-size:1rem}
-@media(max-width:900px){#help-fab{bottom:76px;right:12px;padding:9px 14px 9px 11px}}
+/* On mobile: move to LEFT so it never covers the right-side Next button */
+@media(max-width:900px){#help-fab{bottom:80px;right:auto;left:12px;padding:9px 14px 9px 11px}}
 
 #help-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:400;backdrop-filter:blur(2px)}
 #help-overlay.open{display:block}
@@ -458,7 +459,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 /* AUTOSAVE TOAST */
 #autosave-toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(20px);background:#0F172A;color:#fff;padding:9px 18px;border-radius:99px;font-size:.75rem;font-weight:600;z-index:999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;display:flex;align-items:center;gap:7px;box-shadow:0 4px 20px rgba(0,0,0,.25)}
 #autosave-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(max-width:900px){#autosave-toast{bottom:80px}}
+@media(max-width:900px){#autosave-toast{bottom:130px}}
 
 /* SESSION RESTORE BANNER */
 #restore-banner{display:none;background:var(--primary-lt);border-bottom:1px solid rgba(27,79,216,.15);padding:10px 24px;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap}
@@ -470,12 +471,12 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .restore-no:hover{background:var(--surface2)}
 
 /* MOBILE BOTTOM NAV */
-.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:200;padding:6px 0 max(6px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}
-.mobile-nav-inner{display:flex;justify-content:space-around;align-items:stretch}
-.mnav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 8px;border:none;background:none;cursor:pointer;color:var(--tx4);border-radius:8px;transition:.15s;font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;flex:1;position:relative}
-.mnav-icon{font-size:1.15rem;line-height:1.3;transition:.15s}
-.mnav-btn.active{color:var(--primary)}
-.mnav-btn.active .mnav-icon{transform:scale(1.1)}
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:200;padding:8px 0 max(10px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}
+.mobile-nav-inner{display:flex;justify-content:space-around;align-items:stretch;gap:2px;padding:0 4px}
+.mnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 6px;border:none;background:none;cursor:pointer;color:var(--tx4);border-radius:10px;transition:.15s;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;flex:1;min-width:44px;min-height:52px;position:relative}
+.mnav-icon{font-size:1.25rem;line-height:1.2;transition:.15s}
+.mnav-btn.active{color:var(--primary);background:var(--primary-lt)}
+.mnav-btn.active .mnav-icon{transform:scale(1.15)}
 .mnav-badge{position:absolute;top:2px;right:calc(50% - 14px);background:var(--green);color:#fff;font-size:.55rem;font-weight:800;min-width:14px;height:14px;border-radius:99px;display:flex;align-items:center;justify-content:center;padding:0 3px}
 
 /* SHARE CARD */
@@ -499,7 +500,8 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 /* MOBILE RESPONSIVE IMPROVEMENTS */
 @media(max-width:900px){
   .mobile-nav{display:block}
-  body{padding-bottom:68px}
+  /* padding-bottom: mobile nav (~72px) + FAB (~44px) + breathing room = 140px */
+  body{padding-bottom:140px}
   .hdr-inner{height:54px;padding:0 12px}
   .logo-text{font-size:.95rem}
   .logo-year{display:none}
@@ -513,7 +515,8 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
   .profile-grid{grid-template-columns:1fr}
   .compare-panel{grid-template-columns:1fr}
   .field-row.two,.field-row.three{grid-template-columns:1fr}
-  .nav-bar{padding:12px 0}
+  /* nav-bar gets extra bottom margin so Back/Next buttons stay well above FAB */
+  .nav-bar{padding:16px 0;margin-bottom:16px}
 }
 @media(max-width:480px){
   .stat-grid{grid-template-columns:1fr 1fr}
