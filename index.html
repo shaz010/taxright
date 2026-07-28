@@ -527,22 +527,23 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 /* ≤1366px: covers all iPads in landscape — show mobile nav + fix nav-bar above it */
 @media(max-width:1366px){
   .mobile-nav{display:block}
-  /* Back/Next bar: fixed above the bottom nav so it can never be covered */
+  /* Back/Next bar: fixed above the bottom nav — z-index above mobile-nav (200) */
   .nav-bar{
-    position:fixed;
-    bottom:calc(68px + env(safe-area-inset-bottom, 0px));
+    position:fixed!important;
+    bottom:calc(72px + env(safe-area-inset-bottom, 0px));
     left:0;right:0;
     background:var(--surface);
     border-top:1px solid var(--border);
     padding:10px 20px;
-    z-index:190;
-    display:flex;
+    z-index:220;
+    display:flex!important;
     align-items:center;
     justify-content:space-between;
-    box-shadow:0 -2px 10px rgba(0,0,0,.08);
+    box-shadow:0 -2px 10px rgba(0,0,0,.1);
+    min-height:58px;
   }
-  /* push step content up so the last card isn't hidden under the fixed nav-bar */
-  body{padding-bottom:calc(140px + env(safe-area-inset-bottom, 0px))}
+  /* push step content up so last card never hides behind the two fixed bars */
+  body{padding-bottom:calc(175px + env(safe-area-inset-bottom, 0px))}
 }
 /* ≤900px: compact visual layout for phones */
 @media(max-width:900px){
@@ -618,7 +619,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       </div>
     </div>
     <button id="theme-btn" onclick="toggleDark()" title="Cycle theme">🌙</button>
-    <span class="build-badge" title="Build number">b15</span>
+    <span class="build-badge" title="Build number">b16</span>
   </div>
 </header>
 
