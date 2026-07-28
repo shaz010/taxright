@@ -265,8 +265,77 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 [data-dark] .item-card{background:var(--surface)}
 [data-dark] .stat-card{background:var(--surface)}
 /* TRANSITION */
-.step-panel{animation:fadeIn .25s ease}
+.step-panel{animation:stepIn .32s cubic-bezier(.34,1.56,.64,1)}
+@keyframes stepIn{from{opacity:0;transform:translateX(14px) scale(.99)}to{opacity:1;transform:none}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes bounceIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+
+/* AUTOSAVE TOAST */
+#autosave-toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(20px);background:#0F172A;color:#fff;padding:9px 18px;border-radius:99px;font-size:.75rem;font-weight:600;z-index:999;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;display:flex;align-items:center;gap:7px;box-shadow:0 4px 20px rgba(0,0,0,.25)}
+#autosave-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:900px){#autosave-toast{bottom:80px}}
+
+/* SESSION RESTORE BANNER */
+#restore-banner{display:none;background:var(--primary-lt);border-bottom:1px solid rgba(27,79,216,.15);padding:10px 24px;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap}
+#restore-banner.show{display:flex}
+.restore-btn{padding:6px 16px;border-radius:var(--rs);font-size:.8rem;font-weight:700;cursor:pointer;border:none;transition:.15s}
+.restore-yes{background:var(--primary);color:#fff}
+.restore-yes:hover{background:var(--primary-dk)}
+.restore-no{background:transparent;border:1.5px solid var(--border2);color:var(--tx3)}
+.restore-no:hover{background:var(--surface2)}
+
+/* MOBILE BOTTOM NAV */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:200;padding:6px 0 max(6px,env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.08)}
+.mobile-nav-inner{display:flex;justify-content:space-around;align-items:stretch}
+.mnav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 8px;border:none;background:none;cursor:pointer;color:var(--tx4);border-radius:8px;transition:.15s;font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;flex:1;position:relative}
+.mnav-icon{font-size:1.15rem;line-height:1.3;transition:.15s}
+.mnav-btn.active{color:var(--primary)}
+.mnav-btn.active .mnav-icon{transform:scale(1.1)}
+.mnav-badge{position:absolute;top:2px;right:calc(50% - 14px);background:var(--green);color:#fff;font-size:.55rem;font-weight:800;min-width:14px;height:14px;border-radius:99px;display:flex;align-items:center;justify-content:center;padding:0 3px}
+
+/* SHARE CARD */
+.share-card-section{text-align:center;margin-top:8px}
+.btn-share{background:linear-gradient(135deg,#1B4FD8,#0F2A73);color:#fff;border:none;border-radius:var(--rs);padding:13px 28px;font-size:.95rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:.2s;box-shadow:0 4px 14px rgba(27,79,216,.35);font-family:inherit}
+.btn-share:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(27,79,216,.45)}
+
+/* ONBOARDING ANIMATIONS */
+.welcome-anim .welcome-hero{animation:slideUp .5s cubic-bezier(.34,1.56,.64,1)}
+.welcome-anim .feature-pills{animation:slideUp .45s .12s both}
+.welcome-anim .profile-grid{animation:slideUp .45s .22s both}
+.welcome-anim [data-type="employee"]{animation:bounceIn .4s .32s both}
+.welcome-anim [data-type="freelancer"]{animation:bounceIn .4s .42s both}
+.welcome-anim [data-type="investor"]{animation:bounceIn .4s .52s both}
+
+/* COMPLETION DOTS in sidebar */
+.sb-pct{font-size:.65rem;color:var(--tx4);margin-left:auto;font-weight:700;padding:1px 6px;border-radius:99px;background:var(--surface2);border:1px solid var(--border)}
+.sb-step.active .sb-pct{color:var(--primary);background:var(--primary-lt);border-color:rgba(27,79,216,.2)}
+.sb-step.done .sb-pct{color:var(--green);background:var(--green-lt);border-color:rgba(5,150,105,.2)}
+
+/* MOBILE RESPONSIVE IMPROVEMENTS */
+@media(max-width:900px){
+  .mobile-nav{display:block}
+  body{padding-bottom:68px}
+  .hdr-inner{height:54px;padding:0 12px}
+  .logo-text{font-size:.95rem}
+  .logo-year{display:none}
+  .refund-pill{padding:5px 10px;gap:8px}
+  .rp-value{font-size:.8rem}
+  .rp-sep{height:20px}
+  .main-wrap{padding:12px}
+  .card{padding:18px}
+  .step-header h2{font-size:1.3rem}
+  .stat-value{font-size:1.35rem}
+  .profile-grid{grid-template-columns:1fr}
+  .compare-panel{grid-template-columns:1fr}
+  .field-row.two,.field-row.three{grid-template-columns:1fr}
+  .nav-bar{padding:12px 0}
+}
+@media(max-width:480px){
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .q-table th,.q-table td{padding:8px 8px;font-size:.8rem}
+  .hdr-inner{gap:8px}
+}
 /* WELCOME SCREEN */
 .welcome-hero{text-align:center;padding:32px 0 24px}
 .welcome-hero h1{font-size:2.2rem;font-weight:800;margin-bottom:12px;line-height:1.2}
@@ -291,6 +360,12 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 </head>
 <body>
 <div id="app">
+<!-- SESSION RESTORE BANNER -->
+<div id="restore-banner">
+  <span style="font-size:.875rem;font-weight:600;color:var(--primary-dk)">📂 You have a saved session from your last visit.</span>
+  <button class="restore-btn restore-yes" onclick="restoreSession()">Resume where I left off</button>
+  <button class="restore-btn restore-no" onclick="dismissRestore()">Start fresh</button>
+</div>
 <header>
   <div class="hdr-inner">
     <a class="logo" href="#">
@@ -338,7 +413,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
     <!-- STEP 0: WELCOME -->
     <div class="step-panel active" id="step-0">
-      <div class="card">
+      <div class="card welcome-anim">
         <div class="welcome-hero">
           <h1>Your 2024 Tax Return,<br><span>Done Right.</span></h1>
           <p>Free, private, and thorough. All calculations happen in your browser — your data never leaves your device.</p>
@@ -1170,6 +1245,13 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
         <div id="doc-checklist"></div>
       </div>
 
+      <!-- SHARE CARD -->
+      <div class="card" style="text-align:center">
+        <div style="font-size:1.05rem;font-weight:700;margin-bottom:6px">Share your results</div>
+        <div style="font-size:.85rem;color:var(--tx3);margin-bottom:18px">Generate a shareable card you can screenshot and send to anyone.</div>
+        <button class="btn-share" onclick="generateShareCard()">✦ Generate Share Card</button>
+      </div>
+
       <!-- ACTION BUTTONS -->
       <div class="card" style="text-align:center">
         <div style="font-size:1.1rem;font-weight:700;margin-bottom:8px">Your return is ready to review</div>
@@ -1190,6 +1272,23 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 
   </main>
 </div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-nav" id="mobile-nav" style="display:none">
+  <div class="mobile-nav-inner">
+    <button class="mnav-btn" data-step="1" onclick="goStep(1)"><span class="mnav-icon">👤</span>You</button>
+    <button class="mnav-btn" data-step="2" onclick="goStep(2)"><span class="mnav-icon">💰</span>Income</button>
+    <button class="mnav-btn" data-step="3" onclick="goStep(3)"><span class="mnav-icon">🧾</span>Expenses</button>
+    <button class="mnav-btn" data-step="4" onclick="goStep(4)"><span class="mnav-icon">📋</span>Deduct</button>
+    <button class="mnav-btn" data-step="5" onclick="goStep(5)"><span class="mnav-icon">⭐</span>Credits</button>
+    <button class="mnav-btn" data-step="6" onclick="goStep(6)"><span class="mnav-icon">🏦</span>Paid</button>
+    <button class="mnav-btn" data-step="7" onclick="goStep(7)"><span class="mnav-icon">📊</span>Results</button>
+  </div>
+</nav>
+
+<!-- AUTOSAVE TOAST -->
+<div id="autosave-toast">✦ Progress saved</div>
+
 </div>
 
 <script>
@@ -1643,6 +1742,7 @@ function recalc() {
 
   updateHeader(R);
   updateDynamicFields(R);
+  scheduleAutoSave();
   return R;
 }
 
@@ -1904,8 +2004,10 @@ function goStep(n) {
   currentStep = n;
   updateSidebar();
   updateProgressStrip();
+  updateMobileNav(n);
   if (n === 7) renderResults();
   window.scrollTo({top:0, behavior:'smooth'});
+  scheduleAutoSave();
 }
 
 function updateSidebar() {
@@ -1919,9 +2021,12 @@ function updateSidebar() {
   STEPS.filter(s => s.id > 0).forEach(s => {
     const isDone = completedSteps.has(s.id);
     const isActive = currentStep === s.id;
+    const pct = isDone ? 100 : (isActive ? calcStepCompletion(s.id) : 0);
+    const pctLabel = pct > 0 ? pct + '%' : '';
     html += `<div class="sb-step ${isActive?'active':''} ${isDone?'done':''}" onclick="goStep(${s.id})">
       <div class="sb-num"><span>${s.id}</span></div>
-      <div><div class="sb-label">${s.label}</div>${s.sub?`<div class="sb-sub">${s.sub}</div>`:''}</div>
+      <div style="flex:1"><div class="sb-label">${s.label}</div>${s.sub?`<div class="sb-sub">${s.sub}</div>`:''}</div>
+      ${pctLabel ? `<span class="sb-pct">${pctLabel}</span>` : ''}
     </div>`;
   });
   nav.innerHTML = html;
@@ -2466,16 +2571,229 @@ function toggleDark() {
   document.documentElement.toggleAttribute('data-dark');
   const btn = document.getElementById('theme-btn');
   if (btn) btn.textContent = document.documentElement.hasAttribute('data-dark') ? '☀️' : '🌙';
+  localStorage.setItem('taxright_dark', document.documentElement.hasAttribute('data-dark') ? '1' : '0');
+}
+
+// ============================================================
+// PERSISTENT SESSIONS (localStorage)
+// ============================================================
+const SAVE_KEY = 'taxright_2024_session';
+let autoSaveTimer = null;
+
+function scheduleAutoSave() {
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(doAutoSave, 800);
+}
+
+function doAutoSave() {
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify(S));
+    localStorage.setItem(SAVE_KEY + '_step', currentStep);
+    showToast();
+  } catch(e) {}
+}
+
+let toastTimer = null;
+function showToast() {
+  const toast = document.getElementById('autosave-toast');
+  if (!toast) return;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+function checkSavedSession() {
+  try {
+    const saved = localStorage.getItem(SAVE_KEY);
+    if (!saved) return;
+    const data = JSON.parse(saved);
+    // Check if there's meaningful data (not just a blank session)
+    const hasMeaningfulData = (data.w2s && data.w2s.some(w => +w.wages > 0)) ||
+      (data.freelanceItems && data.freelanceItems.length > 0) ||
+      data.businessRevenue > 0 || data.ordinaryDividends > 0;
+    if (hasMeaningfulData) {
+      const banner = document.getElementById('restore-banner');
+      if (banner) banner.classList.add('show');
+    }
+  } catch(e) {}
+}
+
+function restoreSession() {
+  try {
+    const saved = localStorage.getItem(SAVE_KEY);
+    if (!saved) return;
+    const data = JSON.parse(saved);
+    Object.assign(S, data);
+    renderW2List(); renderFreelanceList(); renderDependentList(); renderEducationList();
+    recalc();
+    // Restore dark mode
+    const savedStep = +localStorage.getItem(SAVE_KEY + '_step') || 1;
+    startReturn(); // show nav etc.
+    goStep(Math.min(7, Math.max(1, savedStep)));
+    dismissRestore();
+    showToast();
+  } catch(e) { dismissRestore(); }
+}
+
+function dismissRestore() {
+  const banner = document.getElementById('restore-banner');
+  if (banner) banner.classList.remove('show');
+}
+
+// ============================================================
+// STEP COMPLETION TRACKING
+// ============================================================
+function calcStepCompletion(step) {
+  switch(step) {
+    case 1: {
+      let score = 0;
+      if (S.filingStatus) score += 40;
+      if (S.age > 0) score += 30;
+      if (S.firstName) score += 30;
+      return score;
+    }
+    case 2: {
+      const hasW2 = S.w2s.some(w => +w.wages > 0);
+      const hasFreelance = S.freelanceItems.some(f => +f.amount > 0);
+      const hasOther = S.ordinaryDividends > 0 || S.interestIncome > 0 || S.socialSecurityBenefits > 0;
+      return hasW2 || hasFreelance || hasOther ? 100 : 0;
+    }
+    case 3: {
+      if (!S.profiles.includes('freelancer') && !S.businessRevenue && !S.freelanceItems.length) return 100;
+      const hasExpenses = Object.values(S.expenses).some(v => v > 0);
+      return hasExpenses ? 100 : 30;
+    }
+    case 4: {
+      const hasItemized = S.mortgageInterest > 0 || S.propertyTax > 0 || S.charitableCash > 0;
+      return S.studentLoanInterest > 0 || S.iraContribution > 0 || hasItemized ? 100 : 50;
+    }
+    case 5: return 100; // credits are auto-calculated from prior data
+    case 6: {
+      const hasWithheld = S.w2s.some(w => +w.federalWithheld > 0);
+      return hasWithheld ? 100 : 30;
+    }
+    case 7: return completedSteps.has(7) ? 100 : 0;
+    default: return 0;
+  }
+}
+
+// ============================================================
+// SHAREABLE RESULTS CARD
+// ============================================================
+function generateShareCard() {
+  const R = recalc();
+  const name = S.firstName ? (S.firstName + (S.lastName ? ' ' + S.lastName[0] + '.' : '')) : 'My';
+  const isRefund = R.balance >= 0;
+  const bigAmt = isRefund ? fmt(R.balance) : fmt(-R.balance);
+  const bigLabel = isRefund ? 'Federal Refund' : 'Balance Due';
+  const bigColor = isRefund ? '#10B981' : '#EF4444';
+  const fsLabel = {single:'Single',mfj:'Married Filing Jointly',mfs:'Married Filing Separately',hoh:'Head of Household',qss:'Qualifying Surviving Spouse'}[S.filingStatus] || 'Single';
+  const riskColor = R.risk.level === 'Low' ? '#10B981' : R.risk.level === 'Moderate' ? '#F59E0B' : '#EF4444';
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TaxRight 2024 — ${name} Tax Summary</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#060C1A;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.card{width:100%;max-width:520px;background:linear-gradient(145deg,#0F1F3D,#091428);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:40px;color:#fff;box-shadow:0 24px 80px rgba(0,0,0,.5);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:-80px;right:-80px;width:280px;height:280px;background:radial-gradient(circle,rgba(27,79,216,.35),transparent 70%);pointer-events:none}
+.card::after{content:'';position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(5,150,105,.2),transparent 70%);pointer-events:none}
+.top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-icon{width:36px;height:36px;background:linear-gradient(135deg,#1B4FD8,#0F2A73);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.brand-name{font-size:1rem;font-weight:800;color:rgba(255,255,255,.9)}
+.brand-sub{font-size:.7rem;color:rgba(255,255,255,.4);margin-top:1px}
+.badge{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:5px 12px;border-radius:99px;font-size:.7rem;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.06em}
+.big-number{text-align:center;margin:8px 0 32px}
+.big-label{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:10px}
+.big-amount{font-size:4rem;font-weight:900;line-height:1;color:${bigColor};text-shadow:0 0 40px ${bigColor}44}
+.big-sub{font-size:.85rem;color:rgba(255,255,255,.4);margin-top:8px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:28px}
+.stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 12px;text-align:center}
+.stat-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.35);margin-bottom:6px}
+.stat-value{font-size:1.05rem;font-weight:800;color:rgba(255,255,255,.9)}
+.divider{border:none;border-top:1px solid rgba(255,255,255,.07);margin:0 0 20px}
+.bottom{display:flex;justify-content:space-between;align-items:center}
+.filing{font-size:.78rem;color:rgba(255,255,255,.35)}
+.filing strong{color:rgba(255,255,255,.6);display:block;font-size:.82rem}
+.risk-pill{padding:5px 12px;border-radius:99px;font-size:.72rem;font-weight:700;background:${riskColor}22;border:1px solid ${riskColor}44;color:${riskColor}}
+.url{font-size:.68rem;color:rgba(255,255,255,.2);text-align:center;margin-top:20px;letter-spacing:.03em}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="top">
+    <div class="brand">
+      <div class="brand-icon">⚖️</div>
+      <div><div class="brand-name">TaxRight</div><div class="brand-sub">2024 Federal Return</div></div>
+    </div>
+    <div class="badge">Tax Year 2024</div>
+  </div>
+  <div class="big-number">
+    <div class="big-label">${bigLabel}</div>
+    <div class="big-amount">${bigAmt}</div>
+    <div class="big-sub">${isRefund ? '→ Direct deposit within ~21 days' : '→ Due by filing deadline'}</div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Total Tax</div><div class="stat-value">${fmt(R.totalTax)}</div></div>
+    <div class="stat"><div class="stat-label">Eff. Rate</div><div class="stat-value">${fmtPct(R.effectiveRate)}</div></div>
+    <div class="stat"><div class="stat-label">AGI</div><div class="stat-value">${R.agi >= 1000 ? '$'+(R.agi/1000).toFixed(1)+'K' : fmt(R.agi)}</div></div>
+    <div class="stat"><div class="stat-label">Deduction</div><div class="stat-value">${R.deduction >= 1000 ? '$'+(R.deduction/1000).toFixed(1)+'K' : fmt(R.deduction)}</div></div>
+    <div class="stat"><div class="stat-label">Marginal</div><div class="stat-value">${Math.round(R.marginalRate*100)}%</div></div>
+    <div class="stat"><div class="stat-label">Credits</div><div class="stat-value">${fmt(R.totalNonRef + R.totalRef)}</div></div>
+  </div>
+  <hr class="divider">
+  <div class="bottom">
+    <div class="filing"><div class="filing">Filing Status</div><strong>${fsLabel}</strong></div>
+    <div class="risk-pill">Audit Risk: ${R.risk.level}</div>
+  </div>
+  <div class="url">shaz010.github.io/taxright · Free · Private · No account required</div>
+</div>
+</body>
+</html>`;
+
+  const blob = new Blob([html], {type: 'text/html'});
+  const url = URL.createObjectURL(blob);
+  const win = window.open(url, '_blank');
+  if (!win) alert('Please allow popups to generate your share card, then try again.');
+  setTimeout(() => URL.revokeObjectURL(url), 30000);
+}
+
+// ============================================================
+// MOBILE NAV UPDATE
+// ============================================================
+function updateMobileNav(step) {
+  document.querySelectorAll('.mnav-btn').forEach(btn => {
+    const s = +btn.dataset.step;
+    btn.classList.toggle('active', s === step);
+  });
+  const mobileNav = document.getElementById('mobile-nav');
+  if (mobileNav) mobileNav.style.display = step === 0 ? 'none' : 'block';
 }
 
 // ============================================================
 // INIT
 // ============================================================
+// Restore dark mode preference
+if (localStorage.getItem('taxright_dark') === '1') {
+  document.documentElement.setAttribute('data-dark', '');
+  const btn = document.getElementById('theme-btn');
+  if (btn) btn.textContent = '☀️';
+}
+
 // Seed a default W-2
 S.w2s.push({employer:'', wages:0, federalWithheld:0, stateWithheld:0});
 renderW2List();
 renderDependentList();
 recalc();
+
+// Check for saved session after a brief delay (let page settle)
+setTimeout(checkSavedSession, 300);
 </script>
 </body>
 </html>
