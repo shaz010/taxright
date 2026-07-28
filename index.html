@@ -497,8 +497,9 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 .restore-no:hover{background:var(--surface2)}
 
 /* MOBILE BOTTOM NAV */
-.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:200;padding:0 0 max(20px,env(safe-area-inset-bottom));box-shadow:0 -2px 16px rgba(0,0,0,.12);transition:transform .38s cubic-bezier(.4,0,.2,1)}
-.mobile-nav.nav-collapsed{transform:translateY(calc(100% - 18px))}
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);z-index:200;padding:0 0 max(20px,env(safe-area-inset-bottom));box-shadow:0 -2px 16px rgba(0,0,0,.12);transition:transform .28s ease-out}
+.mobile-nav.nav-collapsed{transform:translateY(calc(100% - 18px));transition:transform .22s ease-in}
+.mobile-nav.nav-collapsed .mobile-nav-inner{pointer-events:none}
 .nav-handle{display:flex;justify-content:center;align-items:center;padding:6px 0 4px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .nav-handle-pill{width:36px;height:4px;background:var(--border2);border-radius:99px;transition:background .2s,width .2s}
 .nav-collapsed .nav-handle-pill{width:48px;background:var(--primary)}
@@ -610,7 +611,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       </div>
     </div>
     <button id="theme-btn" onclick="toggleDark()" title="Cycle theme">🌙</button>
-    <span class="build-badge" title="Build number">b19</span>
+    <span class="build-badge" title="Build number">b20</span>
   </div>
 </header>
 
