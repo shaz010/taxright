@@ -141,6 +141,23 @@ h1 s{text-decoration-color:#FDA4AF;color:var(--tx3)}
 .tc-crimson{background:#000;color:#FDA4AF;border-color:#1A1A1A}
 .tc-dark{background:#0B1120;color:#C8D3E0;border-color:#233047}
 
+/* ── WHY FREE ── */
+.why-free{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 24px}
+.why-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 2fr;gap:64px;align-items:start}
+.why-q{position:sticky;top:80px}
+.why-q-mark{font-size:6rem;font-weight:900;color:var(--blue);line-height:.8;margin-bottom:12px;opacity:.2}
+.why-q p{font-size:1.4rem;font-weight:800;color:var(--tx);line-height:1.3;letter-spacing:-.02em}
+.why-a{display:flex;flex-direction:column;gap:16px}
+.why-a p{font-size:.975rem;color:var(--tx2);line-height:1.75}
+.why-a strong{color:var(--tx);font-weight:700}
+.why-a em{font-style:normal;color:var(--blue);font-weight:600}
+.why-bottom{padding-top:8px;border-top:1px solid var(--border);color:var(--tx3)!important}
+@media(max-width:760px){
+  .why-inner{grid-template-columns:1fr;gap:24px}
+  .why-q{position:static}
+  .why-q p{font-size:1.2rem}
+}
+
 /* ── CTA ── */
 .cta-section{max-width:780px;margin:0 auto;padding:80px 24px;text-align:center}
 .cta-badge{display:inline-block;background:var(--blue-lt);color:var(--blue);font-size:.75rem;font-weight:800;padding:4px 12px;border-radius:99px;border:1px solid #BFD4FF;margin-bottom:20px;letter-spacing:.05em;text-transform:uppercase}
@@ -388,6 +405,22 @@ footer{border-top:1px solid var(--border);padding:28px 24px;text-align:center}
     <div class="theme-chip tc-crimson">❤️ Noir · Crimson</div>
   </div>
   <a class="btn-primary" href="index.html" style="font-size:.95rem">Try it now — free →</a>
+</section>
+
+<!-- WHY FREE -->
+<section class="why-free">
+  <div class="why-inner">
+    <div class="why-q">
+      <div class="why-q-mark">"</div>
+      <p>If it's free, what's the catch?<br>Who paid for this — and why?</p>
+    </div>
+    <div class="why-a">
+      <p>It's a fair question. Most "free" things are free because <em>you're</em> the product — your data gets sold, your attention gets monetised, or you hit a paywall the moment you actually need something.</p>
+      <p>TaxRight is different for one simple reason: <strong>there is nothing to charge for.</strong> It's a single file that runs entirely inside your browser. There's no server processing your return, no database storing your information, no company with investors expecting a return.</p>
+      <p>Your tax data is never transmitted anywhere. It can't be — the app has no backend to send it to. It lives only in your browser, on your device, until you close the tab.</p>
+      <p class="why-bottom">Think of it like a calculator someone built and left on a table. The calculator doesn't charge you per calculation. It doesn't know what numbers you typed. TaxRight is the same thing — just more sophisticated, and for taxes.</p>
+    </div>
+  </div>
 </section>
 
 <!-- CTA -->
