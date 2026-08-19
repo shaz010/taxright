@@ -35,7 +35,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 input,select,textarea,button{font-family:inherit}
 /* LAYOUT */
 #app{display:flex;flex-direction:column;min-height:100vh}
-header{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--sh)}
+header{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:var(--sh);padding-top:env(safe-area-inset-top)}
 .hdr-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:16px}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
 .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--primary-dk));border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px}
@@ -51,7 +51,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);position:
 .rp-sep{width:1px;height:28px;background:var(--border)}
 #theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--tx3);font-size:1rem;transition:.2s}
 #theme-btn:hover{background:var(--surface2)}
-.build-badge{font-size:.72rem;font-weight:800;color:#fff;letter-spacing:.06em;user-select:none;background:#E83058;border:none;padding:3px 8px;border-radius:99px;box-shadow:0 1px 6px rgba(232,48,88,.45)}
+.build-badge{font-size:.72rem;font-weight:600;color:rgba(255,255,255,.35);letter-spacing:.06em;user-select:none;background:transparent;border:none;padding:3px 8px;border-radius:99px}
 /* MAIN */
 .main-wrap{max-width:1200px;margin:0 auto;width:100%;padding:32px 24px;flex:1;display:grid;grid-template-columns:240px 1fr;gap:28px;align-items:start}
 /* SIDEBAR */
@@ -614,7 +614,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       </div>
     </div>
     <button id="theme-btn" onclick="toggleDark()" title="Cycle theme">🌙</button>
-    <span class="build-badge" title="Build number">b26</span>
+    <span class="build-badge" title="Build number">b27</span>
   </div>
 </header>
 
@@ -641,7 +641,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
     <div class="step-panel active" id="step-0">
       <div class="card welcome-anim">
         <div class="welcome-hero">
-          <h1>Your <span id="wy-year">2024</span> Tax Return,<br><span>Done Right.</span></h1>
+          <h1>Your <span>2026</span> Tax Return,<br><span>Done Right.</span></h1>
           <p>Free, private, and thorough. All calculations happen in your browser — your data never leaves your device.</p>
           <div class="feature-pills">
             <div class="feature-pill"><span>✓</span> 100% Free</div>
@@ -3244,7 +3244,7 @@ document.addEventListener('touchstart', function(e) {
 // INIT
 // ============================================================
 // Stamp TAX_YEAR into all display spans
-document.querySelectorAll('.ty, #logo-year, #wy-year').forEach(el => el.textContent = TAX_YEAR);
+document.querySelectorAll('.ty, #logo-year').forEach(el => el.textContent = TAX_YEAR);
 
 // Restore theme preference (supports legacy 'taxright_dark' key)
 (function() {
