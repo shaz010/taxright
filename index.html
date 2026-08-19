@@ -51,7 +51,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);position:
 .rp-sep{width:1px;height:28px;background:var(--border)}
 #theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--tx3);font-size:1rem;transition:.2s}
 #theme-btn:hover{background:var(--surface2)}
-.build-badge{font-size:.72rem;font-weight:600;color:rgba(255,255,255,.35);letter-spacing:.06em;user-select:none;background:transparent;border:none;padding:3px 8px;border-radius:99px}
+.build-badge{font-size:.72rem;font-weight:600;color:rgba(255,255,255,.55);letter-spacing:.06em;user-select:none;background:transparent;border:none;padding:3px 8px;border-radius:99px}
 /* MAIN */
 .main-wrap{max-width:1200px;margin:0 auto;width:100%;padding:32px 24px;flex:1;display:grid;grid-template-columns:240px 1fr;gap:28px;align-items:start}
 /* SIDEBAR */
@@ -597,6 +597,8 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <div class="logo-icon">⚖️</div>
       <span class="logo-text">TaxRight<span class="logo-year" id="logo-year">2024</span></span>
     </a>
+    <button id="theme-btn" onclick="toggleDark()" title="Cycle theme">🌙</button>
+    <span class="build-badge" title="Build number">b28</span>
     <div class="refund-pill">
       <div class="rp-item">
         <span class="rp-label">Fed. Refund</span>
@@ -613,8 +615,6 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
         <span class="rp-value zero" id="hdr-tax">—</span>
       </div>
     </div>
-    <button id="theme-btn" onclick="toggleDark()" title="Cycle theme">🌙</button>
-    <span class="build-badge" title="Build number">b27</span>
   </div>
 </header>
 
