@@ -556,7 +556,9 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
 @media(max-width:480px){
   .stat-grid{grid-template-columns:1fr 1fr}
   .q-table th,.q-table td{padding:8px 8px;font-size:.8rem}
-  .hdr-inner{gap:8px}
+  .hdr-inner{gap:6px}
+  /* hide build badge on small screens — theme btn needs the space */
+  .build-badge{display:none}
   /* hide Eff. Rate on iPhone so header fits in 390px */
   .refund-pill > :nth-child(3),.refund-pill > :nth-child(4){display:none}
   .refund-pill{flex-shrink:1;gap:6px;padding:4px 10px}
@@ -598,7 +600,7 @@ select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%
       <span class="logo-text">TaxRight<span class="logo-year" id="logo-year">2024</span></span>
     </a>
     <button id="theme-btn" onclick="toggleDark()" title="Cycle theme">🌙</button>
-    <span class="build-badge" title="Build number">b28</span>
+    <span class="build-badge" title="Build number">b29</span>
     <div class="refund-pill">
       <div class="rp-item">
         <span class="rp-label">Fed. Refund</span>
